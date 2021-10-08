@@ -38,20 +38,27 @@ class _LoginScreenState extends State<LoginScreen> {
             child: BlocConsumer<LoginBloc, LoginState>(
               listener: (context, state) {
                 if (state.user != null) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text(state.user!)),
-                  );
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text(state.user!),
+                    duration: Duration(milliseconds: 250),
+                  ));
                 }
 
                 if (state.isLoad) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Loading')),
+                    const SnackBar(
+                      content: Text('Loading'),
+                      duration: Duration(milliseconds: 250),
+                    ),
                   );
                 }
 
                 if (state.errorMessage != null) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text(state.errorMessage!)),
+                    SnackBar(
+                      content: Text(state.errorMessage!),
+                      duration: Duration(milliseconds: 250),
+                    ),
                   );
                 }
               },
@@ -112,6 +119,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                             onPressed: () {
                               if (_formKey.currentState!.validate()) {
+                                print('button pressed');
                                 BlocProvider.of<LoginBloc>(context)
                                   ..add(OnDataEntered(
                                     phone: phoneController.text,

@@ -15,6 +15,8 @@ dependencies:
     sdk: flutter
 
   flutter_bloc: ^7.3.0
+  dio: ^4.0.0
+  retrofit: ^2.0.1
 
   cupertino_icons: ^1.0.0
   google_fonts: ^2.1.0
@@ -22,6 +24,10 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+  retrofit_generator: any
+  build_runner: any
+  json_serializable: any
 
 flutter:
   uses-material-design: true

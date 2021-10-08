@@ -1,8 +1,11 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:popper_mobile/data/auth_repository.dart';
 import 'package:popper_mobile/screen/login/bloc/login_event.dart';
 import 'package:popper_mobile/screen/login/bloc/login_state.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
+  final _repository = AuthRepository();
+
   LoginBloc() : super(LoginState.initial()) {
     on<OnDataEntered>(onDataEntered);
   }
@@ -11,8 +14,9 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     OnDataEntered event,
     Emitter<LoginState> emit,
   ) async {
+    print('button press checked');
     emit(LoginState.load());
-    await Future.delayed(Duration(seconds: 1));
-    emit(LoginState.authorized('Ilia Rodionov'));
+    final user = await _repository.singIn(event.credentials);
+    emit(LoginState.authorized('Authorized $user'));
   }
 }
