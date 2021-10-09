@@ -1,12 +1,14 @@
 import 'package:jwt_decoder/jwt_decoder.dart';
 
 class User {
+  static const testUser = User._(1, "Ilia", "Rodionov", "Alexeevich");
+  
   final int id;
   final String firstname;
   final String surname;
   final String secondName;
 
-  User._(this.id, this.firstname, this.surname, this.secondName);
+  const User._(this.id, this.firstname, this.surname, this.secondName);
 
   factory User.fromToken(String token) {
     final jwtData = JwtDecoder.decode(token);

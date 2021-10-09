@@ -13,13 +13,14 @@ dependencies:
     sdk: flutter
 
   shared_preferences: ^2.0.8
+  dartz: ^0.10.0
 
   flutter_bloc: ^7.3.0
   dio: ^4.0.0
   retrofit: ^2.0.1
   jwt_decoder: ^2.0.1
 
-  dartz: ^0.10.0
+  qr_code_scanner: ^0.5.2
 
   cupertino_icons: ^1.0.0
   google_fonts: ^2.1.0
