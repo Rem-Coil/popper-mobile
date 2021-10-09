@@ -14,9 +14,12 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     OnDataEntered event,
     Emitter<LoginState> emit,
   ) async {
-    print('button press checked');
     emit(LoginState.load());
     final user = await _repository.singIn(event.credentials);
-    emit(LoginState.authorized('Authorized $user'));
+
+    emit(user.fold(
+      (failure) => LoginState.error(failure.message),
+      (token) => LoginState.authorized('Authorized ${token.token}'),
+    ));
   }
 }

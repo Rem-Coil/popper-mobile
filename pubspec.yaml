@@ -18,6 +18,8 @@ dependencies:
   dio: ^4.0.0
   retrofit: ^2.0.1
 
+  dartz: ^0.10.0
+
   cupertino_icons: ^1.0.0
   google_fonts: ^2.1.0
 

@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:popper_mobile/screen/login/bloc/login_bloc.dart';
 import 'package:popper_mobile/screen/login/bloc/login_event.dart';
 import 'package:popper_mobile/screen/login/bloc/login_state.dart';
+import 'package:popper_mobile/widgets/button.dart';
 import 'package:popper_mobile/widgets/column_divider.dart';
 import 'package:popper_mobile/widgets/field.dart';
 import 'package:popper_mobile/widgets/logo.dart';
@@ -22,6 +23,8 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
+  bool get isValidFields => _formKey.currentState!.validate();
+
   @override
   void initState() {
     super.initState();
@@ -32,32 +35,31 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
-        child: SingleChildScrollView(
+        child: Center(
           child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 70),
+            width: 320,
+            height: 510,
             child: BlocConsumer<LoginBloc, LoginState>(
               listener: (context, state) {
                 if (state.user != null) {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content: Text(state.user!),
-                    duration: Duration(milliseconds: 250),
-                  ));
-                }
-
-                if (state.isLoad) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Loading'),
-                      duration: Duration(milliseconds: 250),
+                    SnackBar(
+                      backgroundColor: Colors.green,
+                      content: Text('Успешно'),
+                      duration: Duration(seconds: 1),
                     ),
                   );
+                  Future.delayed(Duration(seconds: 1), () => print('Navigate'));
                 }
 
                 if (state.errorMessage != null) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: Text(state.errorMessage!),
-                      duration: Duration(milliseconds: 250),
+                      backgroundColor: Colors.red,
+                      content: Text(
+                        state.errorMessage!,
+                        style: TextStyle(fontSize: 16),
+                      ),
                     ),
                   );
                 }
@@ -69,7 +71,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Logo(250),
-                      ColumnDivider(48),
+                      ColumnDivider(32),
                       Text(
                         'Войти',
                         style: TextStyle(
@@ -99,35 +101,16 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       ColumnDivider(48),
                       Center(
-                        child: Container(
+                        child: LoadingButton(
                           width: 270,
-                          child: ElevatedButton(
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 15),
-                              child: Text(
-                                'Войти',
-                                style: TextStyle(fontSize: 20),
-                              ),
-                            ),
-                            style: ButtonStyle(
-                              shape: MaterialStateProperty.all<
-                                  RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12.0),
-                                ),
-                              ),
-                            ),
-                            onPressed: () {
-                              if (_formKey.currentState!.validate()) {
-                                print('button pressed');
-                                BlocProvider.of<LoginBloc>(context)
-                                  ..add(OnDataEntered(
-                                    phone: phoneController.text,
-                                    password: passwordController.text,
-                                  ));
-                              }
-                            },
-                          ),
+                          isLoad: state.isLoad,
+                          text: 'Войти',
+                          onPressed: () {
+                            if (isValidFields) {
+                              checkUserData(context);
+                              clear();
+                            }
+                          },
                         ),
                       ),
                       Center(
@@ -145,6 +128,20 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       ),
     );
+  }
+
+  void checkUserData(BuildContext context) {
+    BlocProvider.of<LoginBloc>(context).add(
+      OnDataEntered(
+        phone: phoneController.text,
+        password: passwordController.text,
+      ),
+    );
+  }
+
+  void clear() {
+    phoneController.clear();
+    passwordController.clear();
   }
 
   @override
