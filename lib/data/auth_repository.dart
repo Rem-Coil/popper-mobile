@@ -5,14 +5,21 @@ import 'package:dio/dio.dart';
 import 'package:popper_mobile/core/error/failure.dart';
 import 'package:popper_mobile/data/api/api_provider.dart';
 import 'package:popper_mobile/models/token.dart';
+import 'package:popper_mobile/models/user.dart';
 import 'package:popper_mobile/models/user_credentials.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthRepository {
-  Future<Either<Failure, Token>> singIn(UserCredentials credentials) async {
+  static const _token_key = 'token';
+  Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+
+  Future<Either<Failure, User>> singIn(UserCredentials credentials) async {
     try {
       final service = ApiProvider().getApiService();
       final token = await service.singIn(credentials.toJson());
-      return Right(token);
+      await saveToken(token);
+      final user = User.fromToken(token.token);
+      return Right(user);
 
     } on DioError catch (e) {
 
@@ -25,5 +32,16 @@ class AuthRepository {
 
       return Left(UnknownFailure());
     }
+  }
+
+  Future<User?> getCurrentUser() async {
+    final SharedPreferences prefs = await _prefs;
+    final token = prefs.getString(_token_key);
+    return token != null ? User.fromToken(token) : null;
+  }
+
+  Future<void> saveToken(Token token) async {
+    final SharedPreferences prefs = await _prefs;
+    await prefs.setString(_token_key, token.token);
   }
 }

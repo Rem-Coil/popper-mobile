@@ -1,10 +1,9 @@
-import 'dart:ffi';
-
 import 'package:flutter/foundation.dart';
+import 'package:popper_mobile/models/user.dart';
 
 @immutable
 class LoginState {
-  final String? user;
+  final User? user;
   final bool isLoad;
   final String? errorMessage;
 
@@ -14,7 +13,7 @@ class LoginState {
 
   factory LoginState.load() => LoginState._(null, true, null);
 
-  factory LoginState.authorized(String user) => LoginState._(user, false, null);
+  factory LoginState.authorized(User user) => LoginState._(user, false, null);
 
   factory LoginState.error(String message) => LoginState._(null, false, message);
 }

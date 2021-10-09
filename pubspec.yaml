@@ -1,8 +1,6 @@
 name: popper_mobile
 description: Mobile App for Rem&Coil.
 
-# The following line prevents the package from being accidentally published to
-# pub.dev using `pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
 version: 1.0.0+1
@@ -14,9 +12,12 @@ dependencies:
   flutter:
     sdk: flutter
 
+  shared_preferences: ^2.0.8
+
   flutter_bloc: ^7.3.0
   dio: ^4.0.0
   retrofit: ^2.0.1
+  jwt_decoder: ^2.0.1
 
   dartz: ^0.10.0
 

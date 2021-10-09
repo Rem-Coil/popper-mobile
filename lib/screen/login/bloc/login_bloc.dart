@@ -15,11 +15,15 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     Emitter<LoginState> emit,
   ) async {
     emit(LoginState.load());
-    final user = await _repository.singIn(event.credentials);
+    final serverAnswer = await _repository.singIn(event.credentials);
 
-    emit(user.fold(
+    final newState = serverAnswer.fold(
       (failure) => LoginState.error(failure.message),
-      (token) => LoginState.authorized('Authorized ${token.token}'),
-    ));
+      (user) {
+        print('${user.firstname} ${user.surname}');
+        return LoginState.authorized(user);
+      },
+    );
+    emit(newState);
   }
 }
