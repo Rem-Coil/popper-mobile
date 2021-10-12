@@ -1,12 +1,24 @@
 import 'package:flutter/foundation.dart';
+import 'package:popper_mobile/models/action/action.dart';
 
 @immutable
-class QrScannerState {}
+class QrScannerState {
+  final String? code;
+  final ActionType? action;
 
-class QrCodeNotEntered extends QrScannerState {}
+  QrScannerState._(this.code, this.action);
 
-class QrCodeEntered extends QrScannerState {
-  QrCodeEntered(this.code);
+  factory QrScannerState.initial() {
+    return QrScannerState._(null, null);
+  }
 
-  final String code;
+  QrScannerState addAction(ActionType action) {
+    return QrScannerState._(code, action);
+  }
+
+  QrScannerState addCode(String code) {
+    return QrScannerState._(code, action);
+  }
+
+  bool get isReady => code != null && action != null;
 }

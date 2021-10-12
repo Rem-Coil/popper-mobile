@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:popper_mobile/screen/qr_code_scanner/bloc/qr_scanner_event.dart';
-import 'package:popper_mobile/screen/qr_code_scanner/bloc/qr_scenner_bloc.dart';
+import 'package:popper_mobile/screen/qr_code_scanner/bloc/qr_scanner_bloc.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 class QrScannerView extends StatefulWidget {
