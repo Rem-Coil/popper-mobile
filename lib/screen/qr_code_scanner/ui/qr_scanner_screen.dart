@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:popper_mobile/models/user.dart';
+import 'package:popper_mobile/models/auth/user.dart';
 import 'package:popper_mobile/screen/qr_code_scanner/bloc/qr_scanner_state.dart';
 import 'package:popper_mobile/screen/qr_code_scanner/bloc/qr_scenner_bloc.dart';
 import 'package:popper_mobile/screen/qr_code_scanner/ui/widgets/qr_scanner_view.dart';

@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:popper_mobile/models/user.dart';
+import 'package:popper_mobile/models/auth/user.dart';
 
 @immutable
 class LoginState {

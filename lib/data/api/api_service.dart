@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:popper_mobile/models/token.dart';
+import 'package:popper_mobile/models/auth/token.dart';
 import 'package:retrofit/retrofit.dart';
 
 part 'api_service.g.dart';
