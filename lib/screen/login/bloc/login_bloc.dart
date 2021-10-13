@@ -19,10 +19,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
     final newState = serverAnswer.fold(
       (failure) => LoginState.error(failure.message),
-      (user) {
-        print('${user.firstname} ${user.surname}');
-        return LoginState.authorized(user);
-      },
+      (user) => LoginState.authorized(user),
     );
     emit(newState);
   }

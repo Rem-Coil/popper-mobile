@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
           LoginScreen.route: (_) => LoginScreen(),
           QrScannerScreen.route: (_) => QrScannerScreen(),
         },
-        initialRoute: QrScannerScreen.route,
+        initialRoute: LoginScreen.route,
       ),
     );
   }

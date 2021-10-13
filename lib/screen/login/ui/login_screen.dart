@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:popper_mobile/screen/login/bloc/login_bloc.dart';
 import 'package:popper_mobile/screen/login/bloc/login_event.dart';
 import 'package:popper_mobile/screen/login/bloc/login_state.dart';
+import 'package:popper_mobile/screen/qr_code_scanner/ui/qr_scanner_screen.dart';
 import 'package:popper_mobile/widgets/button.dart';
 import 'package:popper_mobile/widgets/column_divider.dart';
 import 'package:popper_mobile/widgets/field.dart';
@@ -49,7 +50,11 @@ class _LoginScreenState extends State<LoginScreen> {
                       duration: Duration(seconds: 1),
                     ),
                   );
-                  Future.delayed(Duration(seconds: 1), () => print('Navigate'));
+                  Future.delayed(
+                    Duration(seconds: 1),
+                    () => Navigator.of(context)
+                        .pushReplacementNamed(QrScannerScreen.route),
+                  );
                 }
 
                 if (state.errorMessage != null) {

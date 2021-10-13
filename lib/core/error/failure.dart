@@ -19,3 +19,8 @@ class UnknownFailure extends Failure {
   @override
   String get message => 'Unknown error';
 }
+
+class NoUserFailure extends Failure {
+  @override
+  String get message => 'No user';
+}

@@ -1,6 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:popper_mobile/data/actions_repository.dart';
-import 'package:popper_mobile/models/action/action.dart';
 import 'package:popper_mobile/models/auth/user.dart';
 import 'package:popper_mobile/screen/qr_code_scanner/bloc/qr_scanner_event.dart';
 import 'package:popper_mobile/screen/qr_code_scanner/bloc/qr_scanner_state.dart';
@@ -19,8 +18,7 @@ class QrScannerBloc extends Bloc<QrCodeEvent, QrScannerState> {
     OnSaveButtonClicked event,
     Emitter<QrScannerState> emit,
   ) async {
-    final action = Action(user.id, int.parse(state.code!), state.action!);
-    await _repository.saveAction(action);
+    await _repository.saveAction(state.code!, state.action!);
     emit(QrScannerState.initial());
   }
 }

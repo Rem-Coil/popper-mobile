@@ -10,7 +10,7 @@ import 'package:popper_mobile/models/auth/user_credentials.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthRepository {
-  static const _token_key = 'token';
+  static const token_key = 'token';
   Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
   Future<Either<Failure, User>> singIn(UserCredentials credentials) async {
@@ -36,12 +36,12 @@ class AuthRepository {
 
   Future<User?> getCurrentUser() async {
     final SharedPreferences prefs = await _prefs;
-    final token = prefs.getString(_token_key);
+    final token = prefs.getString(token_key);
     return token != null ? User.fromToken(token) : null;
   }
 
   Future<void> saveToken(Token token) async {
     final SharedPreferences prefs = await _prefs;
-    await prefs.setString(_token_key, token.token);
+    await prefs.setString(token_key, token.token);
   }
 }

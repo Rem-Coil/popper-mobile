@@ -13,7 +13,7 @@ class User {
   factory User.fromToken(String token) {
     final jwtData = JwtDecoder.decode(token);
     return User._(
-      0,
+      jwtData['id'],
       jwtData['firstname'],
       jwtData['surname'],
       jwtData['second_name'],
