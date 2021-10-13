@@ -2,10 +2,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:popper_mobile/models/action/action.dart';
-import 'package:popper_mobile/models/auth/user.dart';
+import 'package:popper_mobile/screen/qr_code_scanner/bloc/qr_scanner_bloc.dart';
 import 'package:popper_mobile/screen/qr_code_scanner/bloc/qr_scanner_event.dart';
 import 'package:popper_mobile/screen/qr_code_scanner/bloc/qr_scanner_state.dart';
-import 'package:popper_mobile/screen/qr_code_scanner/bloc/qr_scanner_bloc.dart';
 import 'package:popper_mobile/screen/qr_code_scanner/ui/widgets/qr_scanner_view.dart';
 
 class QrScannerScreen extends StatelessWidget {
@@ -39,7 +38,7 @@ class QrScannerScreen extends StatelessWidget {
                     child: Text("Сохранить"),
                     onPressed: state.isReady
                         ? () => BlocProvider.of<QrScannerBloc>(context)
-                            .add(OnSaveButtonClicked(User.testUser))
+                            .add(OnSaveButtonClicked())
                         : null,
                   ),
                 ),

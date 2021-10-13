@@ -14,11 +14,11 @@ class _ApiService implements ApiService {
   String? baseUrl;
 
   @override
-  Future<Token> singIn(map) async {
+  Future<Token> singIn(user) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _data = <String, dynamic>{};
-    _data.addAll(map);
+    _data.addAll(user);
     final _result = await _dio.fetch<Map<String, dynamic>>(
         _setStreamType<Token>(
             Options(method: 'POST', headers: <String, dynamic>{}, extra: _extra)
@@ -27,6 +27,20 @@ class _ApiService implements ApiService {
                 .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
     final value = Token.fromJson(_result.data!);
     return value;
+  }
+
+  @override
+  Future<void> saveAction(action) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    _data.addAll(action);
+    await _dio.fetch<void>(_setStreamType<void>(
+        Options(method: 'POST', headers: <String, dynamic>{}, extra: _extra)
+            .compose(_dio.options, '/action',
+                queryParameters: queryParameters, data: _data)
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    return null;
   }
 
   RequestOptions _setStreamType<T>(RequestOptions requestOptions) {

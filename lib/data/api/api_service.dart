@@ -9,5 +9,8 @@ abstract class ApiService {
   factory ApiService(Dio dio, {String baseUrl}) = _ApiService;
   
   @POST('/operator/sign_in')
-  Future<Token> singIn(@Body() Map<String, dynamic> map);
+  Future<Token> singIn(@Body() Map<String, dynamic> user);
+
+  @POST('/action')
+  Future<void> saveAction(@Body() Map<String, dynamic> action);
 }
