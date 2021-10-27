@@ -1,7 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:popper_mobile/core/utils/context_utils.dart';
 import 'package:popper_mobile/models/action/action.dart';
+import 'package:popper_mobile/screen/actions/ui/actions_screen.dart';
 import 'package:popper_mobile/screen/qr_code_scanner/bloc/qr_scanner_bloc.dart';
 import 'package:popper_mobile/screen/qr_code_scanner/bloc/qr_scanner_event.dart';
 import 'package:popper_mobile/screen/qr_code_scanner/bloc/qr_scanner_state.dart';
@@ -24,6 +26,15 @@ class QrScannerScreen extends StatelessWidget {
                   BlocProvider.of<QrScannerBloc>(context)
                       .add(OnActionEntered(value!)),
             ),
+            actions: [
+              IconButton(
+                onPressed: () => context.push(ActionsScreen.route),
+                icon: Icon(
+                  Icons.history,
+                  color: Colors.white,
+                ),
+              ),
+            ],
           ),
           body: Column(
             children: <Widget>[
