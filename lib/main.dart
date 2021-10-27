@@ -9,7 +9,6 @@ import 'package:popper_mobile/screen/qr_code_scanner/ui/qr_scanner_screen.dart';
 import 'package:popper_mobile/screen/splash/bloc/splash_bloc.dart';
 import 'package:popper_mobile/screen/splash/ui/splash_screen.dart';
 
-
 void main() {
   configureDependencies();
   runApp(MyApp());
@@ -21,8 +20,8 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider<LoginBloc>(create: (_) => getIt<LoginBloc>()),
-        BlocProvider<SplashBloc>(create: (_) => getIt<SplashBloc>()),
         BlocProvider<QrScannerBloc>(create: (_) => getIt<QrScannerBloc>()),
+        BlocProvider<SplashBloc>(create: (_) => getIt<SplashBloc>()),
       ],
       child: MaterialApp(
         title: 'Rem&Coil',
@@ -38,7 +37,7 @@ class MyApp extends StatelessWidget {
           LoginScreen.route: (_) => LoginScreen(),
           QrScannerScreen.route: (_) => QrScannerScreen(),
         },
-        initialRoute: LoginScreen.route,
+        initialRoute: SplashScreen.route,
       ),
     );
   }

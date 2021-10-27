@@ -3,4 +3,4 @@ import 'package:flutter/foundation.dart';
 @immutable
 class SplashEvent {}
 
-class Initialize {}
+class Initialize extends SplashEvent {}
