@@ -1,12 +1,14 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:injectable/injectable.dart';
 import 'package:popper_mobile/data/auth_repository.dart';
 import 'package:popper_mobile/screen/login/bloc/login_event.dart';
 import 'package:popper_mobile/screen/login/bloc/login_state.dart';
 
+@singleton
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
-  final _repository = AuthRepository();
+  final AuthRepository _repository;
 
-  LoginBloc() : super(LoginState.initial()) {
+  LoginBloc(this._repository) : super(LoginState.initial()) {
     on<OnDataEntered>(onDataEntered);
   }
 

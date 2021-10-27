@@ -111,6 +111,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           isLoad: state.isLoad,
                           text: 'Войти',
                           onPressed: () {
+                            FocusScope.of(context).unfocus();
                             if (isValidFields) {
                               checkUserData(context);
                               clear();
