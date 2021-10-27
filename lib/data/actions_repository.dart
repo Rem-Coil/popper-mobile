@@ -5,26 +5,17 @@ import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 import 'package:popper_mobile/core/error/failure.dart';
 import 'package:popper_mobile/data/api/api_provider.dart';
-import 'package:popper_mobile/data/auth_repository.dart';
 import 'package:popper_mobile/models/action/action.dart';
-import 'package:popper_mobile/models/auth/user.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 @singleton
 class ActionsRepository {
-  Future<Either<Failure, bool>> saveAction(String bobbinId, ActionType actionType) async {
+  Future<Either<Failure, bool>> saveAction(Action action) async {
     try {
-      final user = await getCurrentUser();
-      if (user == null) {
-        return Left(NoUserFailure());
-      }
-
-      final action = Action(user.id, int.parse(bobbinId), actionType);
+      /// cache
       final service = ApiProvider().getApiService();
-      await service.saveAction(action.toJson());
+      await service.saveAction(actionToJson(action));
       return Right(true);
     } on DioError catch (e) {
-
       switch (e.response?.statusCode) {
         case HttpStatus.internalServerError:
           return Left(ServerFailure());
@@ -34,9 +25,23 @@ class ActionsRepository {
     }
   }
 
-  Future<User?> getCurrentUser() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final token = prefs.getString(AuthRepository.token_key);
-    return token != null ? User.fromToken(token) : null;
+  // TODO Remove - ждём изменения бека
+  Map<String, dynamic> actionToJson(Action action) {
+    return <String, dynamic>{
+      'operator_id': action.userId,
+      'bobbin_id': action.bobbinId,
+      'action_type': actionTypeEnumMap[action.type],
+    };
   }
 }
+
+// TODO Remove - ждём изменения бека
+const actionTypeEnumMap = {
+  ActionType.winding: 'winding',
+  ActionType.output: 'output',
+  ActionType.isolation: 'isolation',
+  ActionType.molding: 'molding',
+  ActionType.crimping: 'crimping',
+  ActionType.quality: 'quality',
+  ActionType.testing: 'testing',
+};

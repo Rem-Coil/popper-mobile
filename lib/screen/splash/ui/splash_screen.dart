@@ -35,11 +35,15 @@ class _SplashScreenState extends State<SplashScreen> {
           listener: (context, state) {
             WidgetsBinding.instance?.addPostFrameCallback((_) {
               if (state is NavigateToLogin) {
-                Timer(Duration(seconds: 1),
-                    () => context.pushReplacement(LoginScreen.route));
+                Timer(
+                  Duration(seconds: 1),
+                  () => context.pushReplacement(LoginScreen.route),
+                );
               } else if (state is NavigateToScanner) {
-                Timer(Duration(seconds: 1),
-                    () => context.pushReplacement(QrScannerScreen.route));
+                Timer(
+                  Duration(seconds: 1),
+                  () => context.pushReplacement(QrScannerScreen.route),
+                );
               }
             });
           },

@@ -22,8 +22,8 @@ _i1.GetIt $initGetIt(_i1.GetIt get,
   gh.singleton<_i3.ActionsRepository>(_i3.ActionsRepository());
   gh.singleton<_i4.AuthRepository>(_i4.AuthRepository());
   gh.singleton<_i5.LoginBloc>(_i5.LoginBloc(get<_i4.AuthRepository>()));
-  gh.singleton<_i6.QrScannerBloc>(
-      _i6.QrScannerBloc(get<_i3.ActionsRepository>()));
+  gh.singleton<_i6.QrScannerBloc>(_i6.QrScannerBloc(
+      get<_i3.ActionsRepository>(), get<_i4.AuthRepository>()));
   gh.singleton<_i7.SplashBloc>(_i7.SplashBloc(get<_i4.AuthRepository>()));
   return get;
 }
