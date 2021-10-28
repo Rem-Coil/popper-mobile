@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:popper_mobile/models/action/action.dart';
+import 'package:popper_mobile/models/action/action_type.dart';
 
 @immutable
 class QrCodeEvent {}

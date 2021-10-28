@@ -5,19 +5,26 @@ import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 import 'package:popper_mobile/core/error/failure.dart';
 import 'package:popper_mobile/data/api/api_provider.dart';
+import 'package:popper_mobile/data/local_repositories/local_actions_repository.dart';
 import 'package:popper_mobile/models/action/action.dart';
+import 'package:popper_mobile/models/action/action_type.dart';
+import 'package:popper_mobile/models/action/local_action.dart';
 
 @singleton
 class ActionsRepository {
+  final LocalActionsRepository _localActionsRepository;
+
+  ActionsRepository(this._localActionsRepository);
+
   Future<Either<Failure, bool>> saveAction(Action action) async {
     try {
       final service = ApiProvider().getApiService();
       final actionFromApi = await service.saveAction(_actionToJson(action));
-      _saveToCache(actionFromApi);
+      _saveToCache(actionFromApi, true);
       return Right(true);
     } on DioError catch (e) {
       if (e.error is SocketException) {
-        _saveToCache(action);
+        _saveToCache(action, false);
         return Left(ServerFailure());
       }
 
@@ -25,16 +32,19 @@ class ActionsRepository {
         case HttpStatus.forbidden:
           return Left(WrongOperation());
         case HttpStatus.internalServerError:
-          _saveToCache(action);
+          _saveToCache(action, false);
           return Left(ServerFailure());
       }
 
-      _saveToCache(action);
+      _saveToCache(action, false);
       return Left(UnknownFailure());
     }
   }
 
-  Future<void> _saveToCache(Action action) async {}
+  Future<void> _saveToCache(Action action, bool isSuccess) async {
+    final actionToLocal = action.toLocalAction(isSuccess);
+    await _localActionsRepository.saveAction(actionToLocal);
+  }
 
   // TODO Remove - ждём изменения бека
   Map<String, dynamic> _actionToJson(Action action) {
@@ -45,8 +55,9 @@ class ActionsRepository {
     };
   }
 
-  Future<Either<Failure, List<Action>>> getActions() async {
-    return Left(UnknownFailure());
+  Future<Either<Failure, List<LocalAction>>> getActions() async {
+    final actions = await _localActionsRepository.getActions();
+    return Right(actions.toList());
   }
 }
 

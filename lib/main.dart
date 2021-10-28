@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:popper_mobile/core/di/injection.dart';
+import 'package:popper_mobile/models/action/action_type.dart';
+import 'package:popper_mobile/models/action/local_action.dart';
+import 'package:popper_mobile/screen/actions/bloc/actions_bloc.dart';
 import 'package:popper_mobile/screen/actions/ui/actions_screen.dart';
 import 'package:popper_mobile/screen/login/bloc/login_bloc.dart';
 import 'package:popper_mobile/screen/login/ui/login_screen.dart';
@@ -12,6 +16,10 @@ import 'package:popper_mobile/screen/splash/ui/splash_screen.dart';
 
 void main() {
   configureDependencies();
+  Hive
+    ..initFlutter()
+    ..registerAdapter(LocalActionAdapter())
+    ..registerAdapter(ActionTypeAdapter());
   runApp(MyApp());
 }
 
@@ -22,6 +30,7 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider<LoginBloc>(create: (_) => getIt<LoginBloc>()),
         BlocProvider<QrScannerBloc>(create: (_) => getIt<QrScannerBloc>()),
+        BlocProvider<ActionsBloc>(create: (_) => getIt<ActionsBloc>()),
         BlocProvider<SplashBloc>(create: (_) => getIt<SplashBloc>()),
       ],
       child: MaterialApp(

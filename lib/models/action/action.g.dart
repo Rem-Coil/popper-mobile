@@ -12,7 +12,7 @@ Action _$ActionFromJson(Map<String, dynamic> json) {
     userId: json['operatorId'] as int,
     bobbinId: json['bobbinId'] as int,
     type: _$enumDecode(_$ActionTypeEnumMap, json['actionType']),
-    time: json['doneTime'] as String,
+    time: DateTime.parse(json['doneTime'] as String),
   );
 }
 
@@ -21,7 +21,7 @@ Map<String, dynamic> _$ActionToJson(Action instance) => <String, dynamic>{
       'operatorId': instance.userId,
       'bobbinId': instance.bobbinId,
       'actionType': _$ActionTypeEnumMap[instance.type],
-      'doneTime': instance.time,
+      'doneTime': instance.time.toIso8601String(),
     };
 
 K _$enumDecode<K, V>(

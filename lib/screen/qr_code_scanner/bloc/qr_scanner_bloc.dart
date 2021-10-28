@@ -3,6 +3,7 @@ import 'package:injectable/injectable.dart';
 import 'package:popper_mobile/data/actions_repository.dart';
 import 'package:popper_mobile/data/auth_repository.dart';
 import 'package:popper_mobile/models/action/action.dart';
+import 'package:popper_mobile/models/action/action_type.dart';
 import 'package:popper_mobile/models/auth/user.dart';
 import 'package:popper_mobile/screen/qr_code_scanner/bloc/qr_scanner_event.dart';
 import 'package:popper_mobile/screen/qr_code_scanner/bloc/qr_scanner_state.dart';
@@ -37,7 +38,7 @@ class QrScannerBloc extends Bloc<QrCodeEvent, QrScannerState> {
     final user = await _authRepository.getCurrentUser();
     if (user == null) throw Exception();
 
-    return Action(
+    return Action.fromQr(
       userId: user.id,
       bobbinId: int.parse(code),
       type: actionType,

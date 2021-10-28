@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:popper_mobile/core/error/failure.dart';
-import 'package:popper_mobile/models/action/action.dart';
+import 'package:popper_mobile/models/action/action_type.dart';
 
 @immutable
 class QrScannerState {
