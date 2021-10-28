@@ -20,7 +20,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     final serverAnswer = await _repository.singIn(event.credentials);
 
     final newState = serverAnswer.fold(
-      (failure) => LoginState.error(failure.message),
+      (failure) => LoginState.error(failure),
       (user) => LoginState.authorized(user),
     );
     emit(newState);

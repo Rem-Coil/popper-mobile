@@ -11,27 +11,42 @@ import 'package:popper_mobile/models/action/action.dart';
 class ActionsRepository {
   Future<Either<Failure, bool>> saveAction(Action action) async {
     try {
-      /// cache
       final service = ApiProvider().getApiService();
-      await service.saveAction(actionToJson(action));
+      final actionFromApi = await service.saveAction(_actionToJson(action));
+      _saveToCache(actionFromApi);
       return Right(true);
     } on DioError catch (e) {
+      if (e.error is SocketException) {
+        _saveToCache(action);
+        return Left(ServerFailure());
+      }
+
       switch (e.response?.statusCode) {
+        case HttpStatus.forbidden:
+          return Left(WrongOperation());
         case HttpStatus.internalServerError:
+          _saveToCache(action);
           return Left(ServerFailure());
       }
 
+      _saveToCache(action);
       return Left(UnknownFailure());
     }
   }
 
+  Future<void> _saveToCache(Action action) async {}
+
   // TODO Remove - ждём изменения бека
-  Map<String, dynamic> actionToJson(Action action) {
+  Map<String, dynamic> _actionToJson(Action action) {
     return <String, dynamic>{
       'operator_id': action.userId,
       'bobbin_id': action.bobbinId,
       'action_type': actionTypeEnumMap[action.type],
     };
+  }
+
+  Future<Either<Failure, List<Action>>> getActions() async {
+    return Left(UnknownFailure());
   }
 }
 

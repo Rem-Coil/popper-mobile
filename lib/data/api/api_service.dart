@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:popper_mobile/models/action/action.dart';
 import 'package:popper_mobile/models/auth/token.dart';
 import 'package:retrofit/retrofit.dart';
 
@@ -12,5 +13,5 @@ abstract class ApiService {
   Future<Token> singIn(@Body() Map<String, dynamic> user);
 
   @POST('/action')
-  Future<void> saveAction(@Body() Map<String, dynamic> action);
+  Future<Action> saveAction(@Body() Map<String, dynamic> action);
 }

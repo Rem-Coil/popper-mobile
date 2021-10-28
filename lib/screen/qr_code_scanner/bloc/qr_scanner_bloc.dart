@@ -24,9 +24,13 @@ class QrScannerBloc extends Bloc<QrCodeEvent, QrScannerState> {
     OnSaveButtonClicked event,
     Emitter<QrScannerState> emit,
   ) async {
-    emit(await _generateAction(state.code!, state.action!)
-        .then((action) async => await _actionsRepository.saveAction(action))
-        .then((_) => QrScannerState.initial()));
+    final result = await _generateAction(state.code!, state.action!)
+        .then((action) async => await _actionsRepository.saveAction(action));
+
+    emit(result.fold(
+      (failure) => QrScannerState.error(failure),
+      (_) => QrScannerState.initial(),
+    ));
   }
 
   Future<Action> _generateAction(String code, ActionType actionType) async {

@@ -7,6 +7,7 @@ import 'package:popper_mobile/screen/actions/ui/actions_screen.dart';
 import 'package:popper_mobile/screen/qr_code_scanner/bloc/qr_scanner_bloc.dart';
 import 'package:popper_mobile/screen/qr_code_scanner/bloc/qr_scanner_event.dart';
 import 'package:popper_mobile/screen/qr_code_scanner/bloc/qr_scanner_state.dart';
+import 'package:popper_mobile/screen/qr_code_scanner/ui/widgets/action_selector.dart';
 import 'package:popper_mobile/screen/qr_code_scanner/ui/widgets/qr_scanner_view.dart';
 
 class QrScannerScreen extends StatelessWidget {
@@ -16,7 +17,11 @@ class QrScannerScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<QrScannerBloc, QrScannerState>(
+    return BlocConsumer<QrScannerBloc, QrScannerState>(
+      listenWhen: (previous, current) => current.errorMessage != null,
+      listener: (context, state) {
+        context.errorSnackBar(state.errorMessage!);
+      },
       builder: (context, state) {
         return Scaffold(
           appBar: AppBar(
@@ -79,43 +84,5 @@ class _CodePlaceHolder extends StatelessWidget {
       text = 'Scan a code';
     }
     return Text(text, style: TextStyle(fontSize: 25));
-  }
-}
-
-class ActionSelector extends StatelessWidget {
-  final ActionType? currentAction;
-  final ValueChanged<ActionType?> onPressed;
-
-  const ActionSelector({
-    Key? key,
-    required this.currentAction,
-    required this.onPressed,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return DropdownButton<ActionType>(
-      value: currentAction,
-      dropdownColor: Theme.of(context).primaryColor,
-      icon: const Icon(
-        Icons.keyboard_arrow_down,
-        color: Colors.white,
-      ),
-      iconSize: 24,
-      underline: SizedBox(),
-      hint: Text('Выбирете действие', style: TextStyle(color: Colors.white)),
-      onChanged: onPressed,
-      items: ActionType.values
-          .map(
-            (e) => DropdownMenuItem<ActionType>(
-              value: e,
-              child: Text(
-                describeEnum(e),
-                style: TextStyle(color: Colors.white),
-              ),
-            ),
-          )
-          .toList(),
-    );
   }
 }

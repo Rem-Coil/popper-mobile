@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:popper_mobile/core/utils/context_utils.dart';
 import 'package:popper_mobile/screen/login/bloc/login_bloc.dart';
 import 'package:popper_mobile/screen/login/bloc/login_event.dart';
 import 'package:popper_mobile/screen/login/bloc/login_state.dart';
@@ -43,13 +44,7 @@ class _LoginScreenState extends State<LoginScreen> {
             child: BlocConsumer<LoginBloc, LoginState>(
               listener: (context, state) {
                 if (state.user != null) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      backgroundColor: Colors.green,
-                      content: Text('Успешно'),
-                      duration: Duration(seconds: 1),
-                    ),
-                  );
+                  context.successSnackBar('Успешно');
                   Future.delayed(
                     Duration(seconds: 1),
                     () => Navigator.of(context)
@@ -58,15 +53,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 }
 
                 if (state.errorMessage != null) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      backgroundColor: Colors.red,
-                      content: Text(
-                        state.errorMessage!,
-                        style: TextStyle(fontSize: 16),
-                      ),
-                    ),
-                  );
+                  context.errorSnackBar(state.errorMessage!);
                 }
               },
               builder: (context, state) {

@@ -15,6 +15,11 @@ class WrongCredentials extends Failure {
   String get message => 'Неправильные данные пользователя';
 }
 
+class WrongOperation extends Failure {
+  @override
+  String get message => 'Wrong operation';
+}
+
 class UnknownFailure extends Failure {
   @override
   String get message => 'Unknown error';

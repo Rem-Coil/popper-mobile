@@ -9,19 +9,19 @@ part of 'action.dart';
 Action _$ActionFromJson(Map<String, dynamic> json) {
   return Action(
     id: json['id'] as int,
-    userId: json['operator_id'] as int,
-    bobbinId: json['bobbin_id'] as int,
-    type: _$enumDecode(_$ActionTypeEnumMap, json['action_type']),
-    time: json['done_time'] as String,
+    userId: json['operatorId'] as int,
+    bobbinId: json['bobbinId'] as int,
+    type: _$enumDecode(_$ActionTypeEnumMap, json['actionType']),
+    time: json['doneTime'] as String,
   );
 }
 
 Map<String, dynamic> _$ActionToJson(Action instance) => <String, dynamic>{
       'id': instance.id,
-      'operator_id': instance.userId,
-      'bobbin_id': instance.bobbinId,
-      'action_type': _$ActionTypeEnumMap[instance.type],
-      'done_time': instance.time,
+      'operatorId': instance.userId,
+      'bobbinId': instance.bobbinId,
+      'actionType': _$ActionTypeEnumMap[instance.type],
+      'doneTime': instance.time,
     };
 
 K _$enumDecode<K, V>(

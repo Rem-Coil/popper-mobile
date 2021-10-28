@@ -5,16 +5,18 @@ part 'action.g.dart';
 
 @immutable
 @JsonSerializable()
+// TODO - вернуть формат json
 class Action {
   @JsonKey(name: 'id')
   final int id;
-  @JsonKey(name: 'operator_id')
+  @JsonKey(name: 'operatorId')
   final int userId;
-  @JsonKey(name: 'bobbin_id')
+  @JsonKey(name: 'bobbinId')
   final int bobbinId;
-  @JsonKey(name: 'action_type')
+  @JsonKey(name: 'actionType')
   final ActionType type;
-  @JsonKey(name: 'done_time')
+  // TODO - вернуть время
+  @JsonKey(name: 'doneTime')
   final String time;
 
   Action({
