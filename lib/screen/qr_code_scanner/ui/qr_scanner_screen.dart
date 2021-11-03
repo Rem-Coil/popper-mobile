@@ -2,12 +2,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:popper_mobile/core/utils/context_utils.dart';
-import 'package:popper_mobile/models/action/action_type.dart';
 import 'package:popper_mobile/screen/actions/ui/actions_screen.dart';
 import 'package:popper_mobile/screen/qr_code_scanner/bloc/qr_scanner_bloc.dart';
 import 'package:popper_mobile/screen/qr_code_scanner/bloc/qr_scanner_event.dart';
 import 'package:popper_mobile/screen/qr_code_scanner/bloc/qr_scanner_state.dart';
-import 'package:popper_mobile/screen/qr_code_scanner/ui/widgets/action_selector.dart';
+import 'package:popper_mobile/screen/qr_code_scanner/ui/widgets/code_place_holder.dart';
 import 'package:popper_mobile/screen/qr_code_scanner/ui/widgets/qr_scanner_view.dart';
 
 class QrScannerScreen extends StatelessWidget {
@@ -17,72 +16,73 @@ class QrScannerScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<QrScannerBloc, QrScannerState>(
-      listenWhen: (previous, current) => current.errorMessage != null,
+    return BlocListener<QrScannerBloc, QrScannerState>(
+      listenWhen: (previous, current) =>
+          current.errorMessage != null ||
+          (previous.code == null && current.code != null),
       listener: (context, state) {
-        context.errorSnackBar(state.errorMessage!);
+        if (state.errorMessage != null) {
+          context.errorSnackBar(state.errorMessage!);
+        } else if (state.code != null) {
+          _showCodeView(context, state);
+        }
       },
-      builder: (context, state) {
-        return Scaffold(
-          appBar: AppBar(
-            title: ActionSelector(
-              currentAction: state.action,
-              onPressed: (ActionType? value) =>
-                  BlocProvider.of<QrScannerBloc>(context)
-                      .add(OnActionEntered(value!)),
-            ),
-            actions: [
-              IconButton(
-                onPressed: () => context.push(ActionsScreen.route),
-                icon: Icon(
-                  Icons.history,
-                  color: Colors.white,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('Отсканируйте код'),
+          actions: [
+            _ActionsHistoryButton(),
+          ],
+        ),
+        body: QrScannerView(),
+      ),
+    );
+  }
+
+  void _showCodeView(BuildContext context, QrScannerState state) {
+    showModalBottomSheet(
+      backgroundColor: Colors.transparent,
+      context: context,
+      isScrollControlled: true,
+      builder: (_) {
+        return DraggableScrollableSheet(
+          initialChildSize: 0.13,
+          minChildSize: 0.13,
+          maxChildSize: 0.30,
+          builder: (_, controller) {
+            return Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.vertical(
+                  top: Radius.circular(20.0),
                 ),
+                color: Colors.white,
               ),
-            ],
-          ),
-          body: Column(
-            children: <Widget>[
-              Expanded(flex: 6, child: QrScannerView()),
-              Expanded(
-                flex: 1,
-                child: Center(child: _CodePlaceHolder(state: state)),
+              padding: const EdgeInsets.all(20),
+              child: SingleChildScrollView(
+                controller: controller,
+                child: CodePlaceHolder(),
               ),
-              Expanded(
-                child: Center(
-                  child: ElevatedButton(
-                    child: Text("Сохранить"),
-                    onPressed: state.isReady
-                        ? () => BlocProvider.of<QrScannerBloc>(context)
-                            .add(OnSaveButtonClicked())
-                        : null,
-                  ),
-                ),
-              )
-            ],
-          ),
+            );
+          },
         );
       },
-    );
+    ).whenComplete(() {
+      BlocProvider.of<QrScannerBloc>(context).add(OnBottomSheetClose());
+    });
   }
 }
 
-class _CodePlaceHolder extends StatelessWidget {
-  final QrScannerState state;
-
-  const _CodePlaceHolder({
-    Key? key,
-    required this.state,
-  }) : super(key: key);
+class _ActionsHistoryButton extends StatelessWidget {
+  const _ActionsHistoryButton({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    late String text;
-    if (state.code != null) {
-      text = 'Считано значение: ${state.code}';
-    } else {
-      text = 'Scan a code';
-    }
-    return Text(text, style: TextStyle(fontSize: 25));
+    return IconButton(
+      onPressed: () => context.push(ActionsScreen.route),
+      icon: Icon(
+        Icons.history,
+        color: Colors.white,
+      ),
+    );
   }
 }

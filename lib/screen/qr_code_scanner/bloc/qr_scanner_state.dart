@@ -26,7 +26,7 @@ class QrScannerState {
     return QrScannerState._(code, action, null);
   }
 
-  QrScannerState codeSaved() {
+  QrScannerState clearCode() {
     return QrScannerState._(null, action, null);
   }
 

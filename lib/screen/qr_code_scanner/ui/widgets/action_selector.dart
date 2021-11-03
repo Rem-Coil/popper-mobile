@@ -16,21 +16,22 @@ class ActionSelector extends StatelessWidget {
   Widget build(BuildContext context) {
     return DropdownButton<ActionType>(
       value: currentAction,
-      dropdownColor: Theme.of(context).primaryColor,
+      dropdownColor: Colors.white,
       icon: const Icon(
         Icons.keyboard_arrow_down,
-        color: Colors.white,
+        color: Colors.black,
       ),
       iconSize: 24,
       underline: SizedBox(),
-      hint: Text('Выбирете действие', style: TextStyle(color: Colors.white)),
+      alignment: AlignmentDirectional.centerEnd,
+      hint: Text('...', style: TextStyle(color: Colors.black)),
       onChanged: onPressed,
       items: ActionType.values.map((e) {
         return DropdownMenuItem<ActionType>(
           value: e,
           child: Text(
             e.getLocalizedName(),
-            style: TextStyle(color: Colors.white),
+            style: TextStyle(color: Colors.black),
           ),
         );
       }).toList(),

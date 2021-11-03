@@ -18,6 +18,7 @@ class QrScannerBloc extends Bloc<QrCodeEvent, QrScannerState> {
       : super(QrScannerState.initial()) {
     on<OnCodeEntered>((event, emit) => emit(state.addCode(event.code)));
     on<OnActionEntered>((event, emit) => emit(state.addAction(event.action)));
+    on<OnBottomSheetClose>((_, emit) => emit(state.clearCode()));
     on<OnSaveButtonClicked>(onSaveClicked);
   }
 
@@ -30,7 +31,7 @@ class QrScannerBloc extends Bloc<QrCodeEvent, QrScannerState> {
 
     emit(result.fold(
       (failure) => state.error(failure),
-      (_) => state.codeSaved(),
+      (_) => state.clearCode(),
     ));
   }
 

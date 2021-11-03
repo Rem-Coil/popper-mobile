@@ -43,10 +43,11 @@ class _QrScannerViewState extends State<QrScannerView> {
 
   void _onQRViewCreated(QRViewController controller) {
     this.controller = controller;
-    final bloc = BlocProvider.of<QrScannerBloc>(context);
-    controller.scannedDataStream.listen((scanData) {
-      bloc.add(OnCodeEntered(scanData.code));
-    });
+    controller.scannedDataStream.listen(_onScanned);
+  }
+
+  void _onScanned(Barcode scanData) {
+    BlocProvider.of<QrScannerBloc>(context)..add(OnCodeEntered(scanData.code));
   }
 
   @override
