@@ -4,3 +4,5 @@ import 'package:flutter/foundation.dart';
 class ActionsEvent {}
 
 class UpdateListEvent extends ActionsEvent {}
+
+class SyncActionsEvent extends ActionsEvent {}

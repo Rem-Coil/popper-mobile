@@ -59,6 +59,11 @@ class ActionsRepository {
     final actions = await _localActionsRepository.getActions();
     return Right(actions.toList());
   }
+
+  Future<Either<Failure, List<LocalAction>>> syncActions() async {
+    final actions = await _localActionsRepository.syncEvents();
+    return Right(actions.toList());
+  }
 }
 
 // TODO Remove - ждём изменения бека

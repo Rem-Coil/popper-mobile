@@ -26,6 +26,24 @@ class _ActionsScreenState extends State<ActionsScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('История операций'),
+        actions: [
+          PopupMenuButton(
+            icon: Icon(Icons.more_vert),
+            itemBuilder: (BuildContext context) => <PopupMenuEntry>[
+              PopupMenuItem(
+                padding: EdgeInsets.zero,
+                onTap: () {
+                  BlocProvider.of<ActionsBloc>(context)
+                    ..add(SyncActionsEvent());
+                },
+                child: ListTile(
+                  leading: Icon(Icons.autorenew_rounded),
+                  title: Text('Синхронизовать'),
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
       body: BlocBuilder<ActionsBloc, ActionsState>(
         builder: (context, state) {
@@ -35,7 +53,7 @@ class _ActionsScreenState extends State<ActionsScreen> {
               final action = state.actions[index];
               return ListTile(
                 title: Text(describeEnum(action.type)),
-                subtitle: Text(action.time.toString()),
+                subtitle: Text(action.formattedDate),
                 trailing: !action.isSynchronized
                     ? Icon(Icons.warning_amber_outlined, color: Colors.red)
                     : null,

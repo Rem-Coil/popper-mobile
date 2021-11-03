@@ -10,6 +10,7 @@ class ActionsBloc extends Bloc<ActionsEvent, ActionsState> {
 
   ActionsBloc(this._actionsRepository) : super(ActionsState.initial()) {
     on<UpdateListEvent>(onUpdateActions);
+    on<SyncActionsEvent>(onSyncActions);
   }
 
   Future<void> onUpdateActions(
@@ -20,6 +21,17 @@ class ActionsBloc extends Bloc<ActionsEvent, ActionsState> {
     emit(result.fold(
       (_) => ActionsState.error('message'),
       (actions) => ActionsState.withActions(actions),
+    ));
+  }
+
+  Future<void> onSyncActions(
+    SyncActionsEvent event,
+    Emitter<ActionsState> emit,
+  ) async {
+    final result = await _actionsRepository.syncActions();
+    emit(result.fold(
+          (_) => ActionsState.error('message'),
+          (actions) => ActionsState.withActions(actions),
     ));
   }
 }

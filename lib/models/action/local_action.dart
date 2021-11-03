@@ -1,4 +1,5 @@
 import 'package:hive/hive.dart';
+import 'package:popper_mobile/core/utils/date_utils.dart';
 import 'package:popper_mobile/models/action/action_type.dart';
 
 part 'local_action.g.dart';
@@ -16,7 +17,7 @@ class LocalAction extends HiveObject {
   @HiveField(4)
   final DateTime time;
   @HiveField(5)
-  final bool isSynchronized;
+  bool isSynchronized;
 
   LocalAction({
     required this.id,
@@ -26,4 +27,9 @@ class LocalAction extends HiveObject {
     required this.time,
     required this.isSynchronized,
   });
+
+  String get formattedDate {
+    final formattedDateTime = FormattedDateTime(time);
+    return formattedDateTime.formattedDate;
+  }
 }

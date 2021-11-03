@@ -18,4 +18,20 @@ class LocalActionsRepository {
     actionsBox.close();
     return actions;
   }
+
+  Future<Iterable<LocalAction>> syncEvents() async {
+    final actionsBox = await Hive.openBox<LocalAction>(actionsKey);
+    final actions = actionsBox.values;
+
+    actions.forEach((element) {
+      if (!element.isSynchronized) {
+        // TODO - try to sync
+        element.isSynchronized = true;
+        element.save();
+      }
+    });
+
+    actionsBox.close();
+    return actions;
+  }
 }
