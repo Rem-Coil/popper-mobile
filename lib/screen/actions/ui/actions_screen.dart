@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:popper_mobile/models/action/action_type.dart';
 import 'package:popper_mobile/screen/actions/bloc/actions_bloc.dart';
 import 'package:popper_mobile/screen/actions/bloc/actions_event.dart';
 import 'package:popper_mobile/screen/actions/bloc/actions_state.dart';
@@ -52,7 +53,7 @@ class _ActionsScreenState extends State<ActionsScreen> {
             itemBuilder: (context, index) {
               final action = state.actions[index];
               return ListTile(
-                title: Text(describeEnum(action.type)),
+                title: Text(action.type.getLocalizedName()),
                 subtitle: Text(action.formattedDate),
                 trailing: !action.isSynchronized
                     ? Icon(Icons.warning_amber_outlined, color: Colors.red)

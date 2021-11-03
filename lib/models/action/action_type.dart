@@ -19,3 +19,24 @@ enum ActionType {
   @HiveField(6)
   testing
 }
+
+extension LocalizeActionType on ActionType {
+  String getLocalizedName() {
+    switch(this) {
+      case ActionType.winding:
+       return 'Обмотка';
+      case ActionType.output:
+        return 'Изолировка выводов';
+      case ActionType.isolation:
+        return 'Изоляция';
+      case ActionType.molding:
+        return 'Формовка';
+      case ActionType.crimping:
+        return 'Опрессовка';
+      case ActionType.quality:
+        return 'ОТК';
+      case ActionType.testing:
+        return 'Испытания';
+    }
+  }
+}

@@ -14,8 +14,8 @@ class QrScannerState {
     return QrScannerState._(null, null, null);
   }
 
-  factory QrScannerState.error(Failure failure) {
-    return QrScannerState._(null, null, failure);
+  QrScannerState error(Failure failure) {
+    return QrScannerState._(null, action, failure);
   }
 
   QrScannerState addAction(ActionType action) {
@@ -24,6 +24,10 @@ class QrScannerState {
 
   QrScannerState addCode(String code) {
     return QrScannerState._(code, action, null);
+  }
+
+  QrScannerState codeSaved() {
+    return QrScannerState._(null, action, null);
   }
 
   bool get isReady => code != null && action != null;

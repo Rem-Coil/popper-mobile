@@ -29,7 +29,7 @@ class ActionSelector extends StatelessWidget {
         return DropdownMenuItem<ActionType>(
           value: e,
           child: Text(
-            describeEnum(e),
+            e.getLocalizedName(),
             style: TextStyle(color: Colors.white),
           ),
         );
