@@ -19,10 +19,12 @@ class CodePlaceHolder extends StatelessWidget {
             _ColumnDivider(),
             _LineInfo(
               label: 'Счатанное значение:',
-              infoValue: Text(
-                state.code != null ? state.code! : '...',
-                style: TextStyle(fontSize: 25),
-              ),
+              infoValue: !state.isLoad
+                  ? Text(
+                      state.bobbin != null ? state.bobbin!.bobbinNumber : '...',
+                      style: TextStyle(fontSize: 25),
+                    )
+                  : CircularProgressIndicator(),
             ),
             _ColumnDivider(),
             _LineInfo(

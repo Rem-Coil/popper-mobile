@@ -19,11 +19,11 @@ class QrScannerScreen extends StatelessWidget {
     return BlocListener<QrScannerBloc, QrScannerState>(
       listenWhen: (previous, current) =>
           current.errorMessage != null ||
-          (previous.code == null && current.code != null),
+          (previous.bobbin == null && current.bobbin != null),
       listener: (context, state) {
         if (state.errorMessage != null) {
           context.errorSnackBar(state.errorMessage!);
-        } else if (state.code != null) {
+        } else if (state.bobbin != null) {
           _showCodeView(context, state);
         }
       },
@@ -46,14 +46,14 @@ class QrScannerScreen extends StatelessWidget {
       isScrollControlled: true,
       builder: (_) {
         return DraggableScrollableSheet(
-          initialChildSize: 0.13,
-          minChildSize: 0.13,
+          initialChildSize: 0.30,
+          minChildSize: 0.30,
           maxChildSize: 0.30,
           builder: (_, controller) {
             return Container(
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.vertical(
-                  top: Radius.circular(20.0),
+                borderRadius: const BorderRadius.vertical(
+                  top: const Radius.circular(20.0),
                 ),
                 color: Colors.white,
               ),

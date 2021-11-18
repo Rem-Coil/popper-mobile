@@ -1,34 +1,45 @@
 import 'package:flutter/foundation.dart';
 import 'package:popper_mobile/core/error/failure.dart';
 import 'package:popper_mobile/models/action/action_type.dart';
+import 'package:popper_mobile/models/qr_code/bobbin.dart';
 
 @immutable
 class QrScannerState {
-  final String? code;
+  final Status status;
+  final Bobbin? bobbin;
   final ActionType? action;
   final Failure? errorMessage;
 
-  QrScannerState._(this.code, this.action, this.errorMessage);
+  QrScannerState._(this.status, this.bobbin, this.action, this.errorMessage);
 
   factory QrScannerState.initial() {
-    return QrScannerState._(null, null, null);
+    return QrScannerState._(Status.INITIAL, null, null, null);
+  }
+
+  QrScannerState load() {
+    return QrScannerState._(Status.LOAD, bobbin, action, errorMessage);
   }
 
   QrScannerState error(Failure failure) {
-    return QrScannerState._(null, action, failure);
+    return QrScannerState._(Status.ERROR, null, action, failure);
   }
 
-  QrScannerState addAction(ActionType action) {
-    return QrScannerState._(code, action, null);
+  QrScannerState setAction(ActionType action) {
+    return QrScannerState._(Status.CORRECT, bobbin, action, null);
   }
 
-  QrScannerState addCode(String code) {
-    return QrScannerState._(code, action, null);
+  QrScannerState setBobbin(Bobbin bobbin) {
+    return QrScannerState._(Status.CORRECT, bobbin, action, null);
   }
 
   QrScannerState clearCode() {
-    return QrScannerState._(null, action, null);
+    return QrScannerState._(Status.CORRECT, null, action, null);
   }
 
-  bool get isReady => code != null && action != null;
+  bool get isReady =>
+      status == Status.CORRECT && bobbin != null && action != null;
+
+  bool get isLoad => status == Status.LOAD;
 }
+
+enum Status { INITIAL, LOAD, ERROR, CORRECT }

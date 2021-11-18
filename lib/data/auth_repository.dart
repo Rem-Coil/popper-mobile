@@ -21,8 +21,10 @@ class AuthRepository {
       await saveToken(token);
       final user = User.fromToken(token.token);
       return Right(user);
-
     } on DioError catch (e) {
+      if (e.error is SocketException) {
+        return Left(NoInternetFailure());
+      }
 
       switch (e.response?.statusCode) {
         case HttpStatus.internalServerError:

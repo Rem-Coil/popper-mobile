@@ -25,7 +25,7 @@ class ActionsRepository {
     } on DioError catch (e) {
       if (e.error is SocketException) {
         _saveToCache(action, false);
-        return Left(ServerFailure());
+        return Left(NoInternetFailure());
       }
 
       switch (e.response?.statusCode) {

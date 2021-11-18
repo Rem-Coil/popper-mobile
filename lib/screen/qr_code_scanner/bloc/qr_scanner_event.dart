@@ -8,6 +8,8 @@ class OnCodeEntered extends QrCodeEvent {
   final String code;
 
   OnCodeEntered(this.code);
+
+  int get bobbinId => int.parse(code);
 }
 
 class OnActionEntered extends QrCodeEvent {

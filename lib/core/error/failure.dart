@@ -5,6 +5,11 @@ abstract class Failure {
   String get message;
 }
 
+class NoInternetFailure extends Failure {
+  @override
+  String get message => 'Нет интернета';
+}
+
 class ServerFailure extends Failure {
   @override
   String get message => 'Server error';
@@ -28,4 +33,9 @@ class UnknownFailure extends Failure {
 class NoUserFailure extends Failure {
   @override
   String get message => 'No user';
+}
+
+class ActionAlreadyExist extends Failure {
+  @override
+  String get message => 'Операция уже выполнена';
 }
