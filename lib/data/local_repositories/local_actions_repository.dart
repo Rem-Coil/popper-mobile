@@ -16,7 +16,7 @@ class LocalActionsRepository {
     final actionsBox = await Hive.openBox<LocalAction>(actionsKey);
     final actions = actionsBox.values;
     actionsBox.close();
-    return actions;
+    return List.of(actions).reversed;
   }
 
   Future<Iterable<LocalAction>> syncEvents() async {

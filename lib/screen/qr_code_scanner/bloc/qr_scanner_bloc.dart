@@ -19,8 +19,9 @@ class QrScannerBloc extends Bloc<QrCodeEvent, QrScannerState> {
       : super(QrScannerState.initial()) {
     on<OnCodeEntered>(onCodeEntered);
     on<OnActionEntered>((event, emit) => emit(state.setAction(event.action)));
-    on<OnBottomSheetClose>((_, emit) => emit(state.clearCode()));
+    on<OnBottomSheetClose>((_, emit) => emit(state.clearBobbin()));
     on<OnSaveButtonClicked>(onSaveClicked);
+    on<OnSaveToCacheButtonClicked>(onSaveToCacheButtonClicked);
   }
 
   Future<void> onCodeEntered(
@@ -29,7 +30,10 @@ class QrScannerBloc extends Bloc<QrCodeEvent, QrScannerState> {
   ) async {
     emit(state.load());
     final bobbin = await _bobbinsRepository.getBobbinInfo(event.bobbinId);
-    emit(bobbin.fold((f) => state.error(f), (b) => state.setBobbin(b)));
+    emit(bobbin.fold(
+      (f) => state.onNeedCacheError(event.bobbinId, f),
+      (b) => state.setBobbin(b),
+    ));
   }
 
   Future<void> onSaveClicked(
@@ -41,7 +45,7 @@ class QrScannerBloc extends Bloc<QrCodeEvent, QrScannerState> {
 
     emit(result.fold(
       (failure) => state.error(failure),
-      (_) => state.clearCode(),
+      (_) => state.clearBobbin(),
     ));
   }
 
@@ -54,5 +58,14 @@ class QrScannerBloc extends Bloc<QrCodeEvent, QrScannerState> {
       bobbinId: bobbinId,
       type: actionType,
     );
+  }
+
+  Future<void> onSaveToCacheButtonClicked(
+    OnSaveToCacheButtonClicked event,
+    Emitter<QrScannerState> emit,
+  ) async {
+    _generateAction(state.bobbin!.id, state.action!)
+        .then((action) async => await _actionsRepository.saveToCache(action));
+    emit(state.clearBobbin());
   }
 }

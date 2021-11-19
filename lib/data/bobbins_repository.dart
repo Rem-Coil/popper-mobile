@@ -25,7 +25,7 @@ class BobbinsRepository {
         case HttpStatus.internalServerError:
           return Left(ServerFailure());
         case HttpStatus.unauthorized:
-          return Left(WrongCredentials());
+          return Left(WrongCredentialsFailure());
       }
 
       return Left(UnknownFailure());

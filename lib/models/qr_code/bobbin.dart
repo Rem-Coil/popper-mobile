@@ -15,6 +15,10 @@ class Bobbin {
 
   Bobbin(this.id, this.taskId, this.bobbinNumber);
 
+  factory Bobbin.defaultValue(int id) {
+    return Bobbin(id, -1, 'default');
+  }
+
   factory Bobbin.fromJson(Map<String, dynamic> json) => _$BobbinFromJson(json);
 
   Map<String, dynamic> toJson() => _$BobbinToJson(this);

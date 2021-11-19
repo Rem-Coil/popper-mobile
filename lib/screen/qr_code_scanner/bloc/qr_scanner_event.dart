@@ -21,3 +21,5 @@ class OnActionEntered extends QrCodeEvent {
 class OnSaveButtonClicked extends QrCodeEvent {}
 
 class OnBottomSheetClose extends QrCodeEvent {}
+
+class OnSaveToCacheButtonClicked extends QrCodeEvent {}

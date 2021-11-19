@@ -18,15 +18,11 @@ class QrScannerScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocListener<QrScannerBloc, QrScannerState>(
       listenWhen: (previous, current) =>
-          current.errorMessage != null ||
+          (previous.errorMessage == null &&
+              current.errorMessage != null &&
+              current.bobbin == null) ||
           (previous.bobbin == null && current.bobbin != null),
-      listener: (context, state) {
-        if (state.errorMessage != null) {
-          context.errorSnackBar(state.errorMessage!);
-        } else if (state.bobbin != null) {
-          _showCodeView(context, state);
-        }
-      },
+      listener: (context, state) => _showBottomSheet(context),
       child: Scaffold(
         appBar: AppBar(
           title: Text('Отсканируйте код'),
@@ -39,7 +35,7 @@ class QrScannerScreen extends StatelessWidget {
     );
   }
 
-  void _showCodeView(BuildContext context, QrScannerState state) {
+  void _showBottomSheet(BuildContext context) {
     showModalBottomSheet(
       backgroundColor: Colors.transparent,
       context: context,

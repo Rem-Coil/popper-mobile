@@ -12,30 +12,20 @@ class NoInternetFailure extends Failure {
 
 class ServerFailure extends Failure {
   @override
-  String get message => 'Server error';
+  String get message => 'Ошибка сервера';
 }
 
-class WrongCredentials extends Failure {
+class WrongCredentialsFailure extends Failure {
   @override
   String get message => 'Неправильные данные пользователя';
 }
 
-class WrongOperation extends Failure {
+class ActionAlreadyExistFailure extends Failure {
   @override
-  String get message => 'Wrong operation';
+  String get message => 'Данная опреация уже совершена над катушкой';
 }
 
 class UnknownFailure extends Failure {
   @override
-  String get message => 'Unknown error';
-}
-
-class NoUserFailure extends Failure {
-  @override
-  String get message => 'No user';
-}
-
-class ActionAlreadyExist extends Failure {
-  @override
-  String get message => 'Операция уже выполнена';
+  String get message => 'Неизвестная ошибка';
 }

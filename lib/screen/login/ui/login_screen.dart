@@ -7,7 +7,6 @@ import 'package:popper_mobile/screen/login/bloc/login_event.dart';
 import 'package:popper_mobile/screen/login/bloc/login_state.dart';
 import 'package:popper_mobile/screen/qr_code_scanner/ui/qr_scanner_screen.dart';
 import 'package:popper_mobile/widgets/button.dart';
-import 'package:popper_mobile/widgets/column_divider.dart';
 import 'package:popper_mobile/widgets/field.dart';
 import 'package:popper_mobile/widgets/logo.dart';
 
@@ -63,7 +62,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Logo(250),
-                      ColumnDivider(32),
+                      SizedBox(height: 32),
                       Text(
                         'Войти',
                         style: TextStyle(
@@ -71,7 +70,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           fontWeight: FontWeight.w600,
                         ),
                       ),
-                      ColumnDivider(32),
+                      SizedBox(height: 32),
                       Field(
                         icon: Icons.local_phone_outlined,
                         hintText: 'Телефон',
@@ -81,7 +80,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             ? 'Введите телефон'
                             : null,
                       ),
-                      ColumnDivider(16),
+                    SizedBox(height: 16),
                       Field(
                         icon: Icons.lock_outline_rounded,
                         isHidden: true,
@@ -91,7 +90,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             ? 'Введите пароль'
                             : null,
                       ),
-                      ColumnDivider(48),
+                    SizedBox(height: 48),
                       Center(
                         child: LoadingButton(
                           width: 270,
