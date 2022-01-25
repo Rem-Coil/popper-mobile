@@ -20,7 +20,7 @@ class SplashBloc extends Bloc<SplashEvent, SplashState> {
     if (user == null) {
       emit(NavigateToLogin());
     } else {
-      emit(NavigateToScanner());
+      emit(NavigateToHome());
     }
   }
 }

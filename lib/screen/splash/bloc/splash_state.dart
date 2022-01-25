@@ -7,4 +7,4 @@ class InitialState extends SplashState {}
 
 class NavigateToLogin extends SplashState {}
 
-class NavigateToScanner extends SplashState {}
+class NavigateToHome extends SplashState {}
