@@ -14,7 +14,7 @@ class User {
     final jwtData = JwtDecoder.decode(token);
     return User._(
       jwtData['id'],
-      jwtData['firstname'],
+      jwtData['first_name'],
       jwtData['surname'],
       jwtData['second_name'],
     );
