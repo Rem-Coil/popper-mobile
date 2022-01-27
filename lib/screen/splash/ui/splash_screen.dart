@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:popper_mobile/core/utils/context_utils.dart';
+import 'package:popper_mobile/screen/home/ui/home_screen.dart';
 import 'package:popper_mobile/screen/login/ui/login_screen.dart';
 import 'package:popper_mobile/screen/splash/bloc/splash_bloc.dart';
 import 'package:popper_mobile/screen/splash/bloc/splash_event.dart';
@@ -36,8 +37,9 @@ class _SplashScreenState extends State<SplashScreen> {
               if (state is NavigateToLogin) {
                 _navigateDelayed(LoginScreen.route);
               } else if (state is NavigateToHome) {
-                print('Navigate to home');
-                // _navigateDelayed(HomeScreen.route);
+                _navigateDelayed(
+                  HomeScreen.route
+                );
               }
             });
           },
@@ -47,10 +49,10 @@ class _SplashScreenState extends State<SplashScreen> {
     );
   }
 
-  void _navigateDelayed(String route) {
+  void _navigateDelayed(String route, {Object? args}) {
     Timer(
       Duration(seconds: 1),
-      () => context.pushReplacement(route),
+      () => context.pushReplacement(route, args: args),
     );
   }
 }

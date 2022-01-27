@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:popper_mobile/core/error/failure.dart';
 
 extension Navigateon on BuildContext {
-  pushReplacement(String route) {
-    Navigator.of(this).pushReplacementNamed(route);
+  pushReplacement(String route, {Object? args}) {
+    Navigator.of(this).pushReplacementNamed(route, arguments: args);
   }
 
-  push(String route) {
-    Navigator.of(this).pushNamed(route);
+  push(String route, {Object? args}) {
+    Navigator.of(this).pushNamed(route, arguments: args);
   }
 }
 

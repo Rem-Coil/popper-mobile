@@ -68,61 +68,63 @@ class _LoginScreenState extends State<LoginScreen> {
               builder: (context, state) {
                 return Form(
                   key: _formKey,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Logo(250),
-                      SizedBox(height: 32),
-                      Text(
-                        'Войти',
-                        style: TextStyle(
-                          fontSize: 30,
-                          fontWeight: FontWeight.w600,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Logo(250),
+                        SizedBox(height: 32),
+                        Text(
+                          'Войти',
+                          style: TextStyle(
+                            fontSize: 30,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
-                      ),
-                      SizedBox(height: 32),
-                      Field(
-                        icon: Icons.local_phone_outlined,
-                        hintText: 'Телефон',
-                        controller: phoneController,
-                        isNumberField: true,
-                        validator: (value) =>
-                            isFieldsCleared || value == null || value.isNotEmpty
-                                ? null
-                                : 'Введите телефон',
-                      ),
-                      SizedBox(height: 16),
-                      Field(
-                        icon: Icons.lock_outline_rounded,
-                        isHidden: true,
-                        hintText: 'Пароль',
-                        controller: passwordController,
-                        validator: (value) =>
-                            isFieldsCleared || value == null || value.isNotEmpty
-                                ? null
-                                : 'Введите пароль',
-                      ),
-                      SizedBox(height: 48),
-                      Center(
-                        child: LoadingButton(
-                          width: 270,
-                          isLoad: state.isLoad,
-                          text: 'Войти',
-                          onPressed: () {
-                            FocusScope.of(context).unfocus();
-                            if (isValidFields) {
-                              checkUserData(context);
-                            }
-                          },
+                        SizedBox(height: 32),
+                        Field(
+                          icon: Icons.local_phone_outlined,
+                          hintText: 'Телефон',
+                          controller: phoneController,
+                          isNumberField: true,
+                          validator: (value) =>
+                              isFieldsCleared || value == null || value.isNotEmpty
+                                  ? null
+                                  : 'Введите телефон',
                         ),
-                      ),
-                      Center(
-                        child: TextButton(
-                          child: Text('Регистрация'),
-                          onPressed: () {},
+                        SizedBox(height: 16),
+                        Field(
+                          icon: Icons.lock_outline_rounded,
+                          isHidden: true,
+                          hintText: 'Пароль',
+                          controller: passwordController,
+                          validator: (value) =>
+                              isFieldsCleared || value == null || value.isNotEmpty
+                                  ? null
+                                  : 'Введите пароль',
                         ),
-                      ),
-                    ],
+                        SizedBox(height: 48),
+                        Center(
+                          child: LoadingButton(
+                            width: 270,
+                            isLoad: state.isLoad,
+                            text: 'Войти',
+                            onPressed: () {
+                              FocusScope.of(context).unfocus();
+                              if (isValidFields) {
+                                checkUserData(context);
+                              }
+                            },
+                          ),
+                        ),
+                        Center(
+                          child: TextButton(
+                            child: Text('Регистрация'),
+                            onPressed: () {},
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 );
               },
