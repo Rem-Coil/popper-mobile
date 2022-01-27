@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:popper_mobile/core/utils/context_utils.dart';
+import 'package:popper_mobile/screen/home/ui/home_screen.dart';
 import 'package:popper_mobile/screen/login/bloc/login_bloc.dart';
 import 'package:popper_mobile/screen/login/bloc/login_event.dart';
 import 'package:popper_mobile/screen/login/bloc/login_state.dart';
@@ -56,7 +57,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   context.successSnackBar('Успешно');
                   Future.delayed(
                     Duration(seconds: 1),
-                    () => print('Navigate to home'),
+                    () => context.pushReplacement(HomeScreen.route),
                   );
                 }
 

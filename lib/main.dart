@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:popper_mobile/core/di/injection.dart';
 import 'package:popper_mobile/core/theme/colors.dart';
 import 'package:popper_mobile/core/theme/fonts.dart';
+import 'package:popper_mobile/screen/auth/bloc/auth_bloc.dart';
 import 'package:popper_mobile/screen/home/ui/home_screen.dart';
 import 'package:popper_mobile/screen/login/bloc/login_bloc.dart';
 import 'package:popper_mobile/screen/login/ui/login_screen.dart';
@@ -21,8 +22,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider<LoginBloc>(create: (_) => getIt<LoginBloc>()),
-        BlocProvider<SplashBloc>(create: (_) => getIt<SplashBloc>()),
+        BlocProvider<AuthBloc>(create: (_) => getIt<AuthBloc>()),
       ],
       child: MaterialApp(
         title: 'Rem&Coil',
@@ -40,9 +40,19 @@ class MyApp extends StatelessWidget {
   Route<dynamic>? routeFactory(RouteSettings settings) {
     switch (settings.name) {
       case SplashScreen.route:
-        return MaterialPageRoute(builder: (_) => SplashScreen());
+        return MaterialPageRoute(builder: (_) {
+          return BlocProvider<SplashBloc>(
+            create: (_) => getIt<SplashBloc>(),
+            child: SplashScreen(),
+          );
+        });
       case LoginScreen.route:
-        return MaterialPageRoute(builder: (_) => LoginScreen());
+        return MaterialPageRoute(builder: (_) {
+          return BlocProvider<LoginBloc>(
+            create: (_) => getIt<LoginBloc>(),
+            child: LoginScreen(),
+          );
+        });
       case HomeScreen.route:
         return MaterialPageRoute(builder: (_) => HomeScreen());
       case FailedScreen.route:

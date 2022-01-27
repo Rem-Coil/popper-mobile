@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:popper_mobile/screen/login/bloc/login_bloc.dart';
-import 'package:popper_mobile/screen/login/bloc/login_state.dart';
+import 'package:popper_mobile/screen/auth/bloc/auth_bloc.dart';
+import 'package:popper_mobile/screen/auth/bloc/auth_state.dart';
 
 class HomeScreen extends StatelessWidget {
   static const route = '/home';
@@ -29,7 +29,7 @@ class HomeHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<LoginBloc, LoginState>(
+    return BlocBuilder<AuthBloc, AuthState>(
       builder: (context, state) => Container(
         child: Text('Привет, ${state.user?.firstname ?? 'Незнакомец'}'),
       ),

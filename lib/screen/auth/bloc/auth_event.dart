@@ -2,10 +2,12 @@ import 'package:flutter/foundation.dart';
 import 'package:popper_mobile/models/auth/user.dart';
 
 @immutable
-class SplashEvent {}
+abstract class AuthEvent {}
 
-class Initialize extends SplashEvent {
+class ChangeUser extends AuthEvent {
   final User? user;
 
-  Initialize(this.user);
+  ChangeUser(this.user);
 }
+
+class LoadSavedUser extends AuthEvent {}

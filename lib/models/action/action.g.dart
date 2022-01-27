@@ -6,15 +6,13 @@ part of 'action.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-Action _$ActionFromJson(Map<String, dynamic> json) {
-  return Action(
-    id: json['id'] as int,
-    userId: json['operator_id'] as int,
-    bobbinId: json['bobbin_id'] as int,
-    type: _$enumDecode(_$ActionTypeEnumMap, json['action_type']),
-    time: Action._dateFromJson(json['done_time'] as String),
-  );
-}
+Action _$ActionFromJson(Map<String, dynamic> json) => Action(
+      id: json['id'] as int,
+      userId: json['operator_id'] as int,
+      bobbinId: json['bobbin_id'] as int,
+      type: $enumDecode(_$ActionTypeEnumMap, json['action_type']),
+      time: Action._dateFromJson(json['done_time'] as String),
+    );
 
 Map<String, dynamic> _$ActionToJson(Action instance) => <String, dynamic>{
       'id': instance.id,
@@ -23,32 +21,6 @@ Map<String, dynamic> _$ActionToJson(Action instance) => <String, dynamic>{
       'action_type': _$ActionTypeEnumMap[instance.type],
       'done_time': Action._dateToJson(instance.time),
     };
-
-K _$enumDecode<K, V>(
-  Map<K, V> enumValues,
-  Object? source, {
-  K? unknownValue,
-}) {
-  if (source == null) {
-    throw ArgumentError(
-      'A value must be provided. Supported values: '
-      '${enumValues.values.join(', ')}',
-    );
-  }
-
-  return enumValues.entries.singleWhere(
-    (e) => e.value == source,
-    orElse: () {
-      if (unknownValue == null) {
-        throw ArgumentError(
-          '`$source` is not one of the supported values: '
-          '${enumValues.values.join(', ')}',
-        );
-      }
-      return MapEntry(unknownValue, enumValues.values.first);
-    },
-  ).key;
-}
 
 const _$ActionTypeEnumMap = {
   ActionType.winding: 'winding',
