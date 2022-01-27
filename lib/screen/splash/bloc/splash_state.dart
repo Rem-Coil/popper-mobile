@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart';
+part of 'splash_bloc.dart';
 
 @immutable
 class SplashState {}

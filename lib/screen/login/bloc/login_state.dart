@@ -1,6 +1,4 @@
-import 'package:flutter/foundation.dart';
-import 'package:popper_mobile/core/error/failure.dart';
-import 'package:popper_mobile/models/auth/user.dart';
+part of 'login_bloc.dart';
 
 @immutable
 class LoginState {

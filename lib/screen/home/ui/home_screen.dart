@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:popper_mobile/screen/auth/bloc/auth_bloc.dart';
-import 'package:popper_mobile/screen/auth/bloc/auth_state.dart';
 
 class HomeScreen extends StatelessWidget {
   static const route = '/home';

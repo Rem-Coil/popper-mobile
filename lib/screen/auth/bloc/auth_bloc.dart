@@ -1,8 +1,12 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
+import 'package:popper_mobile/core/bloc/status.dart';
 import 'package:popper_mobile/data/auth_repository.dart';
-import 'package:popper_mobile/screen/auth/bloc/auth_event.dart';
-import 'package:popper_mobile/screen/auth/bloc/auth_state.dart';
+import 'package:popper_mobile/models/auth/user.dart';
+
+part 'auth_event.dart';
+part 'auth_state.dart';
 
 @singleton
 class AuthBloc extends Bloc<AuthEvent, AuthState> {

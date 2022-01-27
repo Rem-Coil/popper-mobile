@@ -1,6 +1,4 @@
-import 'package:flutter/foundation.dart';
-import 'package:popper_mobile/core/bloc/status.dart';
-import 'package:popper_mobile/models/auth/user.dart';
+part of 'auth_bloc.dart';
 
 @immutable
 class AuthState {

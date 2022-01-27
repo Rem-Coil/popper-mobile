@@ -1,5 +1,4 @@
-import 'package:flutter/foundation.dart';
-import 'package:popper_mobile/models/auth/user_credentials.dart';
+part of 'login_bloc.dart';
 
 @immutable
 class LoginEvent {}

@@ -1,7 +1,10 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
-import 'package:popper_mobile/screen/splash/bloc/splash_event.dart';
-import 'package:popper_mobile/screen/splash/bloc/splash_state.dart';
+import 'package:popper_mobile/models/auth/user.dart';
+
+part 'splash_event.dart';
+part 'splash_state.dart';
 
 @singleton
 class SplashBloc extends Bloc<SplashEvent, SplashState> {

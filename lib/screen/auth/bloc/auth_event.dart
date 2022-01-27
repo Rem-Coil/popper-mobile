@@ -1,5 +1,5 @@
-import 'package:flutter/foundation.dart';
-import 'package:popper_mobile/models/auth/user.dart';
+part of 'auth_bloc.dart';
+
 
 @immutable
 abstract class AuthEvent {}

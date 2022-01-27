@@ -1,10 +1,14 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
+import 'package:popper_mobile/core/error/failure.dart';
 import 'package:popper_mobile/data/auth_repository.dart';
+import 'package:popper_mobile/models/auth/user.dart';
+import 'package:popper_mobile/models/auth/user_credentials.dart';
 import 'package:popper_mobile/screen/auth/bloc/auth_bloc.dart';
-import 'package:popper_mobile/screen/auth/bloc/auth_event.dart';
-import 'package:popper_mobile/screen/login/bloc/login_event.dart';
-import 'package:popper_mobile/screen/login/bloc/login_state.dart';
+
+part 'login_event.dart';
+part 'login_state.dart';
 
 @singleton
 class LoginBloc extends Bloc<LoginEvent, LoginState> {

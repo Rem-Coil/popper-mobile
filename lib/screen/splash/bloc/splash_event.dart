@@ -1,5 +1,4 @@
-import 'package:flutter/foundation.dart';
-import 'package:popper_mobile/models/auth/user.dart';
+part of 'splash_bloc.dart';
 
 @immutable
 class SplashEvent {}

@@ -5,12 +5,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:popper_mobile/core/bloc/status.dart';
 import 'package:popper_mobile/core/utils/context_utils.dart';
 import 'package:popper_mobile/screen/auth/bloc/auth_bloc.dart';
-import 'package:popper_mobile/screen/auth/bloc/auth_state.dart';
 import 'package:popper_mobile/screen/home/ui/home_screen.dart';
 import 'package:popper_mobile/screen/login/ui/login_screen.dart';
 import 'package:popper_mobile/screen/splash/bloc/splash_bloc.dart';
-import 'package:popper_mobile/screen/splash/bloc/splash_event.dart';
-import 'package:popper_mobile/screen/splash/bloc/splash_state.dart';
 import 'package:popper_mobile/widgets/logo.dart';
 
 class SplashScreen extends StatelessWidget {

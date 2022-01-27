@@ -3,8 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:popper_mobile/core/utils/context_utils.dart';
 import 'package:popper_mobile/screen/home/ui/home_screen.dart';
 import 'package:popper_mobile/screen/login/bloc/login_bloc.dart';
-import 'package:popper_mobile/screen/login/bloc/login_event.dart';
-import 'package:popper_mobile/screen/login/bloc/login_state.dart';
 import 'package:popper_mobile/widgets/button.dart';
 import 'package:popper_mobile/widgets/field.dart';
 import 'package:popper_mobile/widgets/logo.dart';
