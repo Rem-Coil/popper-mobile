@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:popper_mobile/widgets/button.dart';
+import 'package:popper_mobile/widgets/buttons/simple_button.dart';
 
 class FailedScreen extends StatelessWidget {
   static const String route = '/failed';
