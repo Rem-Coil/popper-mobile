@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:popper_mobile/core/utils/context_utils.dart';
 import 'package:popper_mobile/screen/home/ui/widgets/actions_list_button.dart';
 import 'package:popper_mobile/screen/home/ui/widgets/home_header.dart';
+import 'package:popper_mobile/screen/scanner/ui/scanner_screen.dart';
 import 'package:popper_mobile/widgets/buttons/simple_button.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -41,7 +43,7 @@ class HomeScreen extends StatelessWidget {
               width: double.infinity,
               height: 67,
               borderRadius: 16,
-              onPressed: () {},
+              onPressed: () => context.push(ScannerScreen.route),
               child: Row(
                 children: [
                   Text(

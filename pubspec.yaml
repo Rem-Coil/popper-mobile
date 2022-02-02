@@ -23,6 +23,10 @@ dependencies:
   retrofit: ^2.0.1
   jwt_decoder: ^2.0.1
 
+  image_picker: ^0.8.4
+  camera: ^0.9.4
+  google_ml_kit: 0.7.3
+
   hive: ^2.0.4
   hive_flutter: ^1.1.0
 
