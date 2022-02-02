@@ -60,7 +60,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 }
 
                 if (state.errorMessage != null) {
-                  context.errorSnackBar(state.errorMessage!);
+                  context.errorSnackBar(state.errorMessage!.message);
                   clear();
                 }
               },

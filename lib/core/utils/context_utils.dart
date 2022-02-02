@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:popper_mobile/core/error/failure.dart';
 
 extension Navigateon on BuildContext {
   pushReplacement(String route, {Object? args}) {
@@ -22,12 +21,12 @@ extension SnackBars on BuildContext {
     );
   }
 
-  void errorSnackBar(Failure failure, {int seconds = 1}) {
+  void errorSnackBar(String message, {int seconds = 1}) {
     ScaffoldMessenger.of(this).showSnackBar(
       SnackBar(
         backgroundColor: Colors.red,
         content: Text(
-          failure.message,
+          message,
           style: TextStyle(fontSize: 16),
         ),
       ),

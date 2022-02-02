@@ -1,11 +1,12 @@
-import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:popper_mobile/core/di/injection.dart';
 import 'package:popper_mobile/core/theme/colors.dart';
 import 'package:popper_mobile/core/theme/fonts.dart';
+import 'package:popper_mobile/models/barcode/scanned_entity.dart';
 import 'package:popper_mobile/screen/auth/bloc/auth_bloc.dart';
 import 'package:popper_mobile/screen/home/ui/home_screen.dart';
+import 'package:popper_mobile/screen/loading/ui/bobbin_loading_screen.dart';
 import 'package:popper_mobile/screen/login/bloc/login_bloc.dart';
 import 'package:popper_mobile/screen/login/ui/login_screen.dart';
 import 'package:popper_mobile/screen/scanner/ui/scanner_screen.dart';
@@ -14,12 +15,9 @@ import 'package:popper_mobile/screen/splash/ui/splash_screen.dart';
 import 'package:popper_mobile/widgets/failed_screen.dart';
 import 'package:popper_mobile/widgets/success_screen.dart';
 
-List<CameraDescription> cameras = [];
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  cameras = await availableCameras();
   configureDependencies();
   runApp(MyApp());
 }
@@ -64,6 +62,11 @@ class MyApp extends StatelessWidget {
         return MaterialPageRoute(builder: (_) => HomeScreen());
       case ScannerScreen.route:
         return MaterialPageRoute(builder: (_) => ScannerScreen());
+      case BobbinLoadingScreen.route:
+        final args = settings.arguments as ScannedEntity;
+        return MaterialPageRoute(
+          builder: (_) => BobbinLoadingScreen(bobbin: args),
+        );
       case FailedScreen.route:
         final args = settings.arguments as FailedScreenArgs;
         return MaterialPageRoute(builder: (_) => FailedScreen(args: args));
