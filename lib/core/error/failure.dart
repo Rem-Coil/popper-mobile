@@ -20,6 +20,11 @@ class WrongCredentialsFailure extends Failure {
   String get message => 'Неправильные данные пользователя';
 }
 
+class NoSuchBobbinException extends Failure {
+  @override
+  String get message => 'Отсканированной катушки не существует';
+}
+
 class ActionAlreadyExistFailure extends Failure {
   @override
   String get message => 'Данная опреация уже совершена над катушкой';

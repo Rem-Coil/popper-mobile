@@ -43,7 +43,11 @@ class HomeScreen extends StatelessWidget {
               width: double.infinity,
               height: 67,
               borderRadius: 16,
-              onPressed: () => context.push(ScannerScreen.route),
+              onPressed: () {
+                // final scanned = ScannedEntity.fromString('bobbin:689872');
+                // context.push(BobbinLoadingScreen.route, args: scanned);
+                context.push(ScannerScreen.route);
+              },
               child: Row(
                 children: [
                   Text(

@@ -8,6 +8,10 @@ extension Navigateon on BuildContext {
   push(String route, {Object? args}) {
     Navigator.of(this).pushNamed(route, arguments: args);
   }
+
+  pop() {
+    Navigator.of(this).pop();
+  }
 }
 
 extension SnackBars on BuildContext {

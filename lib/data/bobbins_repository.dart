@@ -5,7 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 import 'package:popper_mobile/core/error/failure.dart';
 import 'package:popper_mobile/data/api/api_provider.dart';
-import 'package:popper_mobile/models/qr_code/bobbin.dart';
+import 'package:popper_mobile/models/bobbin/bobbin.dart';
 
 
 @singleton
@@ -26,6 +26,8 @@ class BobbinsRepository {
           return Left(ServerFailure());
         case HttpStatus.unauthorized:
           return Left(WrongCredentialsFailure());
+        case HttpStatus.badRequest:
+          return Left(NoSuchBobbinException());
       }
 
       return Left(UnknownFailure());

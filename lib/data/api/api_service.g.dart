@@ -48,18 +48,18 @@ class _ApiService implements ApiService {
   }
 
   @override
-  Future<Bobbin> getBobbinInfo(id) async {
+  Future<BobbinRemoteModel> getBobbinInfo(id) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<Bobbin>(
+        _setStreamType<BobbinRemoteModel>(
             Options(method: 'GET', headers: _headers, extra: _extra)
                 .compose(_dio.options, '/bobbin/$id',
                     queryParameters: queryParameters, data: _data)
                 .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    final value = Bobbin.fromJson(_result.data!);
+    final value = BobbinRemoteModel.fromJson(_result.data!);
     return value;
   }
 

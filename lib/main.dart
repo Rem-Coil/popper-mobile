@@ -6,15 +6,13 @@ import 'package:popper_mobile/core/theme/fonts.dart';
 import 'package:popper_mobile/models/barcode/scanned_entity.dart';
 import 'package:popper_mobile/screen/auth/bloc/auth_bloc.dart';
 import 'package:popper_mobile/screen/home/ui/home_screen.dart';
+import 'package:popper_mobile/screen/loading/bloc/bloc.dart';
 import 'package:popper_mobile/screen/loading/ui/bobbin_loading_screen.dart';
 import 'package:popper_mobile/screen/login/bloc/login_bloc.dart';
 import 'package:popper_mobile/screen/login/ui/login_screen.dart';
 import 'package:popper_mobile/screen/scanner/ui/scanner_screen.dart';
 import 'package:popper_mobile/screen/splash/bloc/splash_bloc.dart';
 import 'package:popper_mobile/screen/splash/ui/splash_screen.dart';
-import 'package:popper_mobile/widgets/failed_screen.dart';
-import 'package:popper_mobile/widgets/success_screen.dart';
-
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -45,36 +43,39 @@ class MyApp extends StatelessWidget {
   Route<dynamic>? routeFactory(RouteSettings settings) {
     switch (settings.name) {
       case SplashScreen.route:
-        return MaterialPageRoute(builder: (_) {
-          return BlocProvider<SplashBloc>(
-            create: (_) => getIt<SplashBloc>(),
-            child: SplashScreen(),
-          );
-        });
+        return MaterialPageRoute(
+          builder: (_) => screenWithBloc<SplashBloc>(SplashScreen()),
+        );
       case LoginScreen.route:
-        return MaterialPageRoute(builder: (_) {
-          return BlocProvider<LoginBloc>(
-            create: (_) => getIt<LoginBloc>(),
-            child: LoginScreen(),
-          );
-        });
+        return MaterialPageRoute(
+          builder: (_) => screenWithBloc<LoginBloc>(LoginScreen()),
+        );
       case HomeScreen.route:
         return MaterialPageRoute(builder: (_) => HomeScreen());
       case ScannerScreen.route:
         return MaterialPageRoute(builder: (_) => ScannerScreen());
       case BobbinLoadingScreen.route:
-        final args = settings.arguments as ScannedEntity;
-        return MaterialPageRoute(
-          builder: (_) => BobbinLoadingScreen(bobbin: args),
+        final bobbin = settings.arguments as ScannedEntity;
+        return MaterialPageRoute(builder: (_) {
+          return BlocProvider<BobbinLoadingBloc>(
+            create: (_) {
+              final bloc = getIt<BobbinLoadingBloc>();
+              bloc.add(LoadInfo(bobbin));
+              return bloc;
+            },
+            child: BobbinLoadingScreen(bobbin: bobbin),
+          );
+        }
+          // builder: (_) => screenWithBloc<BobbinLoadingBloc>(
+          //   BobbinLoadingScreen(bobbin: args),
+          // ),
         );
-      case FailedScreen.route:
-        final args = settings.arguments as FailedScreenArgs;
-        return MaterialPageRoute(builder: (_) => FailedScreen(args: args));
-      case SuccessScreen.route:
-        final args = settings.arguments as SuccessScreenArgs;
-        return MaterialPageRoute(builder: (_) => SuccessScreen(args: args));
       default:
         return null;
     }
+  }
+
+  BlocProvider<T> screenWithBloc<T extends BlocBase<Object?>>(Widget screen) {
+    return BlocProvider(create: (_) => getIt<T>(), child: screen);
   }
 }
