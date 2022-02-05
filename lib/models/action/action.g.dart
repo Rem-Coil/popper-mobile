@@ -6,20 +6,21 @@ part of 'action.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-Action _$ActionFromJson(Map<String, dynamic> json) => Action(
+ActionRemote _$ActionRemoteFromJson(Map<String, dynamic> json) => ActionRemote(
       id: json['id'] as int,
       userId: json['operator_id'] as int,
       bobbinId: json['bobbin_id'] as int,
       type: $enumDecode(_$ActionTypeEnumMap, json['action_type']),
-      time: Action._dateFromJson(json['done_time'] as String),
+      time: ActionRemote._dateFromJson(json['done_time'] as String),
     );
 
-Map<String, dynamic> _$ActionToJson(Action instance) => <String, dynamic>{
+Map<String, dynamic> _$ActionRemoteToJson(ActionRemote instance) =>
+    <String, dynamic>{
       'id': instance.id,
       'operator_id': instance.userId,
       'bobbin_id': instance.bobbinId,
       'action_type': _$ActionTypeEnumMap[instance.type],
-      'done_time': Action._dateToJson(instance.time),
+      'done_time': ActionRemote._dateToJson(instance.time),
     };
 
 const _$ActionTypeEnumMap = {

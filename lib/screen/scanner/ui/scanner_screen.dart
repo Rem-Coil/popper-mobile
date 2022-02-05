@@ -4,7 +4,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:popper_mobile/core/utils/context_utils.dart';
 import 'package:popper_mobile/models/barcode/scanned_entity.dart';
-import 'package:popper_mobile/screen/loading/ui/bobbin_loading_screen.dart';
+import 'package:popper_mobile/screen/bobbin_loading/ui/bobbin_loading_screen.dart';
 import 'package:popper_mobile/widgets/buttons/simple_button.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 

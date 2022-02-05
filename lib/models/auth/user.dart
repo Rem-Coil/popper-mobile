@@ -4,11 +4,13 @@ class User {
   static const testUser = User._(1, "Ilia", "Rodionov", "Alexeevich");
   
   final int id;
-  final String firstname;
+  final String firstName;
   final String surname;
   final String secondName;
 
-  const User._(this.id, this.firstname, this.surname, this.secondName);
+  const User._(this.id, this.firstName, this.surname, this.secondName);
+
+  String get fullName => '$secondName $firstName';
 
   factory User.fromToken(String token) {
     final jwtData = JwtDecoder.decode(token);

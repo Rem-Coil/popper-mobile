@@ -14,7 +14,7 @@ abstract class ApiService {
   Future<Token> singIn(@Body() Map<String, dynamic> user);
 
   @POST('/action')
-  Future<Action> saveAction(@Body() Map<String, dynamic> action);
+  Future<ActionRemote> saveAction(@Body() Map<String, dynamic> action);
 
   @GET('/bobbin/{id}')
   Future<BobbinRemoteModel> getBobbinInfo(@Path('id') int id);

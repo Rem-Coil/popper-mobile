@@ -5,20 +5,18 @@ import 'package:popper_mobile/models/action/action_type.dart';
 
 part 'action.g.dart';
 
+part 'action_remote.dart';
+
+part 'action_local.dart';
+
 final formatter = DateFormat('yyyy-MM-ddTHH:mm:ss');
 
 @immutable
-@JsonSerializable()
 class Action {
-  @JsonKey(name: 'id')
   final int id;
-  @JsonKey(name: 'operator_id')
   final int userId;
-  @JsonKey(name: 'bobbin_id')
   final int bobbinId;
-  @JsonKey(name: 'action_type')
   final ActionType type;
-  @JsonKey(name: 'done_time', fromJson: _dateFromJson, toJson: _dateToJson)
   final DateTime time;
 
   Action({
@@ -28,12 +26,4 @@ class Action {
     required this.type,
     required this.time,
   });
-
-  factory Action.fromJson(Map<String, dynamic> json) => _$ActionFromJson(json);
-
-  Map<String, dynamic> toJson() => _$ActionToJson(this);
-
-  static DateTime _dateFromJson(String date) => formatter.parse(date);
-
-  static String _dateToJson(DateTime time) => formatter.format(time);
 }

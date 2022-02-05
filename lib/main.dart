@@ -4,19 +4,24 @@ import 'package:popper_mobile/core/di/injection.dart';
 import 'package:popper_mobile/core/theme/colors.dart';
 import 'package:popper_mobile/core/theme/fonts.dart';
 import 'package:popper_mobile/models/barcode/scanned_entity.dart';
+import 'package:popper_mobile/models/bobbin/bobbin.dart';
 import 'package:popper_mobile/screen/auth/bloc/auth_bloc.dart';
+import 'package:popper_mobile/screen/bobbin_loading/bloc/bloc.dart';
+import 'package:popper_mobile/screen/bobbin_loading/ui/bobbin_loading_screen.dart';
 import 'package:popper_mobile/screen/home/ui/home_screen.dart';
-import 'package:popper_mobile/screen/loading/bloc/bloc.dart';
-import 'package:popper_mobile/screen/loading/ui/bobbin_loading_screen.dart';
 import 'package:popper_mobile/screen/login/bloc/login_bloc.dart';
 import 'package:popper_mobile/screen/login/ui/login_screen.dart';
+import 'package:popper_mobile/screen/scanned_info/bloc/bloc.dart';
+import 'package:popper_mobile/screen/scanned_info/ui/scanned_info_screen.dart';
 import 'package:popper_mobile/screen/scanner/ui/scanner_screen.dart';
 import 'package:popper_mobile/screen/splash/bloc/splash_bloc.dart';
 import 'package:popper_mobile/screen/splash/ui/splash_screen.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   configureDependencies();
+  await initializeDateFormatting('ru_RU', null);
   runApp(MyApp());
 }
 
@@ -54,21 +59,20 @@ class MyApp extends StatelessWidget {
         return MaterialPageRoute(builder: (_) => HomeScreen());
       case ScannerScreen.route:
         return MaterialPageRoute(builder: (_) => ScannerScreen());
+      case ScannedInfoScreen.route:
+        final bobbin = settings.arguments as Bobbin;
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider<SaveActionBloc>(
+            create: (_) => getIt.get<SaveActionBloc>(param1: bobbin),
+            child: ScannedInfoScreen(),
+          ),
+        );
       case BobbinLoadingScreen.route:
         final bobbin = settings.arguments as ScannedEntity;
-        return MaterialPageRoute(builder: (_) {
-          return BlocProvider<BobbinLoadingBloc>(
-            create: (_) {
-              final bloc = getIt<BobbinLoadingBloc>();
-              bloc.add(LoadInfo(bobbin));
-              return bloc;
-            },
-            child: BobbinLoadingScreen(bobbin: bobbin),
-          );
-        }
-          // builder: (_) => screenWithBloc<BobbinLoadingBloc>(
-          //   BobbinLoadingScreen(bobbin: args),
-          // ),
+        return MaterialPageRoute(
+          builder: (_) => screenWithBloc<BobbinLoadingBloc>(
+            BobbinLoadingScreen(bobbin: bobbin),
+          ),
         );
       default:
         return null;

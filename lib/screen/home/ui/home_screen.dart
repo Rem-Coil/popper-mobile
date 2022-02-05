@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:popper_mobile/core/utils/context_utils.dart';
+import 'package:popper_mobile/models/barcode/scanned_entity.dart';
+import 'package:popper_mobile/screen/bobbin_loading/ui/bobbin_loading_screen.dart';
 import 'package:popper_mobile/screen/home/ui/widgets/actions_list_button.dart';
 import 'package:popper_mobile/screen/home/ui/widgets/home_header.dart';
 import 'package:popper_mobile/screen/scanner/ui/scanner_screen.dart';
@@ -44,7 +46,7 @@ class HomeScreen extends StatelessWidget {
               height: 67,
               borderRadius: 16,
               onPressed: () {
-                // final scanned = ScannedEntity.fromString('bobbin:689872');
+                // final scanned = ScannedEntity.fromString('bobbin:1');
                 // context.push(BobbinLoadingScreen.route, args: scanned);
                 context.push(ScannerScreen.route);
               },

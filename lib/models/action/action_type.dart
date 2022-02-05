@@ -22,9 +22,9 @@ enum ActionType {
 
 extension LocalizeActionType on ActionType {
   String getLocalizedName() {
-    switch(this) {
+    switch (this) {
       case ActionType.winding:
-       return 'Обмотка';
+        return 'Обмотка';
       case ActionType.output:
         return 'Изолировка выводов';
       case ActionType.isolation:

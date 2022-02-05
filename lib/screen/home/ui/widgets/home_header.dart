@@ -10,7 +10,7 @@ class HomeHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<AuthBloc, AuthState>(
       builder: (context, state) {
-        final username = state.user?.firstname ?? 'Незнакомец';
+        final username = state.user?.firstName ?? 'Незнакомец';
         return Container(
           child: Column(
             children: [

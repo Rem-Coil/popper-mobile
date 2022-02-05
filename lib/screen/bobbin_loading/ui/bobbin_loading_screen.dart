@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:popper_mobile/core/utils/context_utils.dart';
 import 'package:popper_mobile/models/barcode/scanned_entity.dart';
-import 'package:popper_mobile/screen/loading/bloc/bloc.dart';
+import 'package:popper_mobile/screen/bobbin_loading/bloc/bloc.dart';
+import 'package:popper_mobile/screen/scanned_info/ui/scanned_info_screen.dart';
 import 'package:popper_mobile/widgets/failed_screen.dart';
 import 'package:popper_mobile/widgets/loading_widget.dart';
 
@@ -20,7 +21,7 @@ class BobbinLoadingScreen extends StatefulWidget {
 class _BobbinLoadingScreenState extends State<BobbinLoadingScreen> {
   @override
   void initState() {
-    // BlocProvider.of<BobbinLoadingBloc>(context).add(LoadInfo(widget.bobbin));
+    BlocProvider.of<BobbinLoadingBloc>(context).add(LoadInfo(widget.bobbin));
     super.initState();
   }
 
@@ -29,15 +30,13 @@ class _BobbinLoadingScreenState extends State<BobbinLoadingScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
-        child: BlocBuilder<BobbinLoadingBloc, BobbinLoadingState>(
+        child: BlocConsumer<BobbinLoadingBloc, BobbinLoadingState>(
+          listenWhen: (_, state) => state.hasData,
+          listener: (context, state) => context.pushReplacement(
+            ScannedInfoScreen.route,
+            args: state.bobbin!,
+          ),
           builder: (context, state) {
-            if (state.isLoading) {
-              return Center(
-                child: LoadingWidget(
-                    message: 'Загружаем информацию по катушке...'),
-              );
-            }
-
             if (state.hasError) {
               return FailedScreen(
                 failText: state.failure!.message,
@@ -49,11 +48,11 @@ class _BobbinLoadingScreenState extends State<BobbinLoadingScreen> {
               );
             }
 
-            if (state.hasData) {
-              return Center(child: Text(state.bobbin!.bobbinNumber));
-            }
-
-            return Center(child: Text('Initialization'));
+            return Center(
+              child: LoadingWidget(
+                message: 'Загружаем информацию по катушке...',
+              ),
+            );
           },
         ),
       ),
