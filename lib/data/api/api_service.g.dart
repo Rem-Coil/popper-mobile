@@ -19,7 +19,7 @@ class _ApiService implements ApiService {
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
-    _data.addAll(user);
+    _data.addAll(user.toJson());
     final _result = await _dio.fetch<Map<String, dynamic>>(
         _setStreamType<Token>(
             Options(method: 'POST', headers: _headers, extra: _extra)
@@ -36,7 +36,7 @@ class _ApiService implements ApiService {
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
-    _data.addAll(action);
+    _data.addAll(action.toJson());
     final _result = await _dio.fetch<Map<String, dynamic>>(
         _setStreamType<ActionRemote>(
             Options(method: 'POST', headers: _headers, extra: _extra)

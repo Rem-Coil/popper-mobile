@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:popper_mobile/core/di/injection.dart';
 import 'package:popper_mobile/core/theme/colors.dart';
 import 'package:popper_mobile/core/theme/fonts.dart';
+import 'package:popper_mobile/models/action/action.dart';
+import 'package:popper_mobile/models/action/action_type.dart';
 import 'package:popper_mobile/models/barcode/scanned_entity.dart';
 import 'package:popper_mobile/models/bobbin/bobbin.dart';
 import 'package:popper_mobile/screen/auth/bloc/auth_bloc.dart';
@@ -16,11 +20,16 @@ import 'package:popper_mobile/screen/scanned_info/ui/scanned_info_screen.dart';
 import 'package:popper_mobile/screen/scanner/ui/scanner_screen.dart';
 import 'package:popper_mobile/screen/splash/bloc/splash_bloc.dart';
 import 'package:popper_mobile/screen/splash/ui/splash_screen.dart';
-import 'package:intl/date_symbol_data_local.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   configureDependencies();
+
+  Hive
+    ..initFlutter()
+    ..registerAdapter(ActionLocalAdapter())
+    ..registerAdapter(ActionTypeAdapter());
+
   await initializeDateFormatting('ru_RU', null);
   runApp(MyApp());
 }

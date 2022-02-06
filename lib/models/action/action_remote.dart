@@ -3,7 +3,7 @@ part of 'action.dart';
 @JsonSerializable()
 class ActionRemote extends Action {
   @JsonKey(name: 'id')
-  final int id;
+  final int? id;
   @JsonKey(name: 'operator_id')
   final int userId;
   @JsonKey(name: 'bobbin_id')
@@ -26,6 +26,16 @@ class ActionRemote extends Action {
           type: type,
           time: time,
         );
+
+  factory ActionRemote.fromAction(Action action) {
+    return ActionRemote(
+      id: action.id,
+      userId: action.userId,
+      bobbinId: action.bobbinId,
+      type: action.type,
+      time: action.time,
+    );
+  }
 
   factory ActionRemote.fromJson(Map<String, dynamic> json) =>
       _$ActionRemoteFromJson(json);

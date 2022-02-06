@@ -10,3 +10,5 @@ class OnActionChanged extends SaveActionEvent {
 
   OnActionChanged(this.action);
 }
+
+class OnSaveAction extends SaveActionEvent {}

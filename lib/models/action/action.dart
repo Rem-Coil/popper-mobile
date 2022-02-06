@@ -1,19 +1,20 @@
 import 'package:flutter/foundation.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:popper_mobile/models/action/action_type.dart';
 
 part 'action.g.dart';
 
-part 'action_remote.dart';
-
 part 'action_local.dart';
+
+part 'action_remote.dart';
 
 final formatter = DateFormat('yyyy-MM-ddTHH:mm:ss');
 
 @immutable
 class Action {
-  final int id;
+  final int? id;
   final int userId;
   final int bobbinId;
   final ActionType type;

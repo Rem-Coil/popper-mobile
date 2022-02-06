@@ -13,11 +13,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 @singleton
 class AuthRepository {
   static const token_key = 'token';
+  final ApiProvider _apiProvider;
+
+  AuthRepository(this._apiProvider);
 
   Future<Either<Failure, User>> singIn(UserCredentials credentials) async {
     try {
-      final service = ApiProvider().getApiService();
-      final token = await service.singIn(credentials.toJson());
+      final service = _apiProvider.getApiService();
+      final token = await service.singIn(credentials);
       await saveToken(token);
       final user = User.fromToken(token.token);
       return Right(user);

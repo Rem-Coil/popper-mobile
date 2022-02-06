@@ -3,13 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:popper_mobile/core/bloc/status.dart';
 import 'package:popper_mobile/core/error/failure.dart';
-import 'package:popper_mobile/data/bobbins_repository.dart';
+import 'package:popper_mobile/data/repository/bobbins_repository.dart';
 import 'package:popper_mobile/models/barcode/scanned_entity.dart';
 import 'package:popper_mobile/models/bobbin/bobbin.dart';
 
-part 'state.dart';
-
 part 'event.dart';
+
+part 'state.dart';
 
 @injectable
 class BobbinLoadingBloc extends Bloc<BobbinLoadingEvent, BobbinLoadingState> {
