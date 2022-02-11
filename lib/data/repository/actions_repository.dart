@@ -44,6 +44,15 @@ class ActionsRepository {
     }
   }
 
+  Future<Either<Failure, void>> saveWrongAction(Action action) async {
+    try {
+      await _actionsCache.saveNoSavedAction(action);
+      return Right(null);
+    } on Exception {
+      return Left(CacheFailure());
+    }
+  }
+
   Future<ActionType?> getLastActionType() async {
     final prefs = await SharedPreferences.getInstance();
     final action = prefs.getString(_ACTION_TYPE_KEY);

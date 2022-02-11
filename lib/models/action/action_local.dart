@@ -1,7 +1,7 @@
 part of 'action.dart';
 
 @HiveType(typeId: 0)
-class ActionLocal extends Action {
+class ActionLocal implements Action {
   @override
   @HiveField(0)
   final int? id;
@@ -13,7 +13,7 @@ class ActionLocal extends Action {
   final int bobbinId;
   @override
   @HiveField(3)
-  final ActionType type;
+  final ActionType? type;
   @override
   @HiveField(4)
   final DateTime time;
@@ -24,13 +24,7 @@ class ActionLocal extends Action {
     required this.bobbinId,
     required this.type,
     required this.time,
-  }) : super(
-          id: id,
-          userId: userId,
-          bobbinId: bobbinId,
-          type: type,
-          time: time,
-        );
+  });
 
   factory ActionLocal.fromAction(Action action) {
     return ActionLocal(

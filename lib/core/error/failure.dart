@@ -34,3 +34,8 @@ class UnknownFailure extends Failure {
   @override
   String get message => 'Неизвестная ошибка';
 }
+
+class CacheFailure extends Failure {
+  @override
+  String get message => 'Ошибка сохранения на устройство';
+}

@@ -20,7 +20,7 @@ class ActionLocalAdapter extends TypeAdapter<ActionLocal> {
       id: fields[0] as int?,
       userId: fields[1] as int,
       bobbinId: fields[2] as int,
-      type: fields[3] as ActionType,
+      type: fields[3] as ActionType?,
       time: fields[4] as DateTime,
     );
   }

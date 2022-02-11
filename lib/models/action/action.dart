@@ -5,9 +5,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:popper_mobile/models/action/action_type.dart';
 
 part 'action.g.dart';
-
 part 'action_local.dart';
-
 part 'action_remote.dart';
 
 final formatter = DateFormat('yyyy-MM-ddTHH:mm:ss');
@@ -17,7 +15,7 @@ class Action {
   final int? id;
   final int userId;
   final int bobbinId;
-  final ActionType type;
+  final ActionType? type;
   final DateTime time;
 
   Action({

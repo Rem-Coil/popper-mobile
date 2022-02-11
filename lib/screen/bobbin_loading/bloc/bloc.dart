@@ -8,7 +8,6 @@ import 'package:popper_mobile/models/barcode/scanned_entity.dart';
 import 'package:popper_mobile/models/bobbin/bobbin.dart';
 
 part 'event.dart';
-
 part 'state.dart';
 
 @injectable
@@ -21,11 +20,11 @@ class BobbinLoadingBloc extends Bloc<BobbinLoadingEvent, BobbinLoadingState> {
   }
 
   Future<void> onLoadInfo(LoadInfo event, Emitter emit) async {
-    emit(BobbinLoadingState.load());
+    emit(state.setLoad());
     final result = await _bobbinsRepository.getBobbinInfo(event.bobbin.id);
-    result.fold(
-      (f) => emit(BobbinLoadingState.failure(f)),
-      (b) => emit(BobbinLoadingState.success(b)),
-    );
+    emit(result.fold(
+      (f) => state.setFailure(f),
+      (b) => state.setSuccess(b),
+    ));
   }
 }

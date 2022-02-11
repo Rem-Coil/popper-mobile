@@ -1,7 +1,7 @@
 part of 'action.dart';
 
 @JsonSerializable()
-class ActionRemote extends Action {
+class ActionRemote implements Action {
   @JsonKey(name: 'id')
   final int? id;
   @JsonKey(name: 'operator_id')
@@ -19,20 +19,14 @@ class ActionRemote extends Action {
     required this.bobbinId,
     required this.type,
     required this.time,
-  }) : super(
-          id: id,
-          userId: userId,
-          bobbinId: bobbinId,
-          type: type,
-          time: time,
-        );
+  });
 
   factory ActionRemote.fromAction(Action action) {
     return ActionRemote(
       id: action.id,
       userId: action.userId,
       bobbinId: action.bobbinId,
-      type: action.type,
+      type: action.type!,
       time: action.time,
     );
   }

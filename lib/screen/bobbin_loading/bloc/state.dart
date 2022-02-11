@@ -6,27 +6,47 @@ class BobbinLoadingState {
   final Bobbin? bobbin;
   final Failure? failure;
 
-  BobbinLoadingState._(this.status, this.bobbin, this.failure);
+  BobbinLoadingState._({
+    required this.status,
+    required this.bobbin,
+    required this.failure,
+  });
 
-  bool get hasData => status == Status.success;
+  bool get isSuccessful => status.isSuccessful;
 
   bool get hasError => status == Status.error;
 
   bool get isLoading => status == Status.load;
 
   factory BobbinLoadingState.initial() {
-    return BobbinLoadingState._(Status.initial, null, null);
+    return BobbinLoadingState._(
+      status: Status.initial,
+      bobbin: null,
+      failure: null,
+    );
   }
 
-  factory BobbinLoadingState.load() {
-    return BobbinLoadingState._(Status.load, null, null);
+  BobbinLoadingState copyWith({
+    Status? status,
+    Bobbin? bobbin,
+    Failure? failure,
+  }) {
+    return BobbinLoadingState._(
+      status: status ?? this.status,
+      bobbin: bobbin ?? this.bobbin,
+      failure: failure ?? this.failure,
+    );
   }
 
-  factory BobbinLoadingState.success(Bobbin bobbin) {
-    return BobbinLoadingState._(Status.success, bobbin, null);
+  BobbinLoadingState setLoad() {
+    return copyWith(status: Status.load);
   }
 
-  factory BobbinLoadingState.failure(Failure failure) {
-    return BobbinLoadingState._(Status.error, null, failure);
+  BobbinLoadingState setSuccess(Bobbin bobbin) {
+    return copyWith(status: Status.success, bobbin: bobbin);
+  }
+
+  BobbinLoadingState setFailure(Failure failure) {
+    return copyWith(status: Status.error, failure: failure);
   }
 }

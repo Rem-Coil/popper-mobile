@@ -18,7 +18,8 @@ class FailedScreen extends StatelessWidget {
     required this.dropAction,
     required this.saveText,
     required this.saveAction,
-  }) : image = Image.asset(imagePath), super(key: key);
+  })  : image = Image.asset(imagePath),
+        super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -57,12 +58,13 @@ class FailedScreen extends StatelessWidget {
                   ),
                 ),
                 SizedBox(width: 16),
-                Expanded(
-                  child: SimpleButton(
-                    child: Text(saveText),
-                    onPressed: saveAction,
+                if (saveAction != null)
+                  Expanded(
+                    child: SimpleButton(
+                      child: Text(saveText),
+                      onPressed: saveAction,
+                    ),
                   ),
-                ),
               ],
             ),
           ),

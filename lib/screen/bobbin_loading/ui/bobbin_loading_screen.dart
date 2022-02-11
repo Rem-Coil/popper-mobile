@@ -4,7 +4,6 @@ import 'package:popper_mobile/core/utils/context_utils.dart';
 import 'package:popper_mobile/models/barcode/scanned_entity.dart';
 import 'package:popper_mobile/screen/bobbin_loading/bloc/bloc.dart';
 import 'package:popper_mobile/screen/scanned_info/ui/scanned_info_screen.dart';
-import 'package:popper_mobile/widgets/failed_screen.dart';
 import 'package:popper_mobile/widgets/loading_widget.dart';
 
 class BobbinLoadingScreen extends StatefulWidget {
@@ -31,23 +30,16 @@ class _BobbinLoadingScreenState extends State<BobbinLoadingScreen> {
       backgroundColor: Colors.white,
       body: SafeArea(
         child: BlocConsumer<BobbinLoadingBloc, BobbinLoadingState>(
-          listenWhen: (_, state) => state.hasData,
-          listener: (context, state) => context.pushReplacement(
-            ScannedInfoScreen.route,
-            args: state.bobbin!,
-          ),
-          builder: (context, state) {
-            if (state.hasError) {
-              return FailedScreen(
-                failText: state.failure!.message,
-                imagePath: 'assets/images/load_exception.png',
-                dropText: 'Пропустить',
-                dropAction: () => context.pop(),
-                saveText: 'Сохранить в незагржунные',
-                saveAction: () {},
+          listenWhen: (_, s) => !s.isLoading,
+          listener: (context, state) {
+            if (state.bobbin != null) {
+              context.pushReplacement(
+                ScannedInfoScreen.route,
+                args: state.bobbin!,
               );
             }
-
+          },
+          builder: (_, __) {
             return Center(
               child: LoadingWidget(
                 message: 'Загружаем информацию по катушке...',

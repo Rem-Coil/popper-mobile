@@ -1,9 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-part 'bobbin_remote.dart';
 part 'bobbin.g.dart';
 
+part 'bobbin_remote.dart';
 
 @immutable
 class Bobbin {
@@ -16,4 +16,17 @@ class Bobbin {
     required this.taskId,
     required this.bobbinNumber,
   });
+}
+
+class NotLoadedBobbin implements Bobbin {
+  @override
+  final int id;
+
+  @override
+  int get taskId => throw UnimplementedError();
+
+  @override
+  String get bobbinNumber => throw UnimplementedError();
+
+  const NotLoadedBobbin(this.id);
 }
