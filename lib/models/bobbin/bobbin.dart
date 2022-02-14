@@ -1,9 +1,15 @@
 import 'package:flutter/foundation.dart';
+import 'package:hive/hive.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'bobbin.g.dart';
 
+part 'bobbin_local.dart';
+
 part 'bobbin_remote.dart';
+
+const _defaultTaskId = -1;
+const _defaultBobbinNumber = 'unknown';
 
 @immutable
 class Bobbin {
@@ -11,22 +17,36 @@ class Bobbin {
   final int taskId;
   final String bobbinNumber;
 
+  bool get isUnknown =>
+      taskId == _defaultTaskId && bobbinNumber == _defaultBobbinNumber;
+
   Bobbin({
     required this.id,
     required this.taskId,
     required this.bobbinNumber,
   });
-}
 
-class NotLoadedBobbin implements Bobbin {
-  @override
-  final int id;
+  factory Bobbin.unknown(int id) {
+    return Bobbin(
+      id: id,
+      taskId: _defaultTaskId,
+      bobbinNumber: _defaultBobbinNumber,
+    );
+  }
 
-  @override
-  int get taskId => throw UnimplementedError();
+  BobbinLocal toLocal() {
+    return BobbinLocal(
+      bobbinNumber: bobbinNumber,
+      id: id,
+      taskId: taskId,
+    );
+  }
 
-  @override
-  String get bobbinNumber => throw UnimplementedError();
-
-  const NotLoadedBobbin(this.id);
+  BobbinRemote toRemote() {
+    return BobbinRemote(
+      id: id,
+      taskId: taskId,
+      bobbinNumber: bobbinNumber,
+    );
+  }
 }

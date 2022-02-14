@@ -7,6 +7,7 @@ import 'package:popper_mobile/core/theme/colors.dart';
 import 'package:popper_mobile/core/theme/fonts.dart';
 import 'package:popper_mobile/models/action/action.dart';
 import 'package:popper_mobile/models/action/action_type.dart';
+import 'package:popper_mobile/models/bobbin/bobbin.dart';
 import 'package:popper_mobile/screen/auth/bloc/auth_bloc.dart';
 import 'package:popper_mobile/screen/routing/routing.dart';
 import 'package:popper_mobile/screen/splash/ui/splash_screen.dart';
@@ -17,6 +18,7 @@ Future<void> main() async {
 
   Hive
     ..initFlutter()
+    ..registerAdapter(BobbinLocalAdapter())
     ..registerAdapter(ActionLocalAdapter())
     ..registerAdapter(ActionTypeAdapter());
 

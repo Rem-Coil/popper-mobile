@@ -1,67 +1,110 @@
 part of 'bloc.dart';
 
+final formatter = DateFormat('d MMM yyyy, HH:mm', 'ru_RU');
+
 @immutable
-class SaveActionState {
-  static final formatter = DateFormat('d MMM yyyy, HH:mm', 'ru_RU');
+abstract class SaveActionState {
+  final Action action;
 
-  final Bobbin bobbin;
-  final ActionType? action;
-  final DateTime time;
+  bool get isActionSaved => action.id != Action.defaultId;
 
+  bool get isCanSave => this is SelectTypeState && action.type != null;
+
+  bool get isBobbinNotLoaded => action.bobbin.isUnknown;
+
+  String get currentType =>
+      action.type?.getLocalizedName() ?? 'Выберете операцию';
+
+  String get bobbinNumber => action.bobbin.bobbinNumber;
+
+  String get bobbinId => action.bobbin.id.toString();
+
+  String get formattedDate => formatter.format(action.time);
+
+  SaveActionState._({required this.action});
+}
+
+class SelectTypeState extends SaveActionState {
+  SelectTypeState._({required Action action}) : super._(action: action);
+
+  factory SelectTypeState.initial(Action action) {
+    return SelectTypeState._(action: action);
+  }
+
+  SelectTypeState changeType(ActionType? type) {
+    return SelectTypeState._(action: action.changeType(type));
+  }
+}
+
+class ProcessSaveState extends SaveActionState {
   final Status status;
   final Failure? failure;
 
-  String get bobbinNumber => bobbin.bobbinNumber;
+  bool get isSaveError =>
+      failure is NoInternetFailure || failure is ServerFailure;
 
-  String get actionType => action?.getLocalizedName() ?? 'Выбрать операцию';
-
-  String get formattedDate => formatter.format(time);
-
-  SaveActionState._({
+  ProcessSaveState._({
+    required Action action,
     required this.status,
-    required this.bobbin,
-    required this.time,
-    this.failure = null,
-    this.action = null,
-  });
+    required this.failure,
+  }) : super._(action: action);
 
-  SaveActionState _copyWith({
+  ProcessSaveState _copyWith({
+    Action? action,
     Status? status,
     Failure? failure,
-    Bobbin? bobbin,
-    ActionType? action,
-    DateTime? time,
   }) {
-    return SaveActionState._(
+    return ProcessSaveState._(
+      action: action ?? this.action,
       status: status ?? this.status,
       failure: failure ?? this.failure,
-      bobbin: bobbin ?? this.bobbin,
-      action: action ?? this.action,
-      time: time ?? this.time,
     );
   }
 
-  factory SaveActionState.initial(Bobbin bobbin) {
-    return SaveActionState._(
-      bobbin: bobbin,
-      time: DateTime.now(),
-      status: Status.success,
+  factory ProcessSaveState.load(Action action) {
+    return ProcessSaveState._(
+      action: action,
+      status: Status.load,
+      failure: null,
     );
   }
 
-  SaveActionState changeAction(ActionType? action) {
-    return _copyWith(action: action);
-  }
-
-  SaveActionState load() {
-    return _copyWith(status: Status.load);
-  }
-
-  SaveActionState saveError(Failure failure) {
+  ProcessSaveState error(Failure failure) {
     return _copyWith(status: Status.error, failure: failure);
   }
 
-  SaveActionState saveSuccessful() {
+  ProcessSaveState success() {
+    return _copyWith(status: Status.success);
+  }
+}
+
+class SaveInCacheState extends SaveActionState {
+  final Status status;
+
+  SaveInCacheState._({
+    required Action action,
+    required this.status,
+  }) : super._(action: action);
+
+  SaveInCacheState _copyWith({
+    Action? action,
+    Status? status,
+  }) {
+    return SaveInCacheState._(
+      action: action ?? this.action,
+      status: status ?? this.status,
+    );
+  }
+
+  factory SaveInCacheState.load(Action action) {
+    return SaveInCacheState._(action: action, status: Status.load);
+  }
+
+  SaveInCacheState error() {
+    return _copyWith(status: Status.error);
+  }
+
+  SaveInCacheState success() {
     return _copyWith(status: Status.success);
   }
 }

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:popper_mobile/core/di/injection.dart';
+import 'package:popper_mobile/models/action/action.dart' as models;
 import 'package:popper_mobile/models/barcode/scanned_entity.dart';
-import 'package:popper_mobile/models/bobbin/bobbin.dart';
 import 'package:popper_mobile/screen/bobbin_loading/bloc/bloc.dart';
 import 'package:popper_mobile/screen/bobbin_loading/ui/bobbin_loading_screen.dart';
 import 'package:popper_mobile/screen/home/ui/home_screen.dart';
@@ -12,6 +12,8 @@ import 'package:popper_mobile/screen/routing/screen.dart';
 import 'package:popper_mobile/screen/scanned_info/bloc/bloc.dart';
 import 'package:popper_mobile/screen/scanned_info/ui/scanned_info_screen.dart';
 import 'package:popper_mobile/screen/scanner/ui/scanner_screen.dart';
+import 'package:popper_mobile/screen/scanner_result/model/scanner_result_arguments.dart';
+import 'package:popper_mobile/screen/scanner_result/ui/scanner_result_screen.dart';
 import 'package:popper_mobile/screen/splash/bloc/splash_bloc.dart';
 import 'package:popper_mobile/screen/splash/ui/splash_screen.dart';
 
@@ -22,7 +24,7 @@ class Routing {
       builder: (_) => screenWithBloc<SplashBloc>(SplashScreen()),
     ),
     SimpleScreen(
-      route: SplashScreen.route,
+      route: LoginScreen.route,
       builder: (_) => screenWithBloc<LoginBloc>(LoginScreen()),
     ),
     SimpleScreen(
@@ -33,11 +35,11 @@ class Routing {
       route: ScannerScreen.route,
       builder: (_) => ScannerScreen(),
     ),
-    ScreenWithArguments<Bobbin>(
+    ScreenWithArguments<models.Action>(
       route: ScannedInfoScreen.route,
-      screenBuilder: (_, b) {
+      screenBuilder: (_, a) {
         return BlocProvider<SaveActionBloc>(
-          create: (_) => getIt.get<SaveActionBloc>(param1: b),
+          create: (_) => getIt.get<SaveActionBloc>(param1: a),
           child: ScannedInfoScreen(),
         );
       },
@@ -48,6 +50,12 @@ class Routing {
         return screenWithBloc<BobbinLoadingBloc>(
           BobbinLoadingScreen(bobbin: b),
         );
+      },
+    ),
+    ScreenWithArguments<ScannerResultArguments>(
+      route: ScannerResultScreen.route,
+      screenBuilder: (_, a) {
+        return ScannerResultScreen(args: a);
       },
     ),
   ];

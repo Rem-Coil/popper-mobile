@@ -18,14 +18,14 @@ class ActionsRepository {
 
   ActionsRepository(this._actionsCache, this._apiProvider);
 
-  Future<Either<Failure, Action>> saveAction(Action action) async {
+  Future<Either<Failure, void>> saveAction(Action action) async {
     try {
-      final remoteAction = ActionRemote.fromAction(action);
+      final remoteAction = action.toRemote();
       final api = _apiProvider.getApiService();
       final savedAction = await api.saveAction(remoteAction);
       await _actionsCache.saveAction(savedAction);
-      await setLastActionType(savedAction.type);
-      return Right(savedAction);
+      await _setLastActionType(savedAction.type);
+      return Right(null);
     } on DioError catch (e) {
       if (e.error is SocketException) {
         return Left(NoInternetFailure());
@@ -44,7 +44,32 @@ class ActionsRepository {
     }
   }
 
-  Future<Either<Failure, void>> saveWrongAction(Action action) async {
+  Future<Either<Failure, void>> updateAction(Action action) async {
+    try {
+      final remoteAction = action.toRemote();
+      final api = _apiProvider.getApiService();
+      await api.updateAction(remoteAction);
+      await _actionsCache.updateAction(action);
+      return Right(null);
+    } on DioError catch (e) {
+      if (e.error is SocketException) {
+        return Left(NoInternetFailure());
+      }
+
+      switch (e.response?.statusCode) {
+        case HttpStatus.internalServerError:
+          return Left(ServerFailure());
+        case HttpStatus.unauthorized:
+          return Left(WrongCredentialsFailure());
+        case HttpStatus.forbidden:
+          return Left(ActionAlreadyExistFailure());
+      }
+
+      return Left(UnknownFailure());
+    }
+  }
+
+  Future<Either<Failure, void>> saveActionInCache(Action action) async {
     try {
       await _actionsCache.saveNoSavedAction(action);
       return Right(null);
@@ -60,7 +85,7 @@ class ActionsRepository {
     return ActionType.values.firstWhere((a) => a.name == action, orElse: null);
   }
 
-  Future<void> setLastActionType(ActionType? actionType) async {
+  Future<void> _setLastActionType(ActionType? actionType) async {
     if (actionType == null) return;
     final prefs = await SharedPreferences.getInstance();
     final action = actionType.name;

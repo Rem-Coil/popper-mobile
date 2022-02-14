@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-extension Navigateon on BuildContext {
+extension Navigation on BuildContext {
   pushReplacement(String route, {Object? args}) {
     Navigator.of(this).pushReplacementNamed(route, arguments: args);
   }

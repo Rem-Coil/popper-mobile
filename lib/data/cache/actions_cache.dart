@@ -14,9 +14,23 @@ class ActionsCache {
       _saveAction(action, _NOT_SAVED_ACTIONS_BOX);
 
   Future<void> _saveAction(Action action, String boxName) async {
-    final localAction = ActionLocal.fromAction(action);
+    final localAction = action.toLocal();
     final box = await Hive.openBox<ActionLocal>(boxName);
     await box.add(localAction);
+    await box.close();
+  }
+
+  Future<void> updateAction(Action action) async {
+    final localAction = action.toLocal();
+    final box = await Hive.openBox<ActionLocal>(_SAVED_ACTIONS_BOX);
+    final actions = box.toMap();
+    int oldActionIndex = -1;
+    actions.forEach((key, value) {
+      if (localAction.id == value.id) {
+        oldActionIndex = key;
+      }
+    });
+    await box.putAt(oldActionIndex, localAction);
     await box.close();
   }
 

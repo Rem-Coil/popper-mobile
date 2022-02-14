@@ -1,16 +1,16 @@
 part of 'action.dart';
 
-@HiveType(typeId: 0)
-class ActionLocal implements Action {
+@HiveType(typeId: 3)
+class ActionLocal extends Action {
   @override
   @HiveField(0)
-  final int? id;
+  final int id;
   @override
   @HiveField(1)
   final int userId;
   @override
   @HiveField(2)
-  final int bobbinId;
+  final BobbinLocal bobbin;
   @override
   @HiveField(3)
   final ActionType? type;
@@ -21,17 +21,14 @@ class ActionLocal implements Action {
   ActionLocal({
     required this.id,
     required this.userId,
-    required this.bobbinId,
+    required this.bobbin,
     required this.type,
     required this.time,
-  });
-
-  factory ActionLocal.fromAction(Action action) {
-    return ActionLocal(
-        id: action.id,
-        userId: action.userId,
-        bobbinId: action.bobbinId,
-        type: action.type,
-        time: action.time);
-  }
+  }) : super(
+          id: id,
+          userId: userId,
+          bobbin: bobbin,
+          type: type,
+          time: time,
+        );
 }

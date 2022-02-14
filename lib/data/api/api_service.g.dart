@@ -31,6 +31,22 @@ class _ApiService implements ApiService {
   }
 
   @override
+  Future<BobbinRemote> getBobbinInfo(id) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<BobbinRemote>(
+            Options(method: 'GET', headers: _headers, extra: _extra)
+                .compose(_dio.options, '/bobbin/$id',
+                    queryParameters: queryParameters, data: _data)
+                .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = BobbinRemote.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
   Future<ActionRemote> saveAction(action) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
@@ -48,19 +64,18 @@ class _ApiService implements ApiService {
   }
 
   @override
-  Future<BobbinRemoteModel> getBobbinInfo(id) async {
+  Future<void> updateAction(action) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
-    final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<BobbinRemoteModel>(
-            Options(method: 'GET', headers: _headers, extra: _extra)
-                .compose(_dio.options, '/bobbin/$id',
-                    queryParameters: queryParameters, data: _data)
-                .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    final value = BobbinRemoteModel.fromJson(_result.data!);
-    return value;
+    _data.addAll(action.toJson());
+    await _dio.fetch<void>(_setStreamType<void>(
+        Options(method: 'PUT', headers: _headers, extra: _extra)
+            .compose(_dio.options, '/action',
+                queryParameters: queryParameters, data: _data)
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    return null;
   }
 
   RequestOptions _setStreamType<T>(RequestOptions requestOptions) {

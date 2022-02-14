@@ -1,7 +1,7 @@
 part of 'bobbin.dart';
 
 @JsonSerializable(createToJson: false)
-class BobbinRemoteModel implements Bobbin {
+class BobbinRemote extends Bobbin {
   @JsonKey(name: 'id')
   final int id;
   @JsonKey(name: 'task_id')
@@ -9,12 +9,12 @@ class BobbinRemoteModel implements Bobbin {
   @JsonKey(name: 'bobbin_number')
   final String bobbinNumber;
 
-  BobbinRemoteModel({
+  BobbinRemote({
     required this.id,
     required this.taskId,
     required this.bobbinNumber,
-  });
+  }) : super(id: id, taskId: taskId, bobbinNumber: bobbinNumber);
 
-  factory BobbinRemoteModel.fromJson(Map<String, dynamic> json) =>
-      _$BobbinRemoteModelFromJson(json);
+  factory BobbinRemote.fromJson(Map<String, dynamic> json) =>
+      _$BobbinRemoteFromJson(json);
 }

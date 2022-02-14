@@ -14,9 +14,12 @@ abstract class ApiService {
   @POST('/operator/sign_in')
   Future<Token> singIn(@Body() UserCredentials user);
 
+  @GET('/bobbin/{id}')
+  Future<BobbinRemote> getBobbinInfo(@Path('id') int id);
+
   @POST('/action')
   Future<ActionRemote> saveAction(@Body() ActionRemote action);
 
-  @GET('/bobbin/{id}')
-  Future<BobbinRemoteModel> getBobbinInfo(@Path('id') int id);
+  @PUT('/action')
+  Future<void> updateAction(@Body() ActionRemote action);
 }

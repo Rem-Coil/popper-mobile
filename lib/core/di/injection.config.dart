@@ -12,7 +12,7 @@ import '../../data/cache/actions_cache.dart' as _i3;
 import '../../data/repository/actions_repository.dart' as _i8;
 import '../../data/repository/auth_repository.dart' as _i5;
 import '../../data/repository/bobbins_repository.dart' as _i6;
-import '../../models/bobbin/bobbin.dart' as _i13;
+import '../../models/action/action.dart' as _i13;
 import '../../screen/auth/bloc/auth_bloc.dart' as _i9;
 import '../../screen/bobbin_loading/bloc/bloc.dart' as _i10;
 import '../../screen/login/bloc/login_bloc.dart' as _i11;
@@ -38,8 +38,7 @@ _i1.GetIt $initGetIt(_i1.GetIt get,
       () => _i10.BobbinLoadingBloc(get<_i6.BobbinsRepository>()));
   gh.singleton<_i11.LoginBloc>(
       _i11.LoginBloc(get<_i5.AuthRepository>(), get<_i9.AuthBloc>()));
-  gh.factoryParam<_i12.SaveActionBloc, _i13.Bobbin?, dynamic>((bobbin, _) =>
-      _i12.SaveActionBloc(
-          bobbin, get<_i8.ActionsRepository>(), get<_i5.AuthRepository>()));
+  gh.factoryParam<_i12.SaveActionBloc, _i13.Action?, dynamic>(
+      (action, _) => _i12.SaveActionBloc(action, get<_i8.ActionsRepository>()));
   return get;
 }

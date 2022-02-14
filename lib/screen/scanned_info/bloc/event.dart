@@ -12,3 +12,5 @@ class OnActionChanged extends SaveActionEvent {
 }
 
 class OnSaveAction extends SaveActionEvent {}
+
+class OnSaveInCache extends SaveActionEvent {}

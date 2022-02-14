@@ -8,7 +8,7 @@ part of 'action.dart';
 
 class ActionLocalAdapter extends TypeAdapter<ActionLocal> {
   @override
-  final int typeId = 0;
+  final int typeId = 3;
 
   @override
   ActionLocal read(BinaryReader reader) {
@@ -17,9 +17,9 @@ class ActionLocalAdapter extends TypeAdapter<ActionLocal> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return ActionLocal(
-      id: fields[0] as int?,
+      id: fields[0] as int,
       userId: fields[1] as int,
-      bobbinId: fields[2] as int,
+      bobbin: fields[2] as BobbinLocal,
       type: fields[3] as ActionType?,
       time: fields[4] as DateTime,
     );
@@ -34,7 +34,7 @@ class ActionLocalAdapter extends TypeAdapter<ActionLocal> {
       ..writeByte(1)
       ..write(obj.userId)
       ..writeByte(2)
-      ..write(obj.bobbinId)
+      ..write(obj.bobbin)
       ..writeByte(3)
       ..write(obj.type)
       ..writeByte(4)
@@ -57,9 +57,9 @@ class ActionLocalAdapter extends TypeAdapter<ActionLocal> {
 // **************************************************************************
 
 ActionRemote _$ActionRemoteFromJson(Map<String, dynamic> json) => ActionRemote(
-      id: json['id'] as int?,
+  id: json['id'] as int,
       userId: json['operator_id'] as int,
-      bobbinId: json['bobbin_id'] as int,
+      bobbin: ActionRemote._bobbinFromJson(json['bobbin_id'] as int),
       type: $enumDecode(_$ActionTypeEnumMap, json['action_type']),
       time: ActionRemote._dateFromJson(json['done_time'] as String),
     );
@@ -68,7 +68,7 @@ Map<String, dynamic> _$ActionRemoteToJson(ActionRemote instance) =>
     <String, dynamic>{
       'id': instance.id,
       'operator_id': instance.userId,
-      'bobbin_id': instance.bobbinId,
+      'bobbin_id': ActionRemote._bobbinToJson(instance.bobbin),
       'action_type': _$ActionTypeEnumMap[instance.type],
       'done_time': ActionRemote._dateToJson(instance.time),
     };

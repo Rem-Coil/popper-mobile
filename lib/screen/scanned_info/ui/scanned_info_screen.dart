@@ -3,13 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:popper_mobile/core/bloc/status.dart';
 import 'package:popper_mobile/core/utils/context_utils.dart';
-import 'package:popper_mobile/models/action/action_type.dart';
 import 'package:popper_mobile/screen/auth/bloc/auth_bloc.dart';
 import 'package:popper_mobile/screen/scanned_info/bloc/bloc.dart';
 import 'package:popper_mobile/screen/scanned_info/ui/widgets/scanned_info_field.dart';
 import 'package:popper_mobile/screen/scanned_info/ui/widgets/scanned_info_text.dart';
-import 'package:popper_mobile/screen/scanned_info/ui/widgets/select_action_dialog.dart';
+import 'package:popper_mobile/screen/scanned_info/ui/widgets/scanned_info_warning.dart';
+import 'package:popper_mobile/screen/scanned_info/ui/widgets/select_action_field.dart';
+import 'package:popper_mobile/screen/scanner_result/model/scanner_result_arguments.dart';
+import 'package:popper_mobile/screen/scanner_result/ui/scanner_result_screen.dart';
 import 'package:popper_mobile/widgets/buttons/simple_button.dart';
+import 'package:popper_mobile/widgets/dialogs/decision_dialog.dart';
 
 class ScannedInfoScreen extends StatelessWidget {
   static const String route = '/scannedInfo';
@@ -24,15 +27,13 @@ class ScannedInfoScreen extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.all(30),
           child: BlocConsumer<SaveActionBloc, SaveActionState>(
-            listenWhen: (previous, current) =>
-                previous.status.isLoad &&
-                (current.status.isError || current.status.isSuccessful),
-            listener: (context, state) {
-              if (state.status.isSuccessful) {
-                context.successSnackBar('Операция успешно сохранена');
+            listener: (context, state) async {
+              if (state is ProcessSaveState && !state.status.isLoad) {
+                await _onSaveEnd(context, state);
               }
-              if (state.status.isError) {
-                context.errorSnackBar('Ошибка сохранения операции');
+
+              if (state is SaveInCacheState && !state.status.isLoad) {
+                await _onSaveInCacheEnd(context, state);
               }
             },
             builder: (context, state) {
@@ -40,9 +41,18 @@ class ScannedInfoScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
+                  if (state.isBobbinNotLoaded) ...[
+                    ScannedInfoField(
+                      title: 'Идентификатор катушки',
+                      value: ScannedInfoText(state.bobbinId),
+                    ),
+                    SizedBox(height: 24),
+                  ],
                   ScannedInfoField(
                     title: 'Номер катушки',
-                    value: ScannedInfoText(state.bobbinNumber),
+                    value: state.isBobbinNotLoaded
+                        ? ScannedInfoWarning(state.bobbinNumber)
+                        : ScannedInfoText(state.bobbinNumber),
                   ),
                   SizedBox(height: 24),
                   ScannedInfoField(
@@ -52,17 +62,9 @@ class ScannedInfoScreen extends StatelessWidget {
                   SizedBox(height: 24),
                   ScannedInfoField(
                     title: 'Операция',
-                    value: GestureDetector(
-                      onTap: () async {
-                        final type = await showCupertinoModalPopup<ActionType?>(
-                          context: context,
-                          builder: (_) => SelectActionDialog(),
-                        );
-                        BlocProvider.of<SaveActionBloc>(context)
-                            .add(OnActionChanged(type));
-                      },
-                      child: ScannedInfoText(state.actionType),
-                    ),
+                    value: (state is SelectTypeState)
+                        ? SelectActionButton(type: state.currentType)
+                        : ScannedInfoText(state.currentType),
                   ),
                   SizedBox(height: 24),
                   ScannedInfoField(
@@ -74,6 +76,7 @@ class ScannedInfoScreen extends StatelessWidget {
                     children: [
                       Expanded(
                         child: SimpleButton(
+                          height: 55,
                           child: Text(
                             'Отмена',
                             style: TextStyle(fontSize: 18),
@@ -84,11 +87,18 @@ class ScannedInfoScreen extends StatelessWidget {
                       SizedBox(width: 16),
                       Expanded(
                         child: SimpleButton(
-                          child: Text(
-                            'Сохранить',
-                            style: TextStyle(fontSize: 18),
-                          ),
-                          onPressed: state.action != null
+                          height: 55,
+                          child: (state is ProcessSaveState &&
+                                  state.status.isLoad)
+                              ? SizedBox(
+                                  width: 25,
+                                  height: 25,
+                                  child:
+                                      CircularProgressIndicator(strokeWidth: 3),
+                                )
+                              : Text('Сохранить',
+                                  style: TextStyle(fontSize: 18)),
+                          onPressed: state.isCanSave
                               ? () => _saveAction(context)
                               : null,
                         ),
@@ -103,6 +113,61 @@ class ScannedInfoScreen extends StatelessWidget {
       ),
     );
   }
+
+  Future<void> _onSaveEnd(BuildContext context, ProcessSaveState state) async {
+    if (state.status.isSuccessful) {
+      final args = ScannerResultArguments(
+        message: "Операция успешно сохранена",
+        image: "assets/images/success.png",
+      );
+      context.pushReplacement(ScannerResultScreen.route, args: args);
+    } else if (state.isSaveError) {
+      final isSaveInCache = await _showSaveDialog(context);
+      if (isSaveInCache == null || !isSaveInCache) {
+        context.pop();
+      } else {
+        BlocProvider.of<SaveActionBloc>(context).add(OnSaveInCache());
+      }
+    } else {
+      final args = ScannerResultArguments(
+        message: state.failure!.message,
+        image: "assets/images/save_exception.png",
+      );
+      context.pushReplacement(ScannerResultScreen.route, args: args);
+    }
+  }
+
+  Future<void> _onSaveInCacheEnd(
+    BuildContext context,
+    SaveInCacheState state,
+  ) async {
+    if (state.status.isSuccessful) {
+      final args = ScannerResultArguments(
+        message: "Операция успешно сохранена в кеш",
+        image: "assets/images/success.png",
+      );
+      context.pushReplacement(ScannerResultScreen.route, args: args);
+    } else {
+      final args = ScannerResultArguments(
+        message: "Ошибка сохранения в кеш, проверте правильность данных",
+        image: "assets/images/save_exception.png",
+      );
+      context.pushReplacement(ScannerResultScreen.route, args: args);
+    }
+  }
+
+  Future<bool?> _showSaveDialog(BuildContext context) async =>
+      showCupertinoDialog<bool>(
+        context: context,
+        builder: (BuildContext context) {
+          return DecisionDialog(
+            title: 'Операция не была сохранена',
+            message: 'Произошла ошибка сохранения операции. '
+                'Сохранить на устройстве? '
+                '(необходимо будет позже произвести ручную синхронизацию)',
+          );
+        },
+      );
 
   void _saveAction(BuildContext context) =>
       BlocProvider.of<SaveActionBloc>(context).add(OnSaveAction());
