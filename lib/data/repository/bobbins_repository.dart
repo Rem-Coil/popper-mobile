@@ -25,6 +25,7 @@ class BobbinsRepository {
 
       switch (e.response?.statusCode) {
         case HttpStatus.internalServerError:
+        case HttpStatus.badGateway:
           return Left(ServerFailure());
         case HttpStatus.unauthorized:
           return Left(WrongCredentialsFailure());

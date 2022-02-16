@@ -8,7 +8,7 @@ import 'package:popper_mobile/screen/scanned_info/bloc/bloc.dart';
 import 'package:popper_mobile/screen/scanned_info/ui/widgets/scanned_info_field.dart';
 import 'package:popper_mobile/screen/scanned_info/ui/widgets/scanned_info_text.dart';
 import 'package:popper_mobile/screen/scanned_info/ui/widgets/scanned_info_warning.dart';
-import 'package:popper_mobile/screen/scanned_info/ui/widgets/select_action_field.dart';
+import 'package:popper_mobile/screen/scanned_info/ui/widgets/select_operation_field.dart';
 import 'package:popper_mobile/screen/scanner_result/model/scanner_result_arguments.dart';
 import 'package:popper_mobile/screen/scanner_result/ui/scanner_result_screen.dart';
 import 'package:popper_mobile/widgets/buttons/simple_button.dart';
@@ -26,7 +26,7 @@ class ScannedInfoScreen extends StatelessWidget {
       body: SafeArea(
         child: Container(
           padding: const EdgeInsets.all(30),
-          child: BlocConsumer<SaveActionBloc, SaveActionState>(
+          child: BlocConsumer<OperationSaveBloc, OperationSaveState>(
             listener: (context, state) async {
               if (state is ProcessSaveState && !state.status.isLoad) {
                 await _onSaveEnd(context, state);
@@ -63,7 +63,7 @@ class ScannedInfoScreen extends StatelessWidget {
                   ScannedInfoField(
                     title: 'Операция',
                     value: (state is SelectTypeState)
-                        ? SelectActionButton(type: state.currentType)
+                        ? SelectOperationButton(type: state.currentType)
                         : ScannedInfoText(state.currentType),
                   ),
                   SizedBox(height: 24),
@@ -94,8 +94,7 @@ class ScannedInfoScreen extends StatelessWidget {
                                   width: 25,
                                   height: 25,
                                   child:
-                                      CircularProgressIndicator(strokeWidth: 3),
-                                )
+                                      CircularProgressIndicator(strokeWidth: 3))
                               : Text('Сохранить',
                                   style: TextStyle(fontSize: 18)),
                           onPressed: state.isCanSave
@@ -126,7 +125,7 @@ class ScannedInfoScreen extends StatelessWidget {
       if (isSaveInCache == null || !isSaveInCache) {
         context.pop();
       } else {
-        BlocProvider.of<SaveActionBloc>(context).add(OnSaveInCache());
+        BlocProvider.of<OperationSaveBloc>(context).add(CacheOperation());
       }
     } else {
       final args = ScannerResultArguments(
@@ -170,7 +169,7 @@ class ScannedInfoScreen extends StatelessWidget {
       );
 
   void _saveAction(BuildContext context) =>
-      BlocProvider.of<SaveActionBloc>(context).add(OnSaveAction());
+      BlocProvider.of<OperationSaveBloc>(context).add(SaveOperation());
 
   String _getUserName(BuildContext context) {
     final authState = BlocProvider.of<AuthBloc>(context).state;

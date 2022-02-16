@@ -1,29 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:popper_mobile/core/utils/context_utils.dart';
+import 'package:popper_mobile/screen/scanned_list/models/operation_status.dart';
+import 'package:popper_mobile/screen/scanned_list/ui/scanner_list_screen.dart';
 import 'package:popper_mobile/widgets/buttons/simple_button.dart';
 
-class ActionsListButton extends StatelessWidget {
-  final int color;
-  final String title;
+class OperationsListButton extends StatelessWidget {
   final int count;
+  final OperationStatus status;
 
-  const ActionsListButton({
+  const OperationsListButton({
     Key? key,
-    required this.color,
-    required this.title,
     required this.count,
+    required this.status,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return SimpleButton(
       height: 176,
-      color: Color(color),
+      color: status.color,
       borderRadius: 16,
       padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
       child: Column(
         children: [
           Text(
-            title,
+            '${status.title}:',
             style: TextStyle(fontSize: 18, color: Colors.white, height: 1.2),
           ),
           Spacer(),
@@ -37,7 +38,7 @@ class ActionsListButton extends StatelessWidget {
           ),
         ],
       ),
-      onPressed: () {},
+      onPressed: () => context.push(ScannerListScreen.route, args: status),
     );
   }
 }

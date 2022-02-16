@@ -25,7 +25,7 @@ class NoSuchBobbinException extends Failure {
   String get message => 'Отсканированной катушки не существует';
 }
 
-class ActionAlreadyExistFailure extends Failure {
+class OperationAlreadyExistFailure extends Failure {
   @override
   String get message => 'Данная опреация уже совершена над катушкой';
 }
@@ -37,5 +37,5 @@ class UnknownFailure extends Failure {
 
 class CacheFailure extends Failure {
   @override
-  String get message => 'Ошибка сохранения на устройство';
+  String get message => 'Ошибка кеша';
 }

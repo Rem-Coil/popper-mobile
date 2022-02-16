@@ -1,16 +1,16 @@
 part of 'bloc.dart';
 
 @immutable
-abstract class SaveActionEvent {}
+abstract class OperationSaveEvent {}
 
-class Initialize extends SaveActionEvent {}
+class Initialize extends OperationSaveEvent {}
 
-class OnActionChanged extends SaveActionEvent {
-  final ActionType? action;
+class ChangeOperation extends OperationSaveEvent {
+  final OperationType? operationType;
 
-  OnActionChanged(this.action);
+  ChangeOperation(this.operationType);
 }
 
-class OnSaveAction extends SaveActionEvent {}
+class SaveOperation extends OperationSaveEvent {}
 
-class OnSaveInCache extends SaveActionEvent {}
+class CacheOperation extends OperationSaveEvent {}

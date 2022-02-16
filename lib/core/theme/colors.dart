@@ -15,3 +15,6 @@ final primarySwatch = MaterialColor(
     900: Color(0xFF011679),
   },
 );
+
+const savedColor = 0xFFF4B41A;
+const cachedColor = 0xFFF50303;

@@ -1,18 +1,18 @@
 import 'package:flutter/cupertino.dart';
-import 'package:popper_mobile/models/action/action_type.dart';
+import 'package:popper_mobile/models/operation/operation_type.dart';
 
-class SelectActionDialog extends StatelessWidget {
-  const SelectActionDialog({Key? key}) : super(key: key);
+class SelectOperationDialog extends StatelessWidget {
+  const SelectOperationDialog({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return CupertinoActionSheet(
       title: const Text('Выбрать операцию'),
-      actions: ActionType.values.map<CupertinoActionSheetAction>((a) {
+      actions: OperationType.values.map<CupertinoActionSheetAction>((o) {
         return CupertinoActionSheetAction(
-          child: Text(a.getLocalizedName()),
+          child: Text(o.localizedName),
           onPressed: () {
-            Navigator.pop(context, a);
+            Navigator.pop(context, o);
           },
         );
       }).toList(),

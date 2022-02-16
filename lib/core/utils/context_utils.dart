@@ -9,7 +9,7 @@ extension Navigation on BuildContext {
     return Navigator.of(this).pushNamed(route, arguments: args);
   }
 
-  pop() {
+  void pop() {
     Navigator.of(this).pop();
   }
 }

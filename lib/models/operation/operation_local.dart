@@ -1,7 +1,7 @@
-part of 'action.dart';
+part of 'operation.dart';
 
 @HiveType(typeId: 3)
-class ActionLocal extends Action {
+class OperationLocal extends Operation {
   @override
   @HiveField(0)
   final int id;
@@ -13,12 +13,12 @@ class ActionLocal extends Action {
   final BobbinLocal bobbin;
   @override
   @HiveField(3)
-  final ActionType? type;
+  final OperationType? type;
   @override
   @HiveField(4)
   final DateTime time;
 
-  ActionLocal({
+  OperationLocal({
     required this.id,
     required this.userId,
     required this.bobbin,

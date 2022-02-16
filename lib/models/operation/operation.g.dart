@@ -1,32 +1,32 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'action.dart';
+part of 'operation.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class ActionLocalAdapter extends TypeAdapter<ActionLocal> {
+class OperationLocalAdapter extends TypeAdapter<OperationLocal> {
   @override
   final int typeId = 3;
 
   @override
-  ActionLocal read(BinaryReader reader) {
+  OperationLocal read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return ActionLocal(
+    return OperationLocal(
       id: fields[0] as int,
       userId: fields[1] as int,
       bobbin: fields[2] as BobbinLocal,
-      type: fields[3] as ActionType?,
+      type: fields[3] as OperationType?,
       time: fields[4] as DateTime,
     );
   }
 
   @override
-  void write(BinaryWriter writer, ActionLocal obj) {
+  void write(BinaryWriter writer, OperationLocal obj) {
     writer
       ..writeByte(5)
       ..writeByte(0)
@@ -47,7 +47,7 @@ class ActionLocalAdapter extends TypeAdapter<ActionLocal> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is ActionLocalAdapter &&
+          other is OperationLocalAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
@@ -56,29 +56,30 @@ class ActionLocalAdapter extends TypeAdapter<ActionLocal> {
 // JsonSerializableGenerator
 // **************************************************************************
 
-ActionRemote _$ActionRemoteFromJson(Map<String, dynamic> json) => ActionRemote(
+OperationRemote _$OperationRemoteFromJson(Map<String, dynamic> json) =>
+    OperationRemote(
       id: json['id'] as int,
       userId: json['operator_id'] as int,
-      bobbin: ActionRemote._bobbinFromJson(json['bobbin_id'] as int),
-      type: $enumDecode(_$ActionTypeEnumMap, json['action_type']),
-      time: ActionRemote._dateFromJson(json['done_time'] as String),
+      bobbin: OperationRemote._bobbinFromJson(json['bobbin_id'] as int),
+      type: $enumDecode(_$OperationTypeEnumMap, json['action_type']),
+      time: OperationRemote._dateFromJson(json['done_time'] as String),
     );
 
-Map<String, dynamic> _$ActionRemoteToJson(ActionRemote instance) =>
+Map<String, dynamic> _$OperationRemoteToJson(OperationRemote instance) =>
     <String, dynamic>{
       'id': instance.id,
       'operator_id': instance.userId,
-      'bobbin_id': ActionRemote._bobbinToJson(instance.bobbin),
-      'action_type': _$ActionTypeEnumMap[instance.type],
-      'done_time': ActionRemote._dateToJson(instance.time),
+      'bobbin_id': OperationRemote._bobbinToJson(instance.bobbin),
+      'action_type': _$OperationTypeEnumMap[instance.type],
+      'done_time': OperationRemote._dateToJson(instance.time),
     };
 
-const _$ActionTypeEnumMap = {
-  ActionType.winding: 'winding',
-  ActionType.output: 'output',
-  ActionType.isolation: 'isolation',
-  ActionType.molding: 'molding',
-  ActionType.crimping: 'crimping',
-  ActionType.quality: 'quality',
-  ActionType.testing: 'testing',
+const _$OperationTypeEnumMap = {
+  OperationType.winding: 'winding',
+  OperationType.output: 'output',
+  OperationType.isolation: 'isolation',
+  OperationType.molding: 'molding',
+  OperationType.crimping: 'crimping',
+  OperationType.quality: 'quality',
+  OperationType.testing: 'testing',
 };

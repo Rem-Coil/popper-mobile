@@ -4,8 +4,9 @@ import 'package:popper_mobile/core/utils/context_utils.dart';
 import 'package:popper_mobile/models/barcode/scanned_entity.dart';
 import 'package:popper_mobile/screen/bobbin_loading/ui/bobbin_loading_screen.dart';
 import 'package:popper_mobile/screen/home/bloc/bloc.dart';
-import 'package:popper_mobile/screen/home/ui/widgets/actions_list_button.dart';
 import 'package:popper_mobile/screen/home/ui/widgets/home_header.dart';
+import 'package:popper_mobile/screen/home/ui/widgets/operations_list_button.dart';
+import 'package:popper_mobile/screen/scanned_list/models/operation_status.dart';
 import 'package:popper_mobile/widgets/buttons/simple_button.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -38,17 +39,15 @@ class _HomeScreenState extends State<HomeScreen> {
                 Row(
                   children: [
                     Expanded(
-                      child: ActionsListButton(
-                        color: 0xFFF4B41A,
-                        title: 'Завершённые катушки:',
+                      child: OperationsListButton(
+                        status: OperationStatus.saved,
                         count: state.countSavedActions,
                       ),
                     ),
                     SizedBox(width: 16),
                     Expanded(
-                      child: ActionsListButton(
-                        color: 0xFFF50303,
-                        title: 'Не загруженные катушки',
+                      child: OperationsListButton(
+                        status: OperationStatus.cached,
                         count: state.countCachedActions,
                       ),
                     )
@@ -60,7 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   height: 67,
                   borderRadius: 16,
                   onPressed: () {
-                    final scanned = ScannedEntity.fromString('bobbin:5');
+                    final scanned = ScannedEntity.fromString('bobbin:8');
                     context.push(BobbinLoadingScreen.route, args: scanned);
                     // BlocProvider.of<HomeBloc>(context).add(Initial());
                     // context.push(ScannerScreen.route);

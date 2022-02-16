@@ -5,50 +5,51 @@ import 'package:injectable/injectable.dart';
 import 'package:intl/intl.dart';
 import 'package:popper_mobile/core/bloc/status.dart';
 import 'package:popper_mobile/core/error/failure.dart';
-import 'package:popper_mobile/data/repository/actions_repository.dart';
-import 'package:popper_mobile/models/action/action.dart';
-import 'package:popper_mobile/models/action/action_type.dart';
+import 'package:popper_mobile/data/repository/operations_repository.dart';
+import 'package:popper_mobile/models/operation/operation.dart';
+import 'package:popper_mobile/models/operation/operation_type.dart';
 
 part 'event.dart';
+
 part 'state.dart';
 
 @injectable
-class SaveActionBloc extends Bloc<SaveActionEvent, SaveActionState> {
-  final ActionsRepository _actionsRepository;
+class OperationSaveBloc extends Bloc<OperationSaveEvent, OperationSaveState> {
+  final OperationRepository _operationsRepository;
 
-  SaveActionBloc(
-    @factoryParam Action? action,
-    this._actionsRepository,
-  ) : super(SelectTypeState.initial(action!)) {
-    on<OnActionChanged>(onActionChanged);
+  OperationSaveBloc(
+    @factoryParam Operation? operation,
+    this._operationsRepository,
+  ) : super(SelectTypeState.initial(operation!)) {
+    on<ChangeOperation>(onChangeOperation);
     on<Initialize>(onInitialize);
-    on<OnSaveAction>(onSaveAction);
-    on<OnSaveInCache>(onSaveInCache);
+    on<SaveOperation>(onSaveOperation);
+    on<CacheOperation>(onCacheOperation);
 
     add(Initialize());
   }
 
   Future<void> onInitialize(Initialize event, Emitter emit) async {
-    if (!state.isActionSaved) {
-      final lastAction = await _actionsRepository.getLastActionType();
-      add(OnActionChanged(lastAction));
+    if (!state.isOperationSaved) {
+      final lastOperation = await _operationsRepository.getLastOperationType();
+      add(ChangeOperation(lastOperation));
     }
   }
 
-  Future<void> onActionChanged(OnActionChanged event, Emitter emit) async {
+  Future<void> onChangeOperation(ChangeOperation event, Emitter emit) async {
     final currentState = state as SelectTypeState;
-    emit(currentState.changeType(event.action));
+    emit(currentState.changeType(event.operationType));
   }
 
-  Future<void> onSaveAction(OnSaveAction event, Emitter emit) async {
-    emit(ProcessSaveState.load(state.action));
+  Future<void> onSaveOperation(SaveOperation event, Emitter emit) async {
+    emit(ProcessSaveState.load(state.operation));
     final currentState = state as ProcessSaveState;
 
     late Either<Failure, void> result;
-    if (state.isActionSaved) {
-      result = await _actionsRepository.updateAction(state.action);
+    if (state.isOperationSaved) {
+      result = await _operationsRepository.updateOperation(state.operation);
     } else {
-      result = await _actionsRepository.saveAction(state.action);
+      result = await _operationsRepository.saveOperation(state.operation);
     }
 
     emit(result.fold(
@@ -57,11 +58,11 @@ class SaveActionBloc extends Bloc<SaveActionEvent, SaveActionState> {
     ));
   }
 
-  Future<void> onSaveInCache(OnSaveInCache event, Emitter emit) async {
-    emit(SaveInCacheState.load(state.action));
+  Future<void> onCacheOperation(CacheOperation event, Emitter emit) async {
+    emit(SaveInCacheState.load(state.operation));
     final currentState = state as SaveInCacheState;
     final result =
-        await _actionsRepository.saveActionInCache(currentState.action);
+        await _operationsRepository.cacheOperation(currentState.operation);
 
     emit(result.fold(
       (_) => currentState.error(),

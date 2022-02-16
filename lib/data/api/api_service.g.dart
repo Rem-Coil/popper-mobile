@@ -47,24 +47,24 @@ class _ApiService implements ApiService {
   }
 
   @override
-  Future<ActionRemote> saveAction(action) async {
+  Future<OperationRemote> saveOperation(action) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     _data.addAll(action.toJson());
     final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<ActionRemote>(
+        _setStreamType<OperationRemote>(
             Options(method: 'POST', headers: _headers, extra: _extra)
                 .compose(_dio.options, '/action',
                     queryParameters: queryParameters, data: _data)
                 .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    final value = ActionRemote.fromJson(_result.data!);
+    final value = OperationRemote.fromJson(_result.data!);
     return value;
   }
 
   @override
-  Future<void> updateAction(action) async {
+  Future<void> updateOperation(action) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};

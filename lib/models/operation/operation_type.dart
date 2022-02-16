@@ -1,9 +1,9 @@
 import 'package:hive_flutter/hive_flutter.dart';
 
-part 'action_type.g.dart';
+part 'operation_type.g.dart';
 
 @HiveType(typeId: 1)
-enum ActionType {
+enum OperationType {
   @HiveField(0)
   winding,
   @HiveField(1)
@@ -20,22 +20,22 @@ enum ActionType {
   testing
 }
 
-extension LocalizeActionType on ActionType {
-  String getLocalizedName() {
+extension LocalizeOperationType on OperationType {
+  String get localizedName {
     switch (this) {
-      case ActionType.winding:
+      case OperationType.winding:
         return 'Обмотка';
-      case ActionType.output:
+      case OperationType.output:
         return 'Изолировка выводов';
-      case ActionType.isolation:
+      case OperationType.isolation:
         return 'Изоляция';
-      case ActionType.molding:
+      case OperationType.molding:
         return 'Формовка';
-      case ActionType.crimping:
+      case OperationType.crimping:
         return 'Опрессовка';
-      case ActionType.quality:
+      case OperationType.quality:
         return 'ОТК';
-      case ActionType.testing:
+      case OperationType.testing:
         return 'Испытания';
     }
   }

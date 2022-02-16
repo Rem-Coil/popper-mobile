@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:popper_mobile/core/utils/context_utils.dart';
-import 'package:popper_mobile/models/action/action.dart' as models;
 import 'package:popper_mobile/models/barcode/scanned_entity.dart';
 import 'package:popper_mobile/models/bobbin/bobbin.dart';
+import 'package:popper_mobile/models/operation/operation.dart';
 import 'package:popper_mobile/screen/auth/bloc/auth_bloc.dart';
 import 'package:popper_mobile/screen/bobbin_loading/bloc/bloc.dart';
 import 'package:popper_mobile/screen/scanned_info/ui/scanned_info_screen.dart';
@@ -56,9 +56,9 @@ class _BobbinLoadingScreenState extends State<BobbinLoadingScreen> {
     );
   }
 
-  models.Action generateAction(BuildContext context, Bobbin bobbin) {
+  Operation generateAction(BuildContext context, Bobbin bobbin) {
     final userId = BlocProvider.of<AuthBloc>(context).state.user!.id;
-    return models.Action.create(
+    return Operation.create(
       userId: userId,
       bobbin: bobbin,
       date: DateTime.now(),

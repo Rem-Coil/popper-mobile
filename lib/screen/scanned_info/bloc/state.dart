@@ -3,40 +3,41 @@ part of 'bloc.dart';
 final formatter = DateFormat('d MMM yyyy, HH:mm', 'ru_RU');
 
 @immutable
-abstract class SaveActionState {
-  final Action action;
+abstract class OperationSaveState {
+  final Operation operation;
 
-  bool get isActionSaved => action.id != Action.defaultId;
+  bool get isOperationSaved => operation.id != Operation.defaultId;
 
-  bool get isCanSave => this is SelectTypeState && action.type != null;
+  bool get isCanSave => this is SelectTypeState && operation.type != null;
 
-  bool get isBobbinNotLoaded => action.bobbin.isUnknown;
+  bool get isBobbinNotLoaded => operation.bobbin.isUnknown;
 
   String get currentType =>
-      action.type?.getLocalizedName() ?? 'Выберете операцию';
+      operation.type?.localizedName ?? 'Выберете операцию';
 
-  String get bobbinNumber => action.bobbin.bobbinNumber;
+  String get bobbinNumber => operation.bobbin.bobbinNumber;
 
-  String get bobbinId => action.bobbin.id.toString();
+  String get bobbinId => operation.bobbin.id.toString();
 
-  String get formattedDate => formatter.format(action.time);
+  String get formattedDate => formatter.format(operation.time);
 
-  SaveActionState._({required this.action});
+  OperationSaveState._({required this.operation});
 }
 
-class SelectTypeState extends SaveActionState {
-  SelectTypeState._({required Action action}) : super._(action: action);
+class SelectTypeState extends OperationSaveState {
+  SelectTypeState._({required Operation operation})
+      : super._(operation: operation);
 
-  factory SelectTypeState.initial(Action action) {
-    return SelectTypeState._(action: action);
+  factory SelectTypeState.initial(Operation action) {
+    return SelectTypeState._(operation: action);
   }
 
-  SelectTypeState changeType(ActionType? type) {
-    return SelectTypeState._(action: action.changeType(type));
+  SelectTypeState changeType(OperationType? type) {
+    return SelectTypeState._(operation: operation.changeType(type));
   }
 }
 
-class ProcessSaveState extends SaveActionState {
+class ProcessSaveState extends OperationSaveState {
   final Status status;
   final Failure? failure;
 
@@ -44,26 +45,26 @@ class ProcessSaveState extends SaveActionState {
       failure is NoInternetFailure || failure is ServerFailure;
 
   ProcessSaveState._({
-    required Action action,
+    required Operation operation,
     required this.status,
     required this.failure,
-  }) : super._(action: action);
+  }) : super._(operation: operation);
 
   ProcessSaveState _copyWith({
-    Action? action,
+    Operation? operation,
     Status? status,
     Failure? failure,
   }) {
     return ProcessSaveState._(
-      action: action ?? this.action,
+      operation: operation ?? this.operation,
       status: status ?? this.status,
       failure: failure ?? this.failure,
     );
   }
 
-  factory ProcessSaveState.load(Action action) {
+  factory ProcessSaveState.load(Operation operation) {
     return ProcessSaveState._(
-      action: action,
+      operation: operation,
       status: Status.load,
       failure: null,
     );
@@ -78,26 +79,26 @@ class ProcessSaveState extends SaveActionState {
   }
 }
 
-class SaveInCacheState extends SaveActionState {
+class SaveInCacheState extends OperationSaveState {
   final Status status;
 
   SaveInCacheState._({
-    required Action action,
+    required Operation operation,
     required this.status,
-  }) : super._(action: action);
+  }) : super._(operation: operation);
 
   SaveInCacheState _copyWith({
-    Action? action,
+    Operation? operation,
     Status? status,
   }) {
     return SaveInCacheState._(
-      action: action ?? this.action,
+      operation: operation ?? this.operation,
       status: status ?? this.status,
     );
   }
 
-  factory SaveInCacheState.load(Action action) {
-    return SaveInCacheState._(action: action, status: Status.load);
+  factory SaveInCacheState.load(Operation operation) {
+    return SaveInCacheState._(operation: operation, status: Status.load);
   }
 
   SaveInCacheState error() {

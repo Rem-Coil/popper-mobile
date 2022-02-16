@@ -1,8 +1,8 @@
 import 'package:dio/dio.dart';
-import 'package:popper_mobile/models/action/action.dart';
 import 'package:popper_mobile/models/auth/token.dart';
 import 'package:popper_mobile/models/auth/user_credentials.dart';
 import 'package:popper_mobile/models/bobbin/bobbin.dart';
+import 'package:popper_mobile/models/operation/operation.dart';
 import 'package:retrofit/retrofit.dart';
 
 part 'api_service.g.dart';
@@ -18,8 +18,8 @@ abstract class ApiService {
   Future<BobbinRemote> getBobbinInfo(@Path('id') int id);
 
   @POST('/action')
-  Future<ActionRemote> saveAction(@Body() ActionRemote action);
+  Future<OperationRemote> saveOperation(@Body() OperationRemote action);
 
   @PUT('/action')
-  Future<void> updateAction(@Body() ActionRemote action);
+  Future<void> updateOperation(@Body() OperationRemote action);
 }

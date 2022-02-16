@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:popper_mobile/core/di/injection.dart';
-import 'package:popper_mobile/models/action/action.dart' as models;
 import 'package:popper_mobile/models/barcode/scanned_entity.dart';
+import 'package:popper_mobile/models/operation/operation.dart';
 import 'package:popper_mobile/screen/bobbin_loading/bloc/bloc.dart';
 import 'package:popper_mobile/screen/bobbin_loading/ui/bobbin_loading_screen.dart';
 import 'package:popper_mobile/screen/home/bloc/bloc.dart';
@@ -12,6 +12,9 @@ import 'package:popper_mobile/screen/login/ui/login_screen.dart';
 import 'package:popper_mobile/screen/routing/screen.dart';
 import 'package:popper_mobile/screen/scanned_info/bloc/bloc.dart';
 import 'package:popper_mobile/screen/scanned_info/ui/scanned_info_screen.dart';
+import 'package:popper_mobile/screen/scanned_list/bloc/bloc.dart';
+import 'package:popper_mobile/screen/scanned_list/models/operation_status.dart';
+import 'package:popper_mobile/screen/scanned_list/ui/scanner_list_screen.dart';
 import 'package:popper_mobile/screen/scanner/ui/scanner_screen.dart';
 import 'package:popper_mobile/screen/scanner_result/model/scanner_result_arguments.dart';
 import 'package:popper_mobile/screen/scanner_result/ui/scanner_result_screen.dart';
@@ -36,11 +39,11 @@ class Routing {
       route: ScannerScreen.route,
       builder: (_) => ScannerScreen(),
     ),
-    ScreenWithArguments<models.Action>(
+    ScreenWithArguments<Operation>(
       route: ScannedInfoScreen.route,
       screenBuilder: (_, a) {
-        return BlocProvider<SaveActionBloc>(
-          create: (_) => getIt.get<SaveActionBloc>(param1: a),
+        return BlocProvider<OperationSaveBloc>(
+          create: (_) => getIt.get<OperationSaveBloc>(param1: a),
           child: ScannedInfoScreen(),
         );
       },
@@ -57,6 +60,15 @@ class Routing {
       route: ScannerResultScreen.route,
       screenBuilder: (_, a) {
         return ScannerResultScreen(args: a);
+      },
+    ),
+    ScreenWithArguments<OperationStatus>(
+      route: ScannerListScreen.route,
+      screenBuilder: (_, s) {
+        return BlocProvider<OperationListBloc>(
+          create: (_) => getIt.get<OperationListBloc>(param1: s),
+          child: ScannerListScreen(status: s),
+        );
       },
     ),
   ];

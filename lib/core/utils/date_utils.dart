@@ -15,7 +15,7 @@ class FormattedDateTime {
     if (daysBetween == 0) {
       return 'Сегодня в ';
     } else if (daysBetween == 1) {
-      return '$daysBetween день назад в ';
+      return 'Вчера в ';
     } else if (daysBetween <= 3) {
       return '$daysBetween дня назад в ';
     } else {

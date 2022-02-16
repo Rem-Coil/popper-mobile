@@ -1,59 +1,59 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'action_type.dart';
+part of 'operation_type.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class ActionTypeAdapter extends TypeAdapter<ActionType> {
+class OperationTypeAdapter extends TypeAdapter<OperationType> {
   @override
   final int typeId = 1;
 
   @override
-  ActionType read(BinaryReader reader) {
+  OperationType read(BinaryReader reader) {
     switch (reader.readByte()) {
       case 0:
-        return ActionType.winding;
+        return OperationType.winding;
       case 1:
-        return ActionType.output;
+        return OperationType.output;
       case 2:
-        return ActionType.isolation;
+        return OperationType.isolation;
       case 3:
-        return ActionType.molding;
+        return OperationType.molding;
       case 4:
-        return ActionType.crimping;
+        return OperationType.crimping;
       case 5:
-        return ActionType.quality;
+        return OperationType.quality;
       case 6:
-        return ActionType.testing;
+        return OperationType.testing;
       default:
-        return ActionType.winding;
+        return OperationType.winding;
     }
   }
 
   @override
-  void write(BinaryWriter writer, ActionType obj) {
+  void write(BinaryWriter writer, OperationType obj) {
     switch (obj) {
-      case ActionType.winding:
+      case OperationType.winding:
         writer.writeByte(0);
         break;
-      case ActionType.output:
+      case OperationType.output:
         writer.writeByte(1);
         break;
-      case ActionType.isolation:
+      case OperationType.isolation:
         writer.writeByte(2);
         break;
-      case ActionType.molding:
+      case OperationType.molding:
         writer.writeByte(3);
         break;
-      case ActionType.crimping:
+      case OperationType.crimping:
         writer.writeByte(4);
         break;
-      case ActionType.quality:
+      case OperationType.quality:
         writer.writeByte(5);
         break;
-      case ActionType.testing:
+      case OperationType.testing:
         writer.writeByte(6);
         break;
     }
@@ -65,7 +65,7 @@ class ActionTypeAdapter extends TypeAdapter<ActionType> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is ActionTypeAdapter &&
+          other is OperationTypeAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

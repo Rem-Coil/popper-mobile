@@ -1,15 +1,14 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
-import 'package:popper_mobile/data/cache/actions_cache.dart';
+import 'package:popper_mobile/data/cache/operations_cache.dart';
 
 part 'event.dart';
-
 part 'state.dart';
 
 @singleton
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
-  final ActionsCache _actionsCache;
+  final OperationsCache _actionsCache;
 
   HomeBloc(this._actionsCache) : super(HomeState.setup(0, 0)) {
     on<Initial>(onInitial);

@@ -1,7 +1,7 @@
-part of 'action.dart';
+part of 'operation.dart';
 
 @JsonSerializable()
-class ActionRemote extends Action {
+class OperationRemote extends Operation {
   @JsonKey(name: 'id')
   @override
   final int id;
@@ -13,12 +13,12 @@ class ActionRemote extends Action {
   final Bobbin bobbin;
   @JsonKey(name: 'action_type')
   @override
-  final ActionType type;
+  final OperationType type;
   @JsonKey(name: 'done_time', fromJson: _dateFromJson, toJson: _dateToJson)
   @override
   final DateTime time;
 
-  ActionRemote({
+  OperationRemote({
     required this.id,
     required this.userId,
     required this.bobbin,
@@ -32,10 +32,10 @@ class ActionRemote extends Action {
           time: time,
         );
 
-  factory ActionRemote.fromJson(Map<String, dynamic> json) =>
-      _$ActionRemoteFromJson(json);
+  factory OperationRemote.fromJson(Map<String, dynamic> json) =>
+      _$OperationRemoteFromJson(json);
 
-  Map<String, dynamic> toJson() => _$ActionRemoteToJson(this);
+  Map<String, dynamic> toJson() => _$OperationRemoteToJson(this);
 
   static DateTime _dateFromJson(String date) => formatter.parse(date);
 
