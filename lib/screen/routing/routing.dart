@@ -5,6 +5,7 @@ import 'package:popper_mobile/models/action/action.dart' as models;
 import 'package:popper_mobile/models/barcode/scanned_entity.dart';
 import 'package:popper_mobile/screen/bobbin_loading/bloc/bloc.dart';
 import 'package:popper_mobile/screen/bobbin_loading/ui/bobbin_loading_screen.dart';
+import 'package:popper_mobile/screen/home/bloc/bloc.dart';
 import 'package:popper_mobile/screen/home/ui/home_screen.dart';
 import 'package:popper_mobile/screen/login/bloc/login_bloc.dart';
 import 'package:popper_mobile/screen/login/ui/login_screen.dart';
@@ -29,7 +30,7 @@ class Routing {
     ),
     SimpleScreen(
       route: HomeScreen.route,
-      builder: (_) => HomeScreen(),
+      builder: (_) => screenWithBloc<HomeBloc>(HomeScreen()),
     ),
     SimpleScreen(
       route: ScannerScreen.route,

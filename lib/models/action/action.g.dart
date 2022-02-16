@@ -57,7 +57,7 @@ class ActionLocalAdapter extends TypeAdapter<ActionLocal> {
 // **************************************************************************
 
 ActionRemote _$ActionRemoteFromJson(Map<String, dynamic> json) => ActionRemote(
-  id: json['id'] as int,
+      id: json['id'] as int,
       userId: json['operator_id'] as int,
       bobbin: ActionRemote._bobbinFromJson(json['bobbin_id'] as int),
       type: $enumDecode(_$ActionTypeEnumMap, json['action_type']),
