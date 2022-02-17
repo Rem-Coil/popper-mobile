@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:popper_mobile/core/error/failure.dart';
-import 'package:popper_mobile/data/repository/auth_repository.dart';
+import 'package:popper_mobile/domain/repository/auth_repository.dart';
 import 'package:popper_mobile/models/auth/user.dart';
 import 'package:popper_mobile/models/auth/user_credentials.dart';
 import 'package:popper_mobile/screen/auth/bloc/auth_bloc.dart';

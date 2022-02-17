@@ -9,12 +9,16 @@ import 'package:popper_mobile/screen/home/bloc/bloc.dart';
 import 'package:popper_mobile/screen/home/ui/home_screen.dart';
 import 'package:popper_mobile/screen/login/bloc/login_bloc.dart';
 import 'package:popper_mobile/screen/login/ui/login_screen.dart';
+import 'package:popper_mobile/screen/operation_info/save_operation/bloc/bloc.dart';
+import 'package:popper_mobile/screen/operation_info/save_operation/ui/save_operation_screen.dart';
+import 'package:popper_mobile/screen/operation_info/simple_info/ui/simple_info_screen.dart';
+import 'package:popper_mobile/screen/operation_info/update_operation/bloc/bloc.dart';
+import 'package:popper_mobile/screen/operation_info/update_operation/ui/update_operation_screen.dart';
 import 'package:popper_mobile/screen/routing/screen.dart';
-import 'package:popper_mobile/screen/scanned_info/bloc/bloc.dart';
-import 'package:popper_mobile/screen/scanned_info/ui/scanned_info_screen.dart';
-import 'package:popper_mobile/screen/scanned_list/bloc/bloc.dart';
-import 'package:popper_mobile/screen/scanned_list/models/operation_status.dart';
-import 'package:popper_mobile/screen/scanned_list/ui/scanner_list_screen.dart';
+import 'package:popper_mobile/screen/scanned_list/cached_operations/bloc/bloc.dart';
+import 'package:popper_mobile/screen/scanned_list/cached_operations/ui/cached_operations_screen.dart';
+import 'package:popper_mobile/screen/scanned_list/saved_operations/bloc/bloc.dart';
+import 'package:popper_mobile/screen/scanned_list/saved_operations/ui/saved_operations_screen.dart';
 import 'package:popper_mobile/screen/scanner/ui/scanner_screen.dart';
 import 'package:popper_mobile/screen/scanner_result/model/scanner_result_arguments.dart';
 import 'package:popper_mobile/screen/scanner_result/ui/scanner_result_screen.dart';
@@ -40,13 +44,26 @@ class Routing {
       builder: (_) => ScannerScreen(),
     ),
     ScreenWithArguments<Operation>(
-      route: ScannedInfoScreen.route,
-      screenBuilder: (_, a) {
+      route: OperationSaveScreen.route,
+      screenBuilder: (_, o) {
         return BlocProvider<OperationSaveBloc>(
-          create: (_) => getIt.get<OperationSaveBloc>(param1: a),
-          child: ScannedInfoScreen(),
+          create: (_) => getIt.get<OperationSaveBloc>(param1: o),
+          child: OperationSaveScreen(),
         );
       },
+    ),
+    ScreenWithArguments<Operation>(
+      route: UpdateOperationScreen.route,
+      screenBuilder: (_, o) {
+        return BlocProvider<OperationUpdateBloc>(
+          create: (_) => getIt.get<OperationUpdateBloc>(param1: o),
+          child: UpdateOperationScreen(),
+        );
+      },
+    ),
+    ScreenWithArguments<Operation>(
+      route: SimpleInfoScreen.route,
+      screenBuilder: (_, o) => SimpleInfoScreen(operation: o),
     ),
     ScreenWithArguments<ScannedEntity>(
       route: BobbinLoadingScreen.route,
@@ -62,14 +79,15 @@ class Routing {
         return ScannerResultScreen(args: a);
       },
     ),
-    ScreenWithArguments<OperationStatus>(
-      route: ScannerListScreen.route,
-      screenBuilder: (_, s) {
-        return BlocProvider<OperationListBloc>(
-          create: (_) => getIt.get<OperationListBloc>(param1: s),
-          child: ScannerListScreen(status: s),
-        );
-      },
+    SimpleScreen(
+      route: SavedOperationsScreen.route,
+      builder: (_) =>
+          screenWithBloc<SavedOperationsBloc>(SavedOperationsScreen()),
+    ),
+    SimpleScreen(
+      route: CachedOperationsScreen.route,
+      builder: (_) =>
+          screenWithBloc<CachedOperationsBloc>(CachedOperationsScreen()),
     ),
   ];
 

@@ -6,7 +6,7 @@ import 'package:popper_mobile/models/bobbin/bobbin.dart';
 import 'package:popper_mobile/models/operation/operation.dart';
 import 'package:popper_mobile/screen/auth/bloc/auth_bloc.dart';
 import 'package:popper_mobile/screen/bobbin_loading/bloc/bloc.dart';
-import 'package:popper_mobile/screen/scanned_info/ui/scanned_info_screen.dart';
+import 'package:popper_mobile/screen/operation_info/save_operation/ui/save_operation_screen.dart';
 import 'package:popper_mobile/widgets/loading_widget.dart';
 
 class BobbinLoadingScreen extends StatefulWidget {
@@ -37,10 +37,10 @@ class _BobbinLoadingScreenState extends State<BobbinLoadingScreen> {
           listener: (context, state) {
             if (state.isSuccessful || state.hasError) {
               final bobbin = state.bobbin ?? Bobbin.unknown(widget.bobbin.id);
-              final action = generateAction(context, bobbin);
+              final operation = generateOperation(context, bobbin);
               context.pushReplacement(
-                ScannedInfoScreen.route,
-                args: action,
+                OperationSaveScreen.route,
+                args: operation,
               );
             }
           },
@@ -56,7 +56,7 @@ class _BobbinLoadingScreenState extends State<BobbinLoadingScreen> {
     );
   }
 
-  Operation generateAction(BuildContext context, Bobbin bobbin) {
+  Operation generateOperation(BuildContext context, Bobbin bobbin) {
     final userId = BlocProvider.of<AuthBloc>(context).state.user!.id;
     return Operation.create(
       userId: userId,

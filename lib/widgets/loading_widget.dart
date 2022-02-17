@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:popper_mobile/widgets/circular_loader.dart';
 import 'package:popper_mobile/widgets/logo.dart';
 
 class LoadingWidget extends StatelessWidget {
@@ -14,11 +15,7 @@ class LoadingWidget extends StatelessWidget {
         children: [
           Logo(235),
           SizedBox(height: 40),
-          SizedBox(
-            width: 100,
-            height: 100,
-            child: CircularProgressIndicator(strokeWidth: 5),
-          ),
+          CircularLoader(size: 100, strokeWidth: 5),
           SizedBox(height: 40),
           SizedBox(
             width: 220,

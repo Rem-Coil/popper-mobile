@@ -59,7 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   height: 67,
                   borderRadius: 16,
                   onPressed: () {
-                    final scanned = ScannedEntity.fromString('bobbin:8');
+                    final scanned = ScannedEntity.fromString('bobbin:9');
                     context.push(BobbinLoadingScreen.route, args: scanned);
                     // BlocProvider.of<HomeBloc>(context).add(Initial());
                     // context.push(ScannerScreen.route);

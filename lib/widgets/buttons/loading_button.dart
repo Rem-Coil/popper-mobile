@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:popper_mobile/widgets/buttons/simple_button.dart';
+import 'package:popper_mobile/widgets/circular_loader.dart';
 
 class LoadingButton extends StatelessWidget {
   final double? width;
@@ -20,14 +21,9 @@ class LoadingButton extends StatelessWidget {
     return SimpleButton(
       width: width,
       child: isLoad
-          ? Container(
-              width: 25,
-              height: 25,
-              child: CircularProgressIndicator(color: Colors.white),
-            )
+          ? CircularLoader(size: 25, color: Colors.white)
           : Text(text, style: TextStyle(fontSize: 20)),
       onPressed: onPressed,
     );
   }
 }
-
