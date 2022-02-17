@@ -14,7 +14,7 @@ class CenterTextWithImage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: SizedBox(
-        height: 400,
+        height: 330,
         child: Column(
           children: [
             Image.asset(image),
@@ -27,7 +27,6 @@ class CenterTextWithImage extends StatelessWidget {
               ),
               textAlign: TextAlign.center,
             ),
-            SizedBox(height: 90),
           ],
         ),
       ),

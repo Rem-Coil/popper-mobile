@@ -47,7 +47,7 @@ class OperationLocalAdapter extends TypeAdapter<OperationLocal> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-          other is OperationLocalAdapter &&
+      other is OperationLocalAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

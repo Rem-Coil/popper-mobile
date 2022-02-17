@@ -1,18 +1,61 @@
 part of 'bloc.dart';
 
 @immutable
-abstract class CachedOperationsState {}
-
-class LoadingState extends CachedOperationsState {}
-
-class OperationsLoaded extends CachedOperationsState {
+class CachedOperationsState {
+  final Status status;
+  final Failure? mainFailure;
+  final Failure? deleteFailure;
   final List<Operation> operations;
 
-  OperationsLoaded(this.operations) : super();
-}
+  CachedOperationsState({
+    required this.status,
+    required this.mainFailure,
+    required this.operations,
+    required this.deleteFailure,
+  });
 
-class ErrorState extends CachedOperationsState {
-  final Failure failure;
+  factory CachedOperationsState.initial() {
+    return CachedOperationsState(
+      status: Status.initial,
+      mainFailure: null,
+      deleteFailure: null,
+      operations: [],
+    );
+  }
 
-  ErrorState(this.failure) : super();
+  CachedOperationsState load() {
+    return CachedOperationsState(
+      status: Status.load,
+      mainFailure: mainFailure,
+      deleteFailure: null,
+      operations: operations,
+    );
+  }
+
+  CachedOperationsState operationsLoaded(List<Operation> operations) {
+    return CachedOperationsState(
+      status: Status.success,
+      mainFailure: null,
+      deleteFailure: null,
+      operations: operations,
+    );
+  }
+
+  CachedOperationsState loadError(Failure failure) {
+    return CachedOperationsState(
+      status: Status.error,
+      mainFailure: failure,
+      deleteFailure: null,
+      operations: operations,
+    );
+  }
+
+  CachedOperationsState deleteError(Failure failure) {
+    return CachedOperationsState(
+      status: Status.error,
+      mainFailure: null,
+      deleteFailure: failure,
+      operations: operations,
+    );
+  }
 }

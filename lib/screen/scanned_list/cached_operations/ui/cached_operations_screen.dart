@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:popper_mobile/core/bloc/status.dart';
 import 'package:popper_mobile/core/utils/context_utils.dart';
 import 'package:popper_mobile/screen/operation_info/simple_info/ui/simple_info_screen.dart';
 import 'package:popper_mobile/screen/scanned_list/cached_operations/bloc/bloc.dart';
@@ -30,14 +31,30 @@ class _CachedOperationsScreenState extends State<CachedOperationsScreen> {
       appBar: AppBar(
         title: Text(widget.status.title),
         backgroundColor: widget.status.color,
+        actions: [IconButton(onPressed: () {}, icon: Icon(Icons.cached))],
       ),
-      body: BlocBuilder<CachedOperationsBloc, CachedOperationsState>(
+      body: BlocConsumer<CachedOperationsBloc, CachedOperationsState>(
+        listenWhen: (previous, current) =>
+            previous.deleteFailure == null && current.deleteFailure != null,
+        listener: (context, state) {
+          context.errorSnackBar(state.deleteFailure!.message);
+        },
         builder: (context, state) {
-          return OperationsList(
-            failure: state is ErrorState ? state.failure : null,
-            operations: state is OperationsLoaded ? state.operations : null,
-            onTap: (o) => context.push(SimpleInfoScreen.route, args: o),
-            onDelete: (o) {},
+          return Column(
+            children: [
+              if (state.status.isLoad) LinearProgressIndicator(),
+              Expanded(
+                child: OperationsList(
+                  failure: state.mainFailure,
+                  operations: state.operations,
+                  onTap: (o) => context.push(SimpleInfoScreen.route, args: o),
+                  onDelete: (o) {
+                    BlocProvider.of<CachedOperationsBloc>(context)
+                        .add(DeleteOperation(o));
+                  },
+                ),
+              ),
+            ],
           );
         },
       ),

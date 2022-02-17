@@ -22,4 +22,7 @@ abstract class ApiService {
 
   @PUT('/action')
   Future<void> updateOperation(@Body() OperationRemote action);
+
+  @DELETE('/action/{id}')
+  Future<void> deleteOperation(@Path('id') int id);
 }

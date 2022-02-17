@@ -6,9 +6,7 @@ import 'package:popper_mobile/models/bobbin/bobbin.dart';
 import 'package:popper_mobile/models/operation/operation_type.dart';
 
 part 'operation.g.dart';
-
 part 'operation_local.dart';
-
 part 'operation_remote.dart';
 
 final formatter = DateFormat('yyyy-MM-ddTHH:mm:ss');
@@ -84,5 +82,11 @@ class Operation {
       type: type!,
       time: time,
     );
+  }
+
+  bool isEqualWithoutId(Operation other) {
+    return this.bobbin.id == other.bobbin.id &&
+        this.type == other.type &&
+        this.time == other.time;
   }
 }

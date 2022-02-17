@@ -57,29 +57,44 @@ class OperationsCacheImpl implements OperationsCache {
 
   @override
   Future<ValueListenable<Box<OperationLocal>>>
-  get savedActionListenable async => (await _savedOperations).listenable();
+      get savedActionListenable async => (await _savedOperations).listenable();
 
   @override
   Future<ValueListenable<Box<OperationLocal>>>
       get cachedActionListenable async =>
           (await _cachedOperations).listenable();
 
+  @override
+  Future<void> deleteCacheOperation(Operation operation) async =>
+      _deleteByCondition(await _cachedOperations, operation,
+          (o1, o2) => o1.isEqualWithoutId(o2));
+
+  @override
+  Future<void> deleteSavedOperation(Operation operation) async =>
+      _deleteByCondition(
+          await _savedOperations, operation, (o1, o2) => o1.id == o2.id);
+
+  Future<void> _deleteByCondition(
+    Box<OperationLocal> box,
+    Operation operation,
+    bool Function(Operation o1, Operation o2) condition,
+  ) async {
+    final operations = box.toMap();
+    int deleteIndex = -1;
+
+    operations.forEach((key, value) {
+      if (condition(operation, value)) {
+        deleteIndex = key;
+      }
+    });
+
+    await box.delete(deleteIndex);
+  }
+
   @disposeMethod
   @override
   Future<void> dispose() async {
     await (await _savedOperations).close();
     await (await _cachedOperations).close();
-  }
-
-  @override
-  Future<void> deleteCacheOperation(Operation operation) {
-    // TODO: implement deleteCacheOperation
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<void> deleteSavedOperation(Operation operation) {
-    // TODO: implement deleteSavedOperation
-    throw UnimplementedError();
   }
 }

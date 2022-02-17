@@ -42,8 +42,8 @@ _i1.GetIt $initGetIt(_i1.GetIt get,
       dispose: (i) => i.dispose());
   gh.singleton<_i10.OperationsRepository>(_i11.OperationRepositoryImpl(
       get<_i3.ApiProvider>(), get<_i8.OperationsCache>()));
-  gh.factory<_i12.SavedOperationsBloc>(
-      () => _i12.SavedOperationsBloc(get<_i8.OperationsCache>()));
+  gh.factory<_i12.SavedOperationsBloc>(() => _i12.SavedOperationsBloc(
+      get<_i8.OperationsCache>(), get<_i10.OperationsRepository>()));
   gh.singleton<_i13.SplashBloc>(_i13.SplashBloc());
   gh.singleton<_i14.AuthBloc>(_i14.AuthBloc(get<_i4.AuthRepository>()));
   gh.factory<_i15.BobbinLoadingBloc>(

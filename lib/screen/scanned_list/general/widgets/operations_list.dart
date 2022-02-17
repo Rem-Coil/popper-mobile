@@ -3,11 +3,10 @@ import 'package:popper_mobile/core/error/failure.dart';
 import 'package:popper_mobile/models/operation/operation.dart';
 import 'package:popper_mobile/screen/scanned_list/general/widgets/operation_widget.dart';
 import 'package:popper_mobile/widgets/center_text_with_image.dart';
-import 'package:popper_mobile/widgets/circular_loader.dart';
 
 class OperationsList extends StatelessWidget {
   final Failure? failure;
-  final List<Operation>? operations;
+  final List<Operation> operations;
   final OperationCallback onTap;
   final OperationCallback onDelete;
 
@@ -28,31 +27,25 @@ class OperationsList extends StatelessWidget {
       );
     }
 
-    if (operations != null) {
-      if (operations!.isEmpty) {
-        return CenterTextWithImage(
-          image: 'assets/images/worker.png',
-          title: 'Тут пока ничего нет',
-        );
-      }
-
-      return Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: ListView.builder(
-          itemCount: operations!.length,
-          itemBuilder: (context, i) {
-            return OperationWidget(
-              operation: operations![i],
-              onTap: onTap,
-              onDelete: onDelete,
-            );
-          },
-        ),
+    if (operations.isEmpty) {
+      return CenterTextWithImage(
+        image: 'assets/images/worker.png',
+        title: 'Тут пока ничего нет',
       );
     }
 
-    return Center(
-      child: CircularLoader(size: 50),
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: ListView.builder(
+        itemCount: operations.length,
+        itemBuilder: (context, i) {
+          return OperationWidget(
+            operation: operations[i],
+            onTap: onTap,
+            onDelete: onDelete,
+          );
+        },
+      ),
     );
   }
 }

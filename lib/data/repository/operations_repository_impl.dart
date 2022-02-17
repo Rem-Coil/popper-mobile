@@ -106,14 +106,42 @@ class OperationRepositoryImpl implements OperationsRepository {
   }
 
   @override
-  Future<Either<Failure, void>> deleteCachedOperation(Operation operation) {
-    // TODO: implement deleteCachedOperation
-    throw UnimplementedError();
+  Future<Either<Failure, void>> deleteCachedOperation(
+    Operation operation,
+  ) async {
+    try {
+      _operationsCache.deleteCacheOperation(operation);
+      return Right(null);
+    } catch (e) {
+      return Left(CacheFailure());
+    }
   }
 
   @override
-  Future<Either<Failure, void>> deleteSavedOperation(Operation operation) {
-    // TODO: implement deleteSavedOperation
-    throw UnimplementedError();
+  Future<Either<Failure, void>> deleteSavedOperation(
+    Operation operation,
+  ) async {
+    try {
+      final api = _apiProvider.getApiService();
+      await api.deleteOperation(operation.id);
+      await _operationsCache.deleteSavedOperation(operation);
+      return Right(null);
+    } on DioError catch (e) {
+      if (e.error is SocketException) {
+        return Left(NoInternetFailure());
+      }
+
+      switch (e.response?.statusCode) {
+        case HttpStatus.internalServerError:
+        case HttpStatus.badGateway:
+          return Left(ServerFailure());
+        case HttpStatus.unauthorized:
+          return Left(WrongCredentialsFailure());
+        case HttpStatus.forbidden:
+          return Left(OperationAlreadyExistFailure());
+      }
+
+      return Left(UnknownFailure());
+    }
   }
 }
