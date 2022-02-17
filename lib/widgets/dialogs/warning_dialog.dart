@@ -1,5 +1,5 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:popper_mobile/core/utils/context_utils.dart';
 
 class WarningDialog extends StatelessWidget {
   final String title;
@@ -23,7 +23,7 @@ class WarningDialog extends StatelessWidget {
         CupertinoDialogAction(
           child: Text(actionTitle),
           isDestructiveAction: true,
-          onPressed: () => context.pop(),
+          onPressed: () => context.router.navigateBack(),
         ),
       ],
     );

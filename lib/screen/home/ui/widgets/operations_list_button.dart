@@ -1,8 +1,7 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:popper_mobile/core/utils/context_utils.dart';
-import 'package:popper_mobile/screen/scanned_list/cached_operations/ui/cached_operations_screen.dart';
+import 'package:popper_mobile/screen/routing/app_router.dart';
 import 'package:popper_mobile/screen/scanned_list/models/operation_status.dart';
-import 'package:popper_mobile/screen/scanned_list/saved_operations/ui/saved_operations_screen.dart';
 import 'package:popper_mobile/widgets/buttons/simple_button.dart';
 
 class OperationsListButton extends StatelessWidget {
@@ -40,8 +39,8 @@ class OperationsListButton extends StatelessWidget {
         ],
       ),
       onPressed: () => status == OperationStatus.saved
-          ? context.push(SavedOperationsScreen.route)
-          : context.push(CachedOperationsScreen.route),
+          ? context.router.push(const SavedOperationsRoute())
+          : context.router.push(const CachedOperationsRoute()),
     );
   }
 }

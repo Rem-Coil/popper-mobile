@@ -1,20 +1,29 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:popper_mobile/core/bloc/status.dart';
+import 'package:popper_mobile/core/di/injection.dart';
 import 'package:popper_mobile/core/utils/context_utils.dart';
-import 'package:popper_mobile/screen/operation_info/update_operation/ui/update_operation_screen.dart';
+import 'package:popper_mobile/screen/routing/app_router.dart';
 import 'package:popper_mobile/screen/scanned_list/general/widgets/operations_list.dart';
 import 'package:popper_mobile/screen/scanned_list/models/operation_status.dart';
 import 'package:popper_mobile/screen/scanned_list/saved_operations/bloc/bloc.dart';
 
-class SavedOperationsScreen extends StatefulWidget {
-  static const route = "/saved_operations";
-  final status = OperationStatus.saved;
+const status = OperationStatus.saved;
 
+class SavedOperationsScreen extends StatefulWidget implements AutoRouteWrapper {
   const SavedOperationsScreen({Key? key}) : super(key: key);
 
   @override
   State<SavedOperationsScreen> createState() => _SavedOperationsScreenState();
+
+  @override
+  Widget wrappedRoute(BuildContext context) {
+    return BlocProvider<SavedOperationsBloc>(
+      create: (_) => getIt<SavedOperationsBloc>(),
+      child: this,
+    );
+  }
 }
 
 class _SavedOperationsScreenState extends State<SavedOperationsScreen> {
@@ -29,12 +38,12 @@ class _SavedOperationsScreenState extends State<SavedOperationsScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text(widget.status.title),
-        backgroundColor: widget.status.color,
+        title: Text(status.title),
+        backgroundColor: status.color,
       ),
       body: BlocConsumer<SavedOperationsBloc, SavedOperationsState>(
         listenWhen: (previous, current) =>
-            previous.deleteFailure == null && current.deleteFailure != null,
+        previous.deleteFailure == null && current.deleteFailure != null,
         listener: (context, state) {
           context.errorSnackBar(state.deleteFailure!.message);
         },
@@ -47,7 +56,7 @@ class _SavedOperationsScreenState extends State<SavedOperationsScreen> {
                   failure: state.mainFailure,
                   operations: state.operations,
                   onTap: (o) =>
-                      context.push(UpdateOperationScreen.route, args: o),
+                      context.router.push(UpdateOperationRoute(operation: o)),
                   onDelete: (o) {
                     BlocProvider.of<SavedOperationsBloc>(context)
                         .add(DeleteOperation(o));

@@ -3,8 +3,6 @@ import 'package:popper_mobile/models/operation/operation.dart';
 import 'package:popper_mobile/screen/operation_info/general/widgets/operation_info.dart';
 
 class SimpleInfoScreen extends StatelessWidget {
-  static const String route = '/simple_info';
-
   final Operation operation;
 
   const SimpleInfoScreen({Key? key, required this.operation}) : super(key: key);

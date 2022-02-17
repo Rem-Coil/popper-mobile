@@ -1,18 +1,16 @@
 import 'dart:async';
 
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:popper_mobile/core/bloc/status.dart';
-import 'package:popper_mobile/core/utils/context_utils.dart';
+import 'package:popper_mobile/core/di/injection.dart';
 import 'package:popper_mobile/screen/auth/bloc/auth_bloc.dart';
-import 'package:popper_mobile/screen/home/ui/home_screen.dart';
-import 'package:popper_mobile/screen/login/ui/login_screen.dart';
+import 'package:popper_mobile/screen/routing/app_router.dart';
 import 'package:popper_mobile/screen/splash/bloc/splash_bloc.dart';
 import 'package:popper_mobile/widgets/logo.dart';
 
-class SplashScreen extends StatelessWidget {
-  static const route = '/splash';
-
+class SplashScreen extends StatelessWidget implements AutoRouteWrapper {
   const SplashScreen({Key? key}) : super(key: key);
 
   @override
@@ -28,9 +26,9 @@ class SplashScreen extends StatelessWidget {
             listener: (context, state) {
               WidgetsBinding.instance?.addPostFrameCallback((_) {
                 if (state is NavigateToLogin) {
-                  _navigateDelayed(context, LoginScreen.route);
+                  _navigateDelayed(context, const LoginRoute());
                 } else if (state is NavigateToHome) {
-                  _navigateDelayed(context, HomeScreen.route);
+                  _navigateDelayed(context, const HomeRoute());
                 }
               });
             },
@@ -41,10 +39,18 @@ class SplashScreen extends StatelessWidget {
     );
   }
 
-  void _navigateDelayed(BuildContext context, String route, {Object? args}) {
+  void _navigateDelayed(BuildContext context, PageRouteInfo route) {
     Timer(
       Duration(seconds: 1),
-      () => context.pushReplacement(route, args: args),
+      () => context.router.replace(route),
+    );
+  }
+
+  @override
+  Widget wrappedRoute(BuildContext context) {
+    return BlocProvider<SplashBloc>(
+      create: (_) => getIt<SplashBloc>(),
+      child: this,
     );
   }
 }

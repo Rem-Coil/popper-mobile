@@ -1,19 +1,27 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:popper_mobile/core/di/injection.dart';
 import 'package:popper_mobile/core/utils/context_utils.dart';
-import 'package:popper_mobile/screen/home/ui/home_screen.dart';
 import 'package:popper_mobile/screen/login/bloc/login_bloc.dart';
+import 'package:popper_mobile/screen/routing/app_router.dart';
 import 'package:popper_mobile/widgets/buttons/loading_button.dart';
 import 'package:popper_mobile/widgets/field.dart';
 import 'package:popper_mobile/widgets/logo.dart';
 
-class LoginScreen extends StatefulWidget {
-  static const route = '/login';
-
+class LoginScreen extends StatefulWidget implements AutoRouteWrapper {
   const LoginScreen({Key? key}) : super(key: key);
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
+
+  @override
+  Widget wrappedRoute(BuildContext context) {
+    return BlocProvider<LoginBloc>(
+      create: (_) => getIt<LoginBloc>(),
+      child: this,
+    );
+  }
 }
 
 class _LoginScreenState extends State<LoginScreen> {
@@ -53,10 +61,9 @@ class _LoginScreenState extends State<LoginScreen> {
               listener: (context, state) {
                 if (state.user != null) {
                   context.successSnackBar('Успешно');
-                  Future.delayed(
-                    Duration(seconds: 1),
-                    () => context.pushReplacement(HomeScreen.route),
-                  );
+                  Future.delayed(Duration(seconds: 1), () {
+                    context.router.replace(const HomeRoute());
+                  });
                 }
 
                 if (state.errorMessage != null) {
@@ -86,10 +93,11 @@ class _LoginScreenState extends State<LoginScreen> {
                           hintText: 'Телефон',
                           controller: phoneController,
                           isNumberField: true,
-                          validator: (value) =>
-                              isFieldsCleared || value == null || value.isNotEmpty
-                                  ? null
-                                  : 'Введите телефон',
+                          validator: (value) => isFieldsCleared ||
+                                  value == null ||
+                                  value.isNotEmpty
+                              ? null
+                              : 'Введите телефон',
                         ),
                         SizedBox(height: 16),
                         Field(
@@ -97,10 +105,11 @@ class _LoginScreenState extends State<LoginScreen> {
                           isHidden: true,
                           hintText: 'Пароль',
                           controller: passwordController,
-                          validator: (value) =>
-                              isFieldsCleared || value == null || value.isNotEmpty
-                                  ? null
-                                  : 'Введите пароль',
+                          validator: (value) => isFieldsCleared ||
+                                  value == null ||
+                                  value.isNotEmpty
+                              ? null
+                              : 'Введите пароль',
                         ),
                         SizedBox(height: 48),
                         Center(

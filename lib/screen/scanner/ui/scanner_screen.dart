@@ -1,16 +1,15 @@
-import 'dart:io';
 import 'dart:developer';
+import 'dart:io';
 
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:popper_mobile/core/utils/context_utils.dart';
 import 'package:popper_mobile/models/barcode/scanned_entity.dart';
-import 'package:popper_mobile/screen/bobbin_loading/ui/bobbin_loading_screen.dart';
+import 'package:popper_mobile/screen/routing/app_router.dart';
 import 'package:popper_mobile/widgets/buttons/simple_button.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 class ScannerScreen extends StatefulWidget {
-  static const String route = '/scanner';
-
   const ScannerScreen({Key? key}) : super(key: key);
 
   @override
@@ -123,7 +122,7 @@ class _ScannerScreenState extends State<ScannerScreen> {
     try {
       final scanned = ScannedEntity.fromString(code.code);
       if (scanned.type == EntityType.bobbin) {
-        context.pushReplacement(BobbinLoadingScreen.route, args: scanned);
+        context.router.replace(BobbinLoadingRoute(bobbin: scanned));
       } else {
         _showError('Вы отсканировали не катушку');
       }

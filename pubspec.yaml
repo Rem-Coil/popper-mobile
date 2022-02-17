@@ -12,6 +12,7 @@ dependencies:
   flutter:
     sdk: flutter
 
+  auto_route: ^3.2.3
   injectable: ^1.2.1
   get_it: ^7.2.0
 
@@ -36,6 +37,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
+  auto_route_generator: ^3.2.3
   retrofit_generator: any
   injectable_generator: any
   hive_generator: any

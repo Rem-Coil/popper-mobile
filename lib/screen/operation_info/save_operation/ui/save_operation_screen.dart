@@ -1,20 +1,23 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:popper_mobile/core/bloc/status.dart';
-import 'package:popper_mobile/core/utils/context_utils.dart';
+import 'package:popper_mobile/core/di/injection.dart';
+import 'package:popper_mobile/models/operation/operation.dart';
 import 'package:popper_mobile/screen/operation_info/general/widgets/operation_info.dart';
 import 'package:popper_mobile/screen/operation_info/save_operation/bloc/bloc.dart';
+import 'package:popper_mobile/screen/routing/app_router.dart';
 import 'package:popper_mobile/screen/scanner_result/model/scanner_result_arguments.dart';
-import 'package:popper_mobile/screen/scanner_result/ui/scanner_result_screen.dart';
 import 'package:popper_mobile/widgets/buttons/simple_button.dart';
 import 'package:popper_mobile/widgets/circular_loader.dart';
 import 'package:popper_mobile/widgets/dialogs/decision_dialog.dart';
 
-class OperationSaveScreen extends StatelessWidget {
-  static const String route = '/save_operation';
+class OperationSaveScreen extends StatelessWidget implements AutoRouteWrapper {
+  final Operation operation;
 
-  const OperationSaveScreen({Key? key}) : super(key: key);
+  const OperationSaveScreen({Key? key, required this.operation})
+      : super(key: key);
 
   bool isLoad(OperationSaveState state) {
     return state is SaveProcessState && state.status.isLoad;
@@ -56,7 +59,8 @@ class OperationSaveScreen extends StatelessWidget {
                       child: SimpleButton(
                         height: 55,
                         child: Text('Отмена', style: TextStyle(fontSize: 18)),
-                        onPressed: () => context.pop(),
+                        onPressed: () =>
+                            context.router.navigate(const HomeRoute()),
                       ),
                     ),
                     SizedBox(width: 16),
@@ -87,11 +91,11 @@ class OperationSaveScreen extends StatelessWidget {
         message: "Операция успешно сохранена",
         image: "assets/images/success.png",
       );
-      context.pushReplacement(ScannerResultScreen.route, args: args);
+      context.router.replace(ScannerResultRoute(args: args));
     } else if (state.isSaveError) {
       final isSaveInCache = await _showSaveDialog(context);
       if (isSaveInCache == null || !isSaveInCache) {
-        context.pop();
+        context.router.navigate(const HomeRoute());
       } else {
         BlocProvider.of<OperationSaveBloc>(context).add(CacheOperation());
       }
@@ -100,26 +104,24 @@ class OperationSaveScreen extends StatelessWidget {
         message: state.failure!.message,
         image: "assets/images/save_exception.png",
       );
-      context.pushReplacement(ScannerResultScreen.route, args: args);
+      context.router.replace(ScannerResultRoute(args: args));
     }
   }
 
-  Future<void> _onSaveInCacheEnd(
-    BuildContext context,
-    CacheProcessState state,
-  ) async {
+  Future<void> _onSaveInCacheEnd(BuildContext context,
+      CacheProcessState state,) async {
     if (state.status.isSuccessful) {
       final args = ScannerResultArguments(
         message: "Операция успешно сохранена в кеш",
         image: "assets/images/success.png",
       );
-      context.pushReplacement(ScannerResultScreen.route, args: args);
+      context.router.replace(ScannerResultRoute(args: args));
     } else {
       final args = ScannerResultArguments(
         message: "Ошибка сохранения в кеш, проверте правильность данных",
         image: "assets/images/save_exception.png",
       );
-      context.pushReplacement(ScannerResultScreen.route, args: args);
+      context.router.replace(ScannerResultRoute(args: args));
     }
   }
 
@@ -140,4 +142,12 @@ class OperationSaveScreen extends StatelessWidget {
 
   void _saveOperation(BuildContext context) =>
       BlocProvider.of<OperationSaveBloc>(context).add(SaveOperation());
+
+  @override
+  Widget wrappedRoute(BuildContext context) {
+    return BlocProvider<OperationSaveBloc>(
+      create: (_) => getIt.get<OperationSaveBloc>(param1: operation),
+      child: this,
+    );
+  }
 }

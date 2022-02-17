@@ -1,10 +1,10 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:popper_mobile/core/utils/context_utils.dart';
+import 'package:popper_mobile/screen/routing/app_router.dart';
 import 'package:popper_mobile/screen/scanner_result/model/scanner_result_arguments.dart';
 import 'package:popper_mobile/widgets/buttons/simple_button.dart';
 
 class ScannerResultScreen extends StatelessWidget {
-  static const route = "/scanner_result";
   final ScannerResultArguments args;
 
   const ScannerResultScreen({Key? key, required this.args}) : super(key: key);
@@ -41,7 +41,7 @@ class ScannerResultScreen extends StatelessWidget {
             Expanded(
               child: SimpleButton(
                 child: Text('На главную'),
-                onPressed: () => context.pop(),
+                onPressed: () => context.router.navigate(const HomeRoute()),
               ),
             ),
             SizedBox(height: 16),

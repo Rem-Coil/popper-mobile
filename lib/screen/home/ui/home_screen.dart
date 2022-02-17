@@ -1,21 +1,30 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:popper_mobile/core/utils/context_utils.dart';
+import 'package:popper_mobile/core/di/injection.dart';
 import 'package:popper_mobile/models/barcode/scanned_entity.dart';
-import 'package:popper_mobile/screen/bobbin_loading/ui/bobbin_loading_screen.dart';
 import 'package:popper_mobile/screen/home/bloc/bloc.dart';
 import 'package:popper_mobile/screen/home/ui/widgets/home_header.dart';
 import 'package:popper_mobile/screen/home/ui/widgets/operations_list_button.dart';
+import 'package:popper_mobile/screen/routing/app_router.dart';
 import 'package:popper_mobile/screen/scanned_list/models/operation_status.dart';
 import 'package:popper_mobile/widgets/buttons/simple_button.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends StatefulWidget implements AutoRouteWrapper {
   static const route = '/home';
 
   const HomeScreen({Key? key}) : super(key: key);
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
+
+  @override
+  Widget wrappedRoute(BuildContext context) {
+    return BlocProvider<HomeBloc>(
+      create: (_) => getIt<HomeBloc>(),
+      child: this,
+    );
+  }
 }
 
 class _HomeScreenState extends State<HomeScreen> {
@@ -60,9 +69,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   borderRadius: 16,
                   onPressed: () {
                     final scanned = ScannedEntity.fromString('bobbin:9');
-                    context.push(BobbinLoadingScreen.route, args: scanned);
-                    // BlocProvider.of<HomeBloc>(context).add(Initial());
-                    // context.push(ScannerScreen.route);
+                    context.router.push(BobbinLoadingRoute(bobbin: scanned));
+                    // todo - navigate to scanner
+                    // context.router.push(const ScannerRoute());
                   },
                   child: Row(
                     children: [

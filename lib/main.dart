@@ -9,8 +9,7 @@ import 'package:popper_mobile/models/bobbin/bobbin.dart';
 import 'package:popper_mobile/models/operation/operation.dart';
 import 'package:popper_mobile/models/operation/operation_type.dart';
 import 'package:popper_mobile/screen/auth/bloc/auth_bloc.dart';
-import 'package:popper_mobile/screen/routing/routing.dart';
-import 'package:popper_mobile/screen/splash/ui/splash_screen.dart';
+import 'package:popper_mobile/screen/routing/app_router.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,7 +26,7 @@ Future<void> main() async {
 }
 
 class MyApp extends StatelessWidget {
-  final Routing _routing = Routing();
+  final _appRouter = AppRouter();
 
   @override
   Widget build(BuildContext context) {
@@ -35,15 +34,15 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider<AuthBloc>(create: (_) => getIt<AuthBloc>()),
       ],
-      child: MaterialApp(
+      child: MaterialApp.router(
         title: 'Rem&Coil',
         theme: ThemeData(
           textTheme: fonts(context),
           primarySwatch: primarySwatch,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        onGenerateRoute: (s) => _routing.routeFactory(s),
-        initialRoute: SplashScreen.route,
+        routerDelegate: _appRouter.delegate(),
+        routeInformationParser: _appRouter.defaultRouteParser(),
       ),
     );
   }
