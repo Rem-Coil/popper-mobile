@@ -5,4 +5,4 @@ import 'package:popper_mobile/core/di/injection.config.dart';
 final getIt = GetIt.instance;
 
 @InjectableInit()
-void configureDependencies() => $initGetIt(getIt);
+void configureDependencies(String env) => $initGetIt(getIt, environment: env);

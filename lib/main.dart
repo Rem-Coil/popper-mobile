@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -13,7 +14,8 @@ import 'package:popper_mobile/screen/routing/app_router.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  configureDependencies();
+  final mode = kDebugMode ? 'dev' : 'prod';
+  configureDependencies(mode);
 
   Hive
     ..initFlutter()

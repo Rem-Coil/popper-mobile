@@ -6,8 +6,10 @@ import 'package:popper_mobile/data/api/api_service.dart';
 
 @singleton
 class ApiProvider {
-  static const String baseUrl = 'https://popper-service.herokuapp.com';
+  final String baseUrl;
   final Dio _dio = Dio();
+
+  ApiProvider(@Named('BaseUrl') this.baseUrl);
 
   ApiService getApiService() {
     // _dio.interceptors.add(_logInterceptor);
@@ -24,4 +26,15 @@ class ApiProvider {
   }
 
   void _logPrint(Object object) => log(object.toString());
+}
+
+@module
+abstract class ServerAddressModule {
+  @Named('BaseUrl')
+  @Environment('dev')
+  String get baseUrlTest => 'https://popper-service.herokuapp.com';
+
+  @Named('BaseUrl')
+  @Environment('prod')
+  String get baseUrlProd => 'https://webpanel.remcoil.space';
 }
