@@ -11,3 +11,5 @@ class ChangeUser extends AuthEvent {
 }
 
 class LoadSavedUser extends AuthEvent {}
+
+class LogOut extends AuthEvent {}

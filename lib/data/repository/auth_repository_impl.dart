@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
+import 'package:hive/hive.dart';
 import 'package:injectable/injectable.dart';
 import 'package:popper_mobile/core/error/failure.dart';
 import 'package:popper_mobile/data/api/api_provider.dart';
@@ -41,6 +42,13 @@ class AuthRepositoryImpl implements AuthRepository {
 
       return Left(UnknownFailure());
     }
+  }
+
+  @override
+  Future<void> logOut() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.clear();
+    await Hive.deleteFromDisk();
   }
 
   @override

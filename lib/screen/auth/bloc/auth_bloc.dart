@@ -15,6 +15,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   AuthBloc(this._repository) : super(AuthState.initial()) {
     on<ChangeUser>(onChangeUser);
     on<LoadSavedUser>(onLoadSavedUser);
+    on<LogOut>(onLogOut);
     add(LoadSavedUser());
   }
 
@@ -26,5 +27,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     emit(state.loading());
     final user = await _repository.getCurrentUser();
     add(ChangeUser(user));
+  }
+
+  Future<void> onLogOut(LogOut event, Emitter emit) async {
+    _repository.logOut();
+    add(ChangeUser(null));
   }
 }

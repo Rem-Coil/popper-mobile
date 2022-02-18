@@ -7,6 +7,8 @@ import 'package:popper_mobile/models/auth/user_credentials.dart';
 abstract class AuthRepository {
   Future<Either<Failure, User>> singIn(UserCredentials credentials);
 
+  Future<void> logOut();
+
   Future<User?> getCurrentUser();
 
   Future<void> saveToken(Token token);
