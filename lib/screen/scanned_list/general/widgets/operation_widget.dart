@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:popper_mobile/core/utils/date_utils.dart';
+import 'package:popper_mobile/core/utils/typedefs.dart';
 import 'package:popper_mobile/models/operation/operation.dart';
 import 'package:popper_mobile/models/operation/operation_type.dart';
-import 'package:popper_mobile/screen/scanned_list/general/widgets/operations_list.dart';
 
 class OperationWidget extends StatelessWidget {
   final Operation operation;

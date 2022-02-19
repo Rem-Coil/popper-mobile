@@ -1,6 +1,5 @@
-import 'package:flutter/foundation.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:injectable/injectable.dart';
+import 'package:popper_mobile/core/utils/typedefs.dart';
 import 'package:popper_mobile/models/operation/operation.dart';
 
 abstract class OperationsCache {
@@ -18,11 +17,9 @@ abstract class OperationsCache {
 
   Future<void> deleteCacheOperation(Operation operation);
 
-  // TODO - боксы не должны вылезать за этот класс
-  // TODO - надо сделать подписку на обновление через наблюдателя
-  Future<ValueListenable<Box<OperationLocal>>> get savedActionListenable;
+  Future<void> subscribeToSavedOperations(ListCallback<Operation> listener);
 
-  Future<ValueListenable<Box<OperationLocal>>> get cachedActionListenable;
+  Future<void> subscribeToCachedOperations(ListCallback<Operation> listener);
 
   @disposeMethod
   Future<void> dispose();

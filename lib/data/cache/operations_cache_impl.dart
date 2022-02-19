@@ -1,6 +1,6 @@
-import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:injectable/injectable.dart';
+import 'package:popper_mobile/core/utils/typedefs.dart';
 import 'package:popper_mobile/domain/cache/operations_cache.dart';
 import 'package:popper_mobile/models/operation/operation.dart';
 
@@ -56,13 +56,22 @@ class OperationsCacheImpl implements OperationsCache {
   }
 
   @override
-  Future<ValueListenable<Box<OperationLocal>>>
-      get savedActionListenable async => (await _savedOperations).listenable();
+  Future<void> subscribeToCachedOperations(
+          ListCallback<Operation> listener) async =>
+      _subscribeToBox(listener, await _cachedOperations);
 
   @override
-  Future<ValueListenable<Box<OperationLocal>>>
-      get cachedActionListenable async =>
-          (await _cachedOperations).listenable();
+  Future<void> subscribeToSavedOperations(
+          ListCallback<Operation> listener) async =>
+      _subscribeToBox(listener, await _savedOperations);
+
+  Future<void> _subscribeToBox(
+    ListCallback<Operation> listener,
+    Box<OperationLocal> box,
+  ) async {
+    final listenable = box.listenable();
+    listenable.addListener(() => listener(listenable.value.values.toList()));
+  }
 
   @override
   Future<void> deleteCacheOperation(Operation operation) async =>

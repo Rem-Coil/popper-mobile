@@ -8,9 +8,9 @@ part 'state.dart';
 
 @singleton
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
-  final OperationsCache _actionsCache;
+  final OperationsCache _operationsCache;
 
-  HomeBloc(this._actionsCache) : super(HomeState.setup(0, 0)) {
+  HomeBloc(this._operationsCache) : super(HomeState.setup(0, 0)) {
     on<Initial>(onInitial);
     on<ChangeSavedCount>((event, emit) => emit(state.changeSaved(event.count)));
     on<ChangeCachedCount>(
@@ -19,19 +19,20 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   }
 
   Future<void> onInitial(Initial event, Emitter emit) async {
-    final savedActions = await _actionsCache.savedActionListenable;
-    savedActions.addListener(() {
-      add(ChangeSavedCount(savedActions.value.length));
-    });
+    await _operationsCache
+        .subscribeToSavedOperations((c) => add(ChangeSavedCount(c.length)));
 
-    final cachedActions = await _actionsCache.cachedActionListenable;
-    cachedActions.addListener(() {
-      add(ChangeCachedCount(cachedActions.value.length));
-    });
+    await _operationsCache
+        .subscribeToCachedOperations((c) => add(ChangeCachedCount(c.length)));
+
+    final operations = await Future.wait([
+      _operationsCache.getSavedOperation(),
+      _operationsCache.getCachedOperation(),
+    ]);
 
     emit(HomeState.setup(
-      savedActions.value.length,
-      cachedActions.value.length,
+      operations[0].length,
+      operations[1].length,
     ));
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:popper_mobile/core/error/failure.dart';
+import 'package:popper_mobile/core/utils/typedefs.dart';
 import 'package:popper_mobile/models/operation/operation.dart';
 import 'package:popper_mobile/screen/scanned_list/general/widgets/operation_widget.dart';
 import 'package:popper_mobile/widgets/center_text_with_image.dart';
@@ -49,5 +50,3 @@ class OperationsList extends StatelessWidget {
     );
   }
 }
-
-typedef OperationCallback = void Function(Operation);

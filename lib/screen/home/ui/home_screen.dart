@@ -67,9 +67,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   height: 67,
                   borderRadius: 16,
                   onPressed: () {
-                    // final scanned = ScannedEntity.fromString('bobbin:9');
+                    // final scanned = ScannedEntity.fromString('bobbin:10');
                     // context.router.push(BobbinLoadingRoute(bobbin: scanned));
-                    // todo - navigate to scanner
                     context.router.push(const ScannerRoute());
                   },
                   child: Row(
