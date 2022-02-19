@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:popper_mobile/models/auth/token.dart';
 import 'package:popper_mobile/models/auth/user_credentials.dart';
+import 'package:popper_mobile/models/auth/user_remote.dart';
 import 'package:popper_mobile/models/bobbin/bobbin.dart';
 import 'package:popper_mobile/models/operation/operation.dart';
 import 'package:retrofit/retrofit.dart';
@@ -13,6 +14,9 @@ abstract class ApiService {
 
   @POST('/operator/sign_in')
   Future<Token> singIn(@Body() UserCredentials user);
+
+  @POST('/operator/sign_up')
+  Future<Token> singUp(@Body() UserRemote user);
 
   @GET('/bobbin/{id}')
   Future<BobbinRemote> getBobbinInfo(@Path('id') int id);

@@ -20,9 +20,10 @@ import '../../models/operation/operation.dart' as _i20;
 import '../../screen/auth/bloc/auth_bloc.dart' as _i16;
 import '../../screen/bobbin_loading/bloc/bloc.dart' as _i17;
 import '../../screen/home/bloc/bloc.dart' as _i12;
-import '../../screen/login/bloc/login_bloc.dart' as _i18;
+import '../../screen/login/bloc/bloc.dart' as _i18;
 import '../../screen/operation_info/save_operation/bloc/bloc.dart' as _i19;
 import '../../screen/operation_info/update_operation/bloc/bloc.dart' as _i21;
+import '../../screen/registration/bloc/bloc.dart' as _i22;
 import '../../screen/scanned_list/cached_operations/bloc/bloc.dart' as _i11;
 import '../../screen/scanned_list/saved_operations/bloc/bloc.dart' as _i15;
 import '../../screen/splash/bloc/splash_bloc.dart' as _i5;
@@ -67,6 +68,8 @@ _i1.GetIt $initGetIt(_i1.GetIt get,
   gh.factoryParam<_i21.OperationUpdateBloc, _i20.Operation?, dynamic>(
       (operation, _) => _i21.OperationUpdateBloc(
           operation, get<_i13.OperationsRepository>()));
+  gh.singleton<_i22.RegistrationBloc>(
+      _i22.RegistrationBloc(get<_i7.AuthRepository>(), get<_i16.AuthBloc>()));
   return get;
 }
 

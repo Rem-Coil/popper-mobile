@@ -13,8 +13,9 @@ class CenterTextWithImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: SizedBox(
+      child: Container(
         height: 330,
+        padding: const EdgeInsets.symmetric(horizontal: 32),
         child: Column(
           children: [
             Image.asset(image),

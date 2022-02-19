@@ -25,6 +25,10 @@ class _$AppRouter extends RootStackRouter {
       return CupertinoPageX<dynamic>(
           routeData: routeData, child: const LoginScreen());
     },
+    RegistrationRoute.name: (routeData) {
+      return CupertinoPageX<dynamic>(
+          routeData: routeData, child: const RegistrationScreen());
+    },
     HomeRoute.name: (routeData) {
       return CupertinoPageX<dynamic>(
           routeData: routeData, child: const HomeScreen());
@@ -75,9 +79,11 @@ class _$AppRouter extends RootStackRouter {
   };
 
   @override
-  List<RouteConfig> get routes => [
+  List<RouteConfig> get routes =>
+      [
         RouteConfig(SplashRoute.name, path: '/'),
         RouteConfig(LoginRoute.name, path: '/login-screen'),
+        RouteConfig(RegistrationRoute.name, path: '/registration-screen'),
         RouteConfig(HomeRoute.name, path: '/home-screen'),
         RouteConfig(ScannerRoute.name, path: '/scanner-screen'),
         RouteConfig(OperationSaveRoute.name, path: '/operation-save-screen'),
@@ -107,6 +113,15 @@ class LoginRoute extends PageRouteInfo<void> {
   const LoginRoute() : super(LoginRoute.name, path: '/login-screen');
 
   static const String name = 'LoginRoute';
+}
+
+/// generated route for
+/// [RegistrationScreen]
+class RegistrationRoute extends PageRouteInfo<void> {
+  const RegistrationRoute()
+      : super(RegistrationRoute.name, path: '/registration-screen');
+
+  static const String name = 'RegistrationRoute';
 }
 
 /// generated route for

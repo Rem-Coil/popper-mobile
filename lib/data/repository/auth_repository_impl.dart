@@ -10,6 +10,7 @@ import 'package:popper_mobile/domain/repository/auth_repository.dart';
 import 'package:popper_mobile/models/auth/token.dart';
 import 'package:popper_mobile/models/auth/user.dart';
 import 'package:popper_mobile/models/auth/user_credentials.dart';
+import 'package:popper_mobile/models/auth/user_remote.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 @Singleton(as: AuthRepository)
@@ -27,6 +28,31 @@ class AuthRepositoryImpl implements AuthRepository {
       await saveToken(token);
       final user = User.fromToken(token.token);
       return Right(user);
+    } on DioError catch (e) {
+      if (e.error is SocketException) {
+        return Left(NoInternetFailure());
+      }
+
+      switch (e.response?.statusCode) {
+        case HttpStatus.internalServerError:
+        case HttpStatus.badGateway:
+          return Left(ServerFailure());
+        case HttpStatus.unauthorized:
+          return Left(WrongCredentialsFailure());
+      }
+
+      return Left(UnknownFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, User>> singUp(UserRemote user) async {
+    try {
+      final service = _apiProvider.getApiService();
+      final token = await service.singUp(user);
+      await saveToken(token);
+      final savedUser = User.fromToken(token.token);
+      return Right(savedUser);
     } on DioError catch (e) {
       if (e.error is SocketException) {
         return Left(NoInternetFailure());

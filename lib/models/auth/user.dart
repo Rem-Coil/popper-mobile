@@ -1,8 +1,6 @@
 import 'package:jwt_decoder/jwt_decoder.dart';
 
 class User {
-  static const testUser = User._(1, "Ilia", "Rodionov", "Alexeevich");
-  
   final int id;
   final String firstName;
   final String surname;

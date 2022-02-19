@@ -7,8 +7,9 @@ import 'package:popper_mobile/models/auth/user.dart';
 import 'package:popper_mobile/models/auth/user_credentials.dart';
 import 'package:popper_mobile/screen/auth/bloc/auth_bloc.dart';
 
-part 'login_event.dart';
-part 'login_state.dart';
+part 'event.dart';
+
+part 'state.dart';
 
 @singleton
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
@@ -21,7 +22,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
   Future<void> onDataEntered(
     OnDataEntered event,
-    Emitter<LoginState> emit,
+    Emitter emit,
   ) async {
     emit(LoginState.load());
     final serverAnswer = await _repository.singIn(event.credentials);

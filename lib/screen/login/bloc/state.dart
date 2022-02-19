@@ -1,4 +1,4 @@
-part of 'login_bloc.dart';
+part of 'bloc.dart';
 
 @immutable
 class LoginState {

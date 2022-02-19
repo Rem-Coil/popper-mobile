@@ -14,9 +14,8 @@ class HomeHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocConsumer<AuthBloc, AuthState>(
       listenWhen: (_, state) => state.user == null,
-      listener: (context, state) {
-        context.router.navigate(const LoginRoute());
-      },
+      listener: (context, state) =>
+          context.router.replaceAll([const LoginRoute()]),
       builder: (context, state) {
         final username = state.user?.firstName ?? 'Незнакомец';
         return Container(
@@ -63,8 +62,6 @@ class HomeHeader extends StatelessWidget {
         );
       },
     );
-    if (isNotLogOut != true) {
-      BlocProvider.of<AuthBloc>(context).add(LogOut());
-    }
+    if (isNotLogOut != true) BlocProvider.of<AuthBloc>(context).add(LogOut());
   }
 }
