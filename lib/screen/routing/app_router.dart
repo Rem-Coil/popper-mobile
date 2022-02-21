@@ -8,6 +8,7 @@ import 'package:popper_mobile/screen/login/ui/login_screen.dart';
 import 'package:popper_mobile/screen/operation_info/save_operation/ui/save_operation_screen.dart';
 import 'package:popper_mobile/screen/operation_info/simple_info/ui/simple_info_screen.dart';
 import 'package:popper_mobile/screen/operation_info/update_operation/ui/update_operation_screen.dart';
+import 'package:popper_mobile/screen/operations_sync/ui/operations_sync_screen.dart';
 import 'package:popper_mobile/screen/registration/ui/registration_srceen.dart';
 import 'package:popper_mobile/screen/scanned_list/cached_operations/ui/cached_operations_screen.dart';
 import 'package:popper_mobile/screen/scanned_list/saved_operations/ui/saved_operations_screen.dart';
@@ -33,6 +34,7 @@ part 'app_router.gr.dart';
     AutoRoute(page: ScannerResultScreen),
     AutoRoute(page: SavedOperationsScreen),
     AutoRoute(page: CachedOperationsScreen),
+    AutoRoute(page: OperationsSyncScreen),
   ],
 )
 class AppRouter extends _$AppRouter {}

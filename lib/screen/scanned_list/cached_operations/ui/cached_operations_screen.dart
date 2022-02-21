@@ -41,11 +41,16 @@ class _CachedOperationsScreenState extends State<CachedOperationsScreen> {
       appBar: AppBar(
         title: Text(status.title),
         backgroundColor: status.color,
-        actions: [IconButton(onPressed: () {}, icon: Icon(Icons.cached))],
+        actions: [
+          IconButton(
+            onPressed: () => context.router.push(const OperationsSyncRoute()),
+            icon: Icon(Icons.cached),
+          )
+        ],
       ),
       body: BlocConsumer<CachedOperationsBloc, CachedOperationsState>(
         listenWhen: (previous, current) =>
-        previous.deleteFailure == null && current.deleteFailure != null,
+            previous.deleteFailure == null && current.deleteFailure != null,
         listener: (context, state) {
           context.errorSnackBar(state.deleteFailure!.message);
         },

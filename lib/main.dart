@@ -25,9 +25,9 @@ Future<void> main() async {
     await crashlyticsInit();
 
     await hiveInitial();
-    configureDependencies(kDebugMode ? 'dev' : 'prod');
-
     await initializeDateFormatting('ru_RU', null);
+
+    configureDependencies(kDebugMode ? 'dev' : 'prod');
 
     runApp(MyApp());
   }, (e, s) => FirebaseCrashlytics.instance.recordError(e, s));

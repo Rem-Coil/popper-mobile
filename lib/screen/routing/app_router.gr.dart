@@ -75,12 +75,15 @@ class _$AppRouter extends RootStackRouter {
     CachedOperationsRoute.name: (routeData) {
       return CupertinoPageX<dynamic>(
           routeData: routeData, child: const CachedOperationsScreen());
+    },
+    OperationsSyncRoute.name: (routeData) {
+      return CupertinoPageX<dynamic>(
+          routeData: routeData, child: const OperationsSyncScreen());
     }
   };
 
   @override
-  List<RouteConfig> get routes =>
-      [
+  List<RouteConfig> get routes => [
         RouteConfig(SplashRoute.name, path: '/'),
         RouteConfig(LoginRoute.name, path: '/login-screen'),
         RouteConfig(RegistrationRoute.name, path: '/registration-screen'),
@@ -95,7 +98,8 @@ class _$AppRouter extends RootStackRouter {
         RouteConfig(SavedOperationsRoute.name,
             path: '/saved-operations-screen'),
         RouteConfig(CachedOperationsRoute.name,
-            path: '/cached-operations-screen')
+            path: '/cached-operations-screen'),
+        RouteConfig(OperationsSyncRoute.name, path: '/operations-sync-screen')
       ];
 }
 
@@ -276,4 +280,13 @@ class CachedOperationsRoute extends PageRouteInfo<void> {
       : super(CachedOperationsRoute.name, path: '/cached-operations-screen');
 
   static const String name = 'CachedOperationsRoute';
+}
+
+/// generated route for
+/// [OperationsSyncScreen]
+class OperationsSyncRoute extends PageRouteInfo<void> {
+  const OperationsSyncRoute()
+      : super(OperationsSyncRoute.name, path: '/operations-sync-screen');
+
+  static const String name = 'OperationsSyncRoute';
 }
