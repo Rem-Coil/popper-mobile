@@ -1,3 +1,7 @@
+import 'dart:async';
+
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -6,6 +10,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:popper_mobile/core/di/injection.dart';
 import 'package:popper_mobile/core/theme/colors.dart';
 import 'package:popper_mobile/core/theme/fonts.dart';
+import 'package:popper_mobile/firebase/firebase_crashlytics.dart';
 import 'package:popper_mobile/models/bobbin/bobbin.dart';
 import 'package:popper_mobile/models/operation/operation.dart';
 import 'package:popper_mobile/models/operation/operation_type.dart';
@@ -13,18 +18,27 @@ import 'package:popper_mobile/screen/auth/bloc/auth_bloc.dart';
 import 'package:popper_mobile/screen/routing/app_router.dart';
 
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  final mode = kDebugMode ? 'dev' : 'prod';
-  configureDependencies(mode);
+  runZonedGuarded<Future<void>>(() async {
+    WidgetsFlutterBinding.ensureInitialized();
 
+    await Firebase.initializeApp();
+    await crashlyticsInit();
+
+    await hiveInitial();
+    configureDependencies(kDebugMode ? 'dev' : 'prod');
+
+    await initializeDateFormatting('ru_RU', null);
+
+    runApp(MyApp());
+  }, (e, s) => FirebaseCrashlytics.instance.recordError(e, s));
+}
+
+Future<void> hiveInitial() async {
+  await Hive.initFlutter();
   Hive
-    ..initFlutter()
     ..registerAdapter(BobbinLocalAdapter())
     ..registerAdapter(OperationLocalAdapter())
     ..registerAdapter(OperationTypeAdapter());
-
-  await initializeDateFormatting('ru_RU', null);
-  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
