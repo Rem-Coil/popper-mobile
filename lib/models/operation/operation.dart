@@ -20,6 +20,7 @@ class Operation {
   final Bobbin bobbin;
   final OperationType? type;
   final DateTime time;
+  final bool isSuccessful;
 
   Operation({
     required this.id,
@@ -27,6 +28,7 @@ class Operation {
     required this.bobbin,
     required this.type,
     required this.time,
+    required this.isSuccessful,
   });
 
   factory Operation.create({
@@ -40,6 +42,7 @@ class Operation {
       bobbin: bobbin,
       type: null,
       time: date,
+      isSuccessful: true,
     );
   }
 
@@ -50,6 +53,7 @@ class Operation {
       bobbin: bobbin,
       type: type,
       time: time,
+      isSuccessful: isSuccessful,
     );
   }
 
@@ -60,6 +64,18 @@ class Operation {
       bobbin: this.bobbin,
       type: type,
       time: this.time,
+      isSuccessful: isSuccessful,
+    );
+  }
+
+  Operation changeStatus(bool isSuccessful) {
+    return Operation(
+      id: this.id,
+      userId: this.userId,
+      bobbin: this.bobbin,
+      type: type,
+      time: this.time,
+      isSuccessful: isSuccessful,
     );
   }
 
@@ -71,6 +87,7 @@ class Operation {
       bobbin: localBobbin,
       type: type,
       time: time,
+      isSuccessful: isSuccessful,
     );
   }
 
@@ -81,6 +98,7 @@ class Operation {
       bobbin: bobbin,
       type: type!,
       time: time,
+      isSuccessful: isSuccessful,
     );
   }
 

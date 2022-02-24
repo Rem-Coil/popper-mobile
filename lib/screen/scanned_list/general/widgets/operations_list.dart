@@ -37,7 +37,8 @@ class OperationsList extends StatelessWidget {
 
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: ListView.builder(
+      child: ListView.separated(
+        separatorBuilder: (context, _) => SizedBox(height: 8),
         itemCount: operations.length,
         itemBuilder: (context, i) {
           return OperationWidget(

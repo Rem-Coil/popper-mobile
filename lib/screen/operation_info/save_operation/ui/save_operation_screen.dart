@@ -58,15 +58,20 @@ class OperationSaveScreen extends StatelessWidget implements AutoRouteWrapper {
                     Expanded(
                       child: SimpleButton(
                         height: 55,
-                        child: Text('Отмена', style: TextStyle(fontSize: 18)),
-                        onPressed: () =>
-                            context.router.navigate(const HomeRoute()),
+                        color: Colors.red,
+                        child: isLoad(state)
+                            ? CircularLoader(size: 25, strokeWidth: 3)
+                            : Text('Брак', style: TextStyle(fontSize: 18)),
+                        onPressed: state.isCanSave
+                            ? () => _rejectOperation(context)
+                            : null,
                       ),
                     ),
                     SizedBox(width: 16),
                     Expanded(
                       child: SimpleButton(
                         height: 55,
+                        color: Colors.green,
                         child: isLoad(state)
                             ? CircularLoader(size: 25, strokeWidth: 3)
                             : Text('Сохранить', style: TextStyle(fontSize: 18)),
@@ -108,8 +113,10 @@ class OperationSaveScreen extends StatelessWidget implements AutoRouteWrapper {
     }
   }
 
-  Future<void> _onSaveInCacheEnd(BuildContext context,
-      CacheProcessState state,) async {
+  Future<void> _onSaveInCacheEnd(
+    BuildContext context,
+    CacheProcessState state,
+  ) async {
     if (state.status.isSuccessful) {
       final args = ScannerResultArguments(
         message: "Операция успешно сохранена в кеш",
@@ -141,7 +148,10 @@ class OperationSaveScreen extends StatelessWidget implements AutoRouteWrapper {
   }
 
   void _saveOperation(BuildContext context) =>
-      BlocProvider.of<OperationSaveBloc>(context).add(SaveOperation());
+      BlocProvider.of<OperationSaveBloc>(context).add(SuccessOperation());
+
+  void _rejectOperation(BuildContext context) =>
+      BlocProvider.of<OperationSaveBloc>(context).add(RejectOperation());
 
   @override
   Widget wrappedRoute(BuildContext context) {

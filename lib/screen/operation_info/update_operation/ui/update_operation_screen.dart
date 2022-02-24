@@ -25,7 +25,7 @@ class UpdateOperationScreen extends StatelessWidget
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Сохранить операцию?')),
+      appBar: AppBar(title: Text('Обновить операцию?')),
       body: Container(
         padding: const EdgeInsets.all(30),
         child: BlocConsumer<OperationUpdateBloc, OperationUpdateState>(
@@ -53,19 +53,24 @@ class UpdateOperationScreen extends StatelessWidget
                     Expanded(
                       child: SimpleButton(
                         height: 55,
-                        child: Text('Отмена', style: TextStyle(fontSize: 18)),
-                        onPressed: () =>
-                            context.router.navigate(const HomeRoute()),
+                        color: Colors.red,
+                        child: isLoad(state)
+                            ? CircularLoader(size: 25, strokeWidth: 3)
+                            : Text('Брак', style: TextStyle(fontSize: 18)),
+                        onPressed: state.isCanSave(true)
+                            ? () => _rejectOperation(context)
+                            : null,
                       ),
                     ),
                     SizedBox(width: 16),
                     Expanded(
                       child: SimpleButton(
                         height: 55,
+                        color: Colors.green,
                         child: isLoad(state)
                             ? CircularLoader(size: 25, strokeWidth: 3)
-                            : Text('Обновить', style: TextStyle(fontSize: 18)),
-                        onPressed: state.isCanSave
+                            : Text('Успешно', style: TextStyle(fontSize: 18)),
+                        onPressed: state.isCanSave(false)
                             ? () => _updateOperation(context)
                             : null,
                       ),
@@ -80,8 +85,10 @@ class UpdateOperationScreen extends StatelessWidget
     );
   }
 
-  Future<void> _onUpdateEnd(BuildContext context,
-      UpdateProcessState state,) async {
+  Future<void> _onUpdateEnd(
+    BuildContext context,
+    UpdateProcessState state,
+  ) async {
     if (state.status.isSuccessful) {
       final args = ScannerResultArguments(
         message: "Операция успешно обновлена",
@@ -98,7 +105,10 @@ class UpdateOperationScreen extends StatelessWidget
   }
 
   void _updateOperation(BuildContext context) =>
-      BlocProvider.of<OperationUpdateBloc>(context).add(UpdateOperation());
+      BlocProvider.of<OperationUpdateBloc>(context).add(SuccessOperation());
+
+  void _rejectOperation(BuildContext context) =>
+      BlocProvider.of<OperationUpdateBloc>(context).add(RejectOperation());
 
   @override
   Widget wrappedRoute(BuildContext context) {

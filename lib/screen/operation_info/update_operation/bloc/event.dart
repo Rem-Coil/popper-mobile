@@ -12,3 +12,7 @@ class ChangeOperation extends OperationUpdateEvent {
 }
 
 class UpdateOperation extends OperationUpdateEvent {}
+
+class RejectOperation extends OperationUpdateEvent {}
+
+class SuccessOperation extends OperationUpdateEvent {}

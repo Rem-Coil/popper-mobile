@@ -17,6 +17,9 @@ class OperationLocal extends Operation {
   @override
   @HiveField(4)
   final DateTime time;
+  @override
+  @HiveField(5, defaultValue: true)
+  final bool isSuccessful;
 
   OperationLocal({
     required this.id,
@@ -24,11 +27,13 @@ class OperationLocal extends Operation {
     required this.bobbin,
     required this.type,
     required this.time,
+    required this.isSuccessful,
   }) : super(
           id: id,
           userId: userId,
           bobbin: bobbin,
           type: type,
           time: time,
+          isSuccessful: isSuccessful,
         );
 }

@@ -51,7 +51,8 @@ class _OperationsSyncScreenState extends State<OperationsSyncScreen> {
               children: [
                 Expanded(
                   flex: 10,
-                  child: ListView.builder(
+                  child: ListView.separated(
+                    separatorBuilder: (context, _) => SizedBox(height: 8),
                     itemCount: state.operations.length,
                     itemBuilder: (context, i) {
                       return SynchronizationOperation(

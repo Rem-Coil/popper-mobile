@@ -17,6 +17,9 @@ class OperationRemote extends Operation {
   @JsonKey(name: 'done_time', fromJson: _dateFromJson, toJson: _dateToJson)
   @override
   final DateTime time;
+  @JsonKey(name: 'successful')
+  @override
+  final bool isSuccessful;
 
   OperationRemote({
     required this.id,
@@ -24,12 +27,14 @@ class OperationRemote extends Operation {
     required this.bobbin,
     required this.type,
     required this.time,
+    required this.isSuccessful,
   }) : super(
           id: id,
           userId: userId,
           bobbin: bobbin,
           type: type,
           time: time,
+          isSuccessful: isSuccessful,
         );
 
   factory OperationRemote.fromJson(Map<String, dynamic> json) =>

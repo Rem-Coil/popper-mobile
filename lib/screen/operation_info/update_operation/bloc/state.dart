@@ -5,10 +5,10 @@ abstract class OperationUpdateState {
   final Operation operation;
   final OperationType lastType;
 
-  bool get isCanSave =>
+  bool isCanSave(bool isReject) =>
       this is SelectTypeState &&
-      operation.type != null &&
-      operation.type != lastType;
+      (operation.type != null && operation.type != lastType ||
+          isReject == operation.isSuccessful);
 
   const OperationUpdateState._(
       {required this.operation, required this.lastType});
@@ -31,6 +31,13 @@ class SelectTypeState extends OperationUpdateState {
   SelectTypeState changeType(OperationType? type) {
     return SelectTypeState._(
       operation: operation.changeType(type),
+      type: lastType,
+    );
+  }
+
+  SelectTypeState changeStatus(bool isSuccessful) {
+    return SelectTypeState._(
+      operation: operation.changeStatus(isSuccessful),
       type: lastType,
     );
   }

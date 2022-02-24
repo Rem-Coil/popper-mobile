@@ -27,20 +27,40 @@ class OperationWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      onTap: onTap != null ? () => onTap!(operation) : null,
-      trailing: trailing,
-      title: Text(bobbinName),
-      isThreeLine: true,
-      subtitle: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(height: 4),
-          Text(typeName),
-          SizedBox(height: 2),
-          Text(formattedDate.formattedDate),
-        ],
-      ),
+    return Row(
+      children: [
+        Container(
+          width: 4,
+          height: 90,
+          color: operation.isSuccessful ? Colors.green : Colors.red,
+        ),
+        Expanded(
+          child: Card(
+            color: Colors.white10,
+            shape: ContinuousRectangleBorder(
+              borderRadius: BorderRadius.zero,
+            ),
+            borderOnForeground: true,
+            elevation: 0,
+            margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+            child: ListTile(
+              onTap: onTap != null ? () => onTap!(operation) : null,
+              trailing: trailing,
+              title: Text(bobbinName),
+              isThreeLine: true,
+              subtitle: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(height: 4),
+                  Text(typeName),
+                  SizedBox(height: 2),
+                  Text(formattedDate.formattedDate),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

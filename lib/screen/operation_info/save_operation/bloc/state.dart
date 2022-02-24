@@ -28,6 +28,10 @@ class SelectTypeState extends OperationSaveState {
   SelectTypeState changeType(OperationType? type) {
     return SelectTypeState._(operation: operation.changeType(type));
   }
+
+  SelectTypeState changeStatus(bool isSuccessful) {
+    return SelectTypeState._(operation: operation.changeStatus(isSuccessful));
+  }
 }
 
 class SaveProcessState extends OperationSaveState {

@@ -67,6 +67,11 @@ class OperationInfo extends StatelessWidget {
           title: 'Дата сканирования',
           value: ValueInfoText(formatter.format(operation.time)),
         ),
+        SizedBox(height: 24),
+        ValueInfoField(
+          title: 'Статус',
+          value: ValueInfoText(operation.isSuccessful ? "Успешно" : "Брак"),
+        ),
       ],
     );
   }

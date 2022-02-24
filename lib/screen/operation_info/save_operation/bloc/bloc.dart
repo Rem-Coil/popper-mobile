@@ -19,6 +19,8 @@ class OperationSaveBloc extends Bloc<OperationSaveEvent, OperationSaveState> {
     on<ChangeOperation>(onChangeOperation);
     on<Initialize>(onInitialize);
     on<SaveOperation>(onSaveOperation);
+    on<RejectOperation>(onRejectOperation);
+    on<SuccessOperation>(onSuccessOperation);
     on<CacheOperation>(onCacheOperation);
 
     add(Initialize());
@@ -42,6 +44,18 @@ class OperationSaveBloc extends Bloc<OperationSaveEvent, OperationSaveState> {
       (f) => currentState.error(f),
       (_) => currentState.success(),
     ));
+  }
+
+  Future<void> onRejectOperation(RejectOperation event, Emitter emit) async {
+    final currentState = state as SelectTypeState;
+    emit(currentState.changeStatus(false));
+    add(SaveOperation());
+  }
+
+  Future<void> onSuccessOperation(SuccessOperation event, Emitter emit) async {
+    final currentState = state as SelectTypeState;
+    emit(currentState.changeStatus(true));
+    add(SaveOperation());
   }
 
   Future<void> onCacheOperation(CacheOperation event, Emitter emit) async {

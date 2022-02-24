@@ -13,4 +13,8 @@ class ChangeOperation extends OperationSaveEvent {
 
 class SaveOperation extends OperationSaveEvent {}
 
+class RejectOperation extends OperationSaveEvent {}
+
+class SuccessOperation extends OperationSaveEvent {}
+
 class CacheOperation extends OperationSaveEvent {}
