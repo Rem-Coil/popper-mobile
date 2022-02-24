@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:popper_mobile/core/error/failure.dart';
 import 'package:popper_mobile/core/utils/typedefs.dart';
 import 'package:popper_mobile/models/operation/operation.dart';
-import 'package:popper_mobile/screen/scanned_list/general/widgets/operation_widget.dart';
 import 'package:popper_mobile/widgets/center_text_with_image.dart';
+import 'package:popper_mobile/widgets/operation_widget.dart';
 
 class OperationsList extends StatelessWidget {
   final Failure? failure;
@@ -43,7 +43,10 @@ class OperationsList extends StatelessWidget {
           return OperationWidget(
             operation: operations[i],
             onTap: onTap,
-            onDelete: onDelete,
+            trailing: IconButton(
+              icon: Icon(Icons.delete),
+              onPressed: () => onDelete(operations[i]),
+            ),
           );
         },
       ),

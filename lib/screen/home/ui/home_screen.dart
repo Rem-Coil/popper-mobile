@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:popper_mobile/core/di/injection.dart';
+import 'package:popper_mobile/models/barcode/scanned_entity.dart';
 import 'package:popper_mobile/screen/home/bloc/bloc.dart';
 import 'package:popper_mobile/screen/home/ui/widgets/home_header.dart';
 import 'package:popper_mobile/screen/home/ui/widgets/operations_list_button.dart';
@@ -67,9 +68,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   height: 67,
                   borderRadius: 16,
                   onPressed: () {
-                    // final scanned = ScannedEntity.fromString('bobbin:10');
-                    // context.router.push(BobbinLoadingRoute(bobbin: scanned));
-                    context.router.push(const ScannerRoute());
+                    final scanned = ScannedEntity.fromString('bobbin:15');
+                    context.router.push(BobbinLoadingRoute(bobbin: scanned));
+                    // context.router.push(const ScannerRoute());
                   },
                   child: Row(
                     children: [

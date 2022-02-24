@@ -36,34 +36,39 @@ class _CachedOperationsScreenState extends State<CachedOperationsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: Text(status.title),
-        backgroundColor: status.color,
-        actions: [
-          IconButton(
-            onPressed: () => context.router.push(const OperationsSyncRoute()),
-            icon: Icon(Icons.cached),
-          )
-        ],
-      ),
-      body: BlocConsumer<CachedOperationsBloc, CachedOperationsState>(
-        listenWhen: (previous, current) =>
-            previous.deleteFailure == null && current.deleteFailure != null,
-        listener: (context, state) {
-          context.errorSnackBar(state.deleteFailure!.message);
-        },
-        builder: (context, state) {
-          return Column(
+    return BlocConsumer<CachedOperationsBloc, CachedOperationsState>(
+      listenWhen: (previous, current) =>
+          previous.deleteFailure == null && current.deleteFailure != null,
+      listener: (context, state) {
+        context.errorSnackBar(state.deleteFailure!.message);
+      },
+      builder: (context, state) {
+        return Scaffold(
+          backgroundColor: Colors.white,
+          appBar: AppBar(
+            title: Text(status.title),
+            backgroundColor: status.color,
+            actions: [
+              if (state.operations.isNotEmpty) ...[
+                IconButton(
+                  onPressed: () => context.router.push(
+                    OperationsSyncRoute(operations: state.operations),
+                  ),
+                  icon: Icon(Icons.cached),
+                )
+              ]
+            ],
+          ),
+          body: Column(
             children: [
               if (state.status.isLoad) LinearProgressIndicator(),
               Expanded(
                 child: OperationsList(
                   failure: state.mainFailure,
                   operations: state.operations,
-                  onTap: (o) =>
-                      context.router.push(SimpleInfoRoute(operation: o)),
+                  onTap: (o) => context.router.push(
+                    SimpleInfoRoute(operation: o),
+                  ),
                   onDelete: (o) {
                     BlocProvider.of<CachedOperationsBloc>(context)
                         .add(DeleteOperation(o));
@@ -71,9 +76,9 @@ class _CachedOperationsScreenState extends State<CachedOperationsScreen> {
                 ),
               ),
             ],
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 }

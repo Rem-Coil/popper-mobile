@@ -1,22 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:popper_mobile/models/operation/operation.dart';
+import 'package:popper_mobile/screen/operations_sync/models/synchronization_status.dart';
 import 'package:popper_mobile/widgets/circular_loader.dart';
+import 'package:popper_mobile/widgets/operation_widget.dart';
 
 class SynchronizationOperation extends StatelessWidget {
-  final String title;
+  final Operation operation;
   final SynchronizationStatus status;
 
   const SynchronizationOperation({
     Key? key,
-    required this.title,
+    required this.operation,
     required this.status,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      title: Text(title),
-      subtitle: Text(_subtitle),
+    return OperationWidget(
       trailing: _icon,
+      operation: operation,
+      onTap: null,
     );
   }
 
@@ -46,5 +49,3 @@ class SynchronizationOperation extends StatelessWidget {
     }
   }
 }
-
-enum SynchronizationStatus { wait, load, success, error }

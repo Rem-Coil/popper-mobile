@@ -7,14 +7,14 @@ import 'package:popper_mobile/models/operation/operation_type.dart';
 class OperationWidget extends StatelessWidget {
   final Operation operation;
   final FormattedDateTime formattedDate;
-  final OperationCallback onTap;
-  final OperationCallback onDelete;
+  final OperationCallback? onTap;
+  final Widget trailing;
 
   OperationWidget({
     Key? key,
     required this.operation,
     required this.onTap,
-    required this.onDelete,
+    required this.trailing,
   })  : formattedDate = FormattedDateTime(operation.time),
         super(key: key);
 
@@ -28,11 +28,8 @@ class OperationWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      onTap: () => onTap(operation),
-      trailing: IconButton(
-        icon: Icon(Icons.delete),
-        onPressed: () => onDelete(operation),
-      ),
+      onTap: onTap != null ? () => onTap!(operation) : null,
+      trailing: trailing,
       title: Text(bobbinName),
       isThreeLine: true,
       subtitle: Column(

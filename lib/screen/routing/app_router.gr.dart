@@ -77,8 +77,11 @@ class _$AppRouter extends RootStackRouter {
           routeData: routeData, child: const CachedOperationsScreen());
     },
     OperationsSyncRoute.name: (routeData) {
+      final args = routeData.argsAs<OperationsSyncRouteArgs>();
       return CupertinoPageX<dynamic>(
-          routeData: routeData, child: const OperationsSyncScreen());
+          routeData: routeData,
+          child:
+              OperationsSyncScreen(key: args.key, operations: args.operations));
     }
   };
 
@@ -284,9 +287,24 @@ class CachedOperationsRoute extends PageRouteInfo<void> {
 
 /// generated route for
 /// [OperationsSyncScreen]
-class OperationsSyncRoute extends PageRouteInfo<void> {
-  const OperationsSyncRoute()
-      : super(OperationsSyncRoute.name, path: '/operations-sync-screen');
+class OperationsSyncRoute extends PageRouteInfo<OperationsSyncRouteArgs> {
+  OperationsSyncRoute({Key? key, required List<Operation> operations})
+      : super(OperationsSyncRoute.name,
+            path: '/operations-sync-screen',
+            args: OperationsSyncRouteArgs(key: key, operations: operations));
 
   static const String name = 'OperationsSyncRoute';
+}
+
+class OperationsSyncRouteArgs {
+  const OperationsSyncRouteArgs({this.key, required this.operations});
+
+  final Key? key;
+
+  final List<Operation> operations;
+
+  @override
+  String toString() {
+    return 'OperationsSyncRouteArgs{key: $key, operations: $operations}';
+  }
 }
