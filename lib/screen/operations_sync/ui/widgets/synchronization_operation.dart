@@ -1,43 +1,57 @@
 import 'package:flutter/material.dart';
-import 'package:popper_mobile/models/operation/operation.dart';
+import 'package:popper_mobile/screen/operations_sync/models/operation_with_status.dart';
 import 'package:popper_mobile/screen/operations_sync/models/synchronization_status.dart';
 import 'package:popper_mobile/widgets/circular_loader.dart';
 import 'package:popper_mobile/widgets/operation_widget.dart';
 
 class SynchronizationOperation extends StatelessWidget {
-  final Operation operation;
-  final SynchronizationStatus status;
+  final OperationWithStatus operation;
 
   const SynchronizationOperation({
     Key? key,
     required this.operation,
-    required this.status,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return OperationWidget(
-      trailing: _icon,
-      operation: operation,
+      trailing: Container(
+        width: 150,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Expanded(
+              child: Text(
+                _subtitle,
+                textAlign: TextAlign.end,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+            SizedBox(width: 8),
+            _icon,
+          ],
+        ),
+      ),
+      operation: operation.operation,
       onTap: null,
     );
   }
 
   String get _subtitle {
-    switch (status) {
+    switch (operation.status) {
       case SynchronizationStatus.wait:
-        return 'Wait';
+        return 'В очереди';
       case SynchronizationStatus.load:
-        return 'Load';
+        return 'Синхронизация';
       case SynchronizationStatus.success:
-        return 'Success';
+        return 'Успешно';
       case SynchronizationStatus.error:
-        return 'Error';
+        return operation.failure!.message;
     }
   }
 
   Widget get _icon {
-    switch (status) {
+    switch (operation.status) {
       case SynchronizationStatus.wait:
         return Icon(Icons.file_upload_outlined, color: Colors.grey);
       case SynchronizationStatus.load:

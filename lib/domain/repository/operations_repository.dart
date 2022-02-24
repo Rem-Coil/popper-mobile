@@ -10,6 +10,8 @@ abstract class OperationsRepository {
 
   Future<Either<Failure, void>> updateOperation(Operation operation);
 
+  Future<Either<Failure, void>> syncOperation(Operation operation);
+
   Future<Either<Failure, void>> deleteSavedOperation(Operation operation);
 
   Future<Either<Failure, void>> deleteCachedOperation(Operation operation);

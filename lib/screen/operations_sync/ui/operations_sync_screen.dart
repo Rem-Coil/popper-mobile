@@ -8,7 +8,7 @@ import 'package:popper_mobile/screen/operations_sync/ui/widgets/synchronization_
 import 'package:popper_mobile/screen/routing/app_router.dart';
 import 'package:popper_mobile/widgets/buttons/simple_button.dart';
 
-class OperationsSyncScreen extends StatelessWidget implements AutoRouteWrapper {
+class OperationsSyncScreen extends StatefulWidget implements AutoRouteWrapper {
   final List<Operation> operations;
 
   const OperationsSyncScreen({
@@ -17,9 +17,32 @@ class OperationsSyncScreen extends StatelessWidget implements AutoRouteWrapper {
   }) : super(key: key);
 
   @override
+  State<OperationsSyncScreen> createState() => _OperationsSyncScreenState();
+
+  @override
+  Widget wrappedRoute(BuildContext context) {
+    return BlocProvider<OperationSyncBloc>(
+      create: (_) => getIt.get<OperationSyncBloc>(param1: operations),
+      child: this,
+    );
+  }
+}
+
+class _OperationsSyncScreenState extends State<OperationsSyncScreen> {
+  @override
+  void initState() {
+    super.initState();
+    BlocProvider.of<OperationSyncBloc>(context)
+        .add(const StartOperationsSynchronization());
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Синхронизация операций')),
+      appBar: AppBar(
+        title: Text('Синхронизация операций'),
+        leading: SizedBox.shrink(),
+      ),
       body: Container(
         padding: const EdgeInsets.all(8),
         child: BlocBuilder<OperationSyncBloc, OperationSyncState>(
@@ -31,35 +54,28 @@ class OperationsSyncScreen extends StatelessWidget implements AutoRouteWrapper {
                   child: ListView.builder(
                     itemCount: state.operations.length,
                     itemBuilder: (context, i) {
-                      final operation = state.operations[i];
                       return SynchronizationOperation(
-                        operation: operation.operation,
-                        status: operation.status,
+                        operation: state.operations[i],
                       );
                     },
                   ),
                 ),
                 Expanded(
-                  child: SimpleButton(
-                    width: 150,
-                    borderRadius: 20,
-                    child: Text('Отмена', style: TextStyle(fontSize: 18)),
-                    onPressed: () => context.router.navigate(const HomeRoute()),
-                  ),
+                  child: state.isSyncEnd
+                      ? SimpleButton(
+                          width: 150,
+                          borderRadius: 20,
+                          child: Text('Готово', style: TextStyle(fontSize: 18)),
+                          onPressed: () =>
+                              context.router.navigate(const HomeRoute()),
+                        )
+                      : SizedBox.expand(),
                 ),
               ],
             );
           },
         ),
       ),
-    );
-  }
-
-  @override
-  Widget wrappedRoute(BuildContext context) {
-    return BlocProvider<OperationSyncBloc>(
-      create: (_) => getIt.get<OperationSyncBloc>(param1: operations),
-      child: this,
     );
   }
 }

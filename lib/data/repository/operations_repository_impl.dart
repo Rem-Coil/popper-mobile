@@ -76,6 +76,36 @@ class OperationRepositoryImpl implements OperationsRepository {
   }
 
   @override
+  Future<Either<Failure, void>> syncOperation(Operation operation) async {
+    try {
+      final remoteOperation = operation.toRemote();
+      final api = _apiProvider.getApiService();
+      final savedOperation = await api.saveOperation(remoteOperation);
+      final operationWithId = operation.copyWithId(savedOperation);
+      await _operationsCache.saveOperation(operationWithId);
+      await _operationsCache.deleteCacheOperation(operation);
+      return Right(null);
+    } on DioError catch (e) {
+      if (e.error is SocketException) {
+        return Left(NoInternetFailure());
+      }
+
+      switch (e.response?.statusCode) {
+        case HttpStatus.internalServerError:
+        case HttpStatus.badGateway:
+          return Left(ServerFailure());
+        case HttpStatus.unauthorized:
+          return Left(WrongCredentialsFailure());
+        case HttpStatus.forbidden:
+          await _operationsCache.deleteCacheOperation(operation);
+          return Left(OperationAlreadyExistFailure());
+      }
+
+      return Left(UnknownFailure());
+    }
+  }
+
+  @override
   Future<Either<Failure, void>> cacheOperation(Operation operation) async {
     try {
       await _operationsCache.cacheOperation(operation);
