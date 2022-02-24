@@ -24,11 +24,11 @@ extension LocalizeOperationType on OperationType {
   String get localizedName {
     switch (this) {
       case OperationType.winding:
-        return 'Обмотка';
+        return 'Намотка';
       case OperationType.output:
-        return 'Изолировка выводов';
+        return 'Вывод';
       case OperationType.isolation:
-        return 'Изоляция';
+        return 'Изолировка';
       case OperationType.molding:
         return 'Формовка';
       case OperationType.crimping:
