@@ -15,7 +15,7 @@ class SynchronizationOperation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return OperationWidget(
-      trailing: Container(
+      trailing: SizedBox(
         width: 150,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.end,
@@ -27,7 +27,7 @@ class SynchronizationOperation extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
               ),
             ),
-            SizedBox(width: 8),
+            const SizedBox(width: 8),
             _icon,
           ],
         ),
@@ -53,13 +53,13 @@ class SynchronizationOperation extends StatelessWidget {
   Widget get _icon {
     switch (operation.status) {
       case SynchronizationStatus.wait:
-        return Icon(Icons.file_upload_outlined, color: Colors.grey);
+        return const Icon(Icons.file_upload_outlined, color: Colors.grey);
       case SynchronizationStatus.load:
-        return CircularLoader(size: 20, strokeWidth: 2);
+        return const CircularLoader(size: 20, strokeWidth: 2);
       case SynchronizationStatus.success:
-        return Icon(Icons.done, color: Colors.green);
+        return const Icon(Icons.done, color: Colors.green);
       case SynchronizationStatus.error:
-        return Icon(Icons.error, color: Colors.red);
+        return const Icon(Icons.error, color: Colors.red);
     }
   }
 }

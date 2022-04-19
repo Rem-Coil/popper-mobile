@@ -40,8 +40,8 @@ class _OperationsSyncScreenState extends State<OperationsSyncScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Синхронизация операций'),
-        leading: SizedBox.shrink(),
+        title: const Text('Синхронизация операций'),
+        leading: const SizedBox.shrink(),
       ),
       body: Container(
         padding: const EdgeInsets.all(8),
@@ -52,7 +52,7 @@ class _OperationsSyncScreenState extends State<OperationsSyncScreen> {
                 Expanded(
                   flex: 10,
                   child: ListView.separated(
-                    separatorBuilder: (context, _) => SizedBox(height: 8),
+                    separatorBuilder: (context, _) => const SizedBox(height: 8),
                     itemCount: state.operations.length,
                     itemBuilder: (context, i) {
                       return SynchronizationOperation(
@@ -66,11 +66,11 @@ class _OperationsSyncScreenState extends State<OperationsSyncScreen> {
                       ? SimpleButton(
                           width: 150,
                           borderRadius: 20,
-                          child: Text('Готово', style: TextStyle(fontSize: 18)),
+                          child: const Text('Готово', style: TextStyle(fontSize: 18)),
                           onPressed: () =>
                               context.router.navigate(const HomeRoute()),
                         )
-                      : SizedBox.expand(),
+                      : const SizedBox.expand(),
                 ),
               ],
             );

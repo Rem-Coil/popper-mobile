@@ -10,7 +10,7 @@ class SimpleInfoScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Информация об операции')),
+      appBar: AppBar(title: const Text('Информация об операции')),
       body: Padding(
         padding: const EdgeInsets.all(30),
         child: Column(

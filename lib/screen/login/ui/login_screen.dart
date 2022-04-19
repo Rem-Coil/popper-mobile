@@ -37,14 +37,14 @@ class _LoginScreenState extends State<LoginScreen> {
       backgroundColor: Colors.white,
       body: SafeArea(
         child: Center(
-          child: Container(
+          child: SizedBox(
             width: 320,
             height: 540,
             child: BlocConsumer<LoginBloc, LoginState>(
               listener: (context, state) {
                 if (state.user != null) {
                   context.successSnackBar('Успешно');
-                  Future.delayed(Duration(seconds: 1), () {
+                  Future.delayed(const Duration(seconds: 1), () {
                     context.router.replace(const HomeRoute());
                   });
                 }
@@ -60,16 +60,16 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Logo(250),
-                        SizedBox(height: 32),
-                        Text(
+                        const Logo(250),
+                        const SizedBox(height: 32),
+                        const Text(
                           'Войти',
                           style: TextStyle(
                             fontSize: 30,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
-                        SizedBox(height: 32),
+                        const SizedBox(height: 32),
                         Field(
                           icon: Icons.local_phone_outlined,
                           hintText: 'Телефон',
@@ -80,7 +80,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   ? null
                                   : 'Введите телефон',
                         ),
-                        SizedBox(height: 16),
+                        const SizedBox(height: 16),
                         Field(
                           icon: Icons.lock_outline_rounded,
                           isHidden: true,
@@ -91,7 +91,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   ? null
                                   : 'Введите пароль',
                         ),
-                        SizedBox(height: 48),
+                        const SizedBox(height: 48),
                         Center(
                           child: LoadingButton(
                             width: 270,
@@ -107,7 +107,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         Center(
                           child: TextButton(
-                            child: Text('Регистрация'),
+                            child: const Text('Регистрация'),
                             onPressed: () =>
                                 context.router.push(const RegistrationRoute()),
                           ),

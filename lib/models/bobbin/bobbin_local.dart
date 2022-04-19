@@ -14,7 +14,7 @@ class BobbinLocal extends Bobbin {
   @HiveField(2)
   final String bobbinNumber;
 
-  BobbinLocal({
+  const BobbinLocal({
     required this.bobbinNumber,
     required this.id,
     required this.taskId,

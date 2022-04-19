@@ -17,7 +17,7 @@ class ValueInfoField extends StatelessWidget {
       children: [
         Text(
           title,
-          style: TextStyle(fontSize: 18, color: Color(0xFFA8A8A8)),
+          style: const TextStyle(fontSize: 18, color: Color(0xFFA8A8A8)),
         ),
         value
       ],

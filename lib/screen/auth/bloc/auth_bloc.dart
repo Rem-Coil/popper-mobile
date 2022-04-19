@@ -10,7 +10,7 @@ part 'auth_state.dart';
 
 @singleton
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
-  AuthRepository _repository;
+  final AuthRepository _repository;
 
   AuthBloc(this._repository) : super(AuthState.initial()) {
     on<ChangeUser>(onChangeUser);

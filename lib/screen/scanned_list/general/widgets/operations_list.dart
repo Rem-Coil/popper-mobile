@@ -29,7 +29,7 @@ class OperationsList extends StatelessWidget {
     }
 
     if (operations.isEmpty) {
-      return CenterTextWithImage(
+      return const CenterTextWithImage(
         image: 'assets/images/worker.png',
         title: 'Тут пока ничего нет',
       );
@@ -38,14 +38,14 @@ class OperationsList extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: ListView.separated(
-        separatorBuilder: (context, _) => SizedBox(height: 8),
+        separatorBuilder: (context, _) => const SizedBox(height: 8),
         itemCount: operations.length,
         itemBuilder: (context, i) {
           return OperationWidget(
             operation: operations[i],
             onTap: onTap,
             trailing: IconButton(
-              icon: Icon(Icons.delete),
+              icon: const Icon(Icons.delete),
               onPressed: () => onDelete(operations[i]),
             ),
           );

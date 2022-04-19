@@ -6,7 +6,7 @@ abstract class OperationSaveState {
 
   bool get isCanSave => this is SelectTypeState && operation.type != null;
 
-  OperationSaveState._({required this.operation});
+  const OperationSaveState._({required this.operation});
 
   OperationSaveState startSave() {
     return SaveProcessState.load(operation);
@@ -18,7 +18,7 @@ abstract class OperationSaveState {
 }
 
 class SelectTypeState extends OperationSaveState {
-  SelectTypeState._({required Operation operation})
+  const SelectTypeState._({required Operation operation})
       : super._(operation: operation);
 
   factory SelectTypeState.initial(Operation action) {
@@ -41,7 +41,7 @@ class SaveProcessState extends OperationSaveState {
   bool get isSaveError =>
       failure is NoInternetFailure || failure is ServerFailure;
 
-  SaveProcessState._({
+  const SaveProcessState._({
     required Operation operation,
     required this.status,
     required this.failure,
@@ -78,7 +78,7 @@ class SaveProcessState extends OperationSaveState {
 class CacheProcessState extends OperationSaveState {
   final Status status;
 
-  CacheProcessState._({
+  const CacheProcessState._({
     required Operation operation,
     required this.status,
   }) : super._(operation: operation);

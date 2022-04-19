@@ -5,7 +5,7 @@ class HomeState {
   final int countSavedActions;
   final int countCachedActions;
 
-  HomeState._({
+  const HomeState._({
     required this.countSavedActions,
     required this.countCachedActions,
   });

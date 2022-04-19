@@ -2,7 +2,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'user_remote.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(createFactory: false)
 class UserRemote {
   final int id;
   @JsonKey(name: 'first_name')

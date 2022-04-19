@@ -11,7 +11,7 @@ class WarningDialog extends StatelessWidget {
     required this.title,
     this.message,
     String? actionTitle,
-  })  : this.actionTitle = actionTitle ?? 'Пропустить',
+  })  : actionTitle = actionTitle ?? 'Пропустить',
         super(key: key);
 
   @override

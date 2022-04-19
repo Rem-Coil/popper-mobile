@@ -7,7 +7,7 @@ class CachedOperationsState {
   final Failure? deleteFailure;
   final List<Operation> operations;
 
-  CachedOperationsState({
+  const CachedOperationsState({
     required this.status,
     required this.mainFailure,
     required this.operations,
@@ -15,7 +15,7 @@ class CachedOperationsState {
   });
 
   factory CachedOperationsState.initial() {
-    return CachedOperationsState(
+    return const CachedOperationsState(
       status: Status.initial,
       mainFailure: null,
       deleteFailure: null,

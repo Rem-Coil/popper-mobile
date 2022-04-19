@@ -45,7 +45,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             listener: (context, state) {
               if (state.user != null) {
                 context.successSnackBar('Успешно');
-                Future.delayed(Duration(seconds: 1), () {
+                Future.delayed(const Duration(seconds: 1), () {
                   context.router.replaceAll([const HomeRoute()]);
                 });
               }
@@ -61,16 +61,16 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Logo(250),
-                      SizedBox(height: 32),
-                      Text(
+                      const Logo(250),
+                      const SizedBox(height: 32),
+                      const Text(
                         'Регистрация',
                         style: TextStyle(
                           fontSize: 30,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
-                      SizedBox(height: 32),
+                      const SizedBox(height: 32),
                       Field(
                         icon: Icons.account_circle,
                         hintText: 'Имя',
@@ -79,7 +79,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             ? null
                             : 'Введите своё имя',
                       ),
-                      SizedBox(height: 16),
+                      const SizedBox(height: 16),
                       Field(
                         icon: Icons.account_circle,
                         hintText: 'Фамилия',
@@ -88,7 +88,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             ? null
                             : 'Введите свою фамилию',
                       ),
-                      SizedBox(height: 16),
+                      const SizedBox(height: 16),
                       Field(
                         icon: Icons.account_circle,
                         hintText: 'Отчество',
@@ -97,7 +97,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             ? null
                             : 'Введите своё отчество',
                       ),
-                      SizedBox(height: 16),
+                      const SizedBox(height: 16),
                       Field(
                         icon: Icons.local_phone_outlined,
                         hintText: 'Телефон',
@@ -107,7 +107,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             ? null
                             : 'Введите телефон',
                       ),
-                      SizedBox(height: 16),
+                      const SizedBox(height: 16),
                       Field(
                         icon: Icons.lock_outline_rounded,
                         isHidden: true,
@@ -117,7 +117,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             ? null
                             : 'Введите пароль',
                       ),
-                      SizedBox(height: 48),
+                      const SizedBox(height: 48),
                       Center(
                         child: LoadingButton(
                           width: 270,
@@ -133,7 +133,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       ),
                       Center(
                         child: TextButton(
-                          child: Text('Назад'),
+                          child: const Text('Назад'),
                           onPressed: () => context.router.navigateBack(),
                         ),
                       ),

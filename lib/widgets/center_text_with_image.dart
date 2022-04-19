@@ -21,7 +21,7 @@ class CenterTextWithImage extends StatelessWidget {
             Image.asset(image),
             Text(
               title,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 34,
                 fontWeight: FontWeight.bold,
                 // height: 1.2,

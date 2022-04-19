@@ -5,8 +5,8 @@ enum OperationStatus { saved, cached }
 
 extension OperationStatusValues on OperationStatus {
   String get title => this == OperationStatus.saved
-      ? "Завершённые катушки"
-      : "Не загруженные катушки";
+      ? 'Завершённые катушки'
+      : 'Не загруженные катушки';
 
   Color get color =>
       Color(this == OperationStatus.saved ? savedColor : cachedColor);

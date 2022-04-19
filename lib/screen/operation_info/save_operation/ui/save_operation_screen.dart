@@ -26,7 +26,7 @@ class OperationSaveScreen extends StatelessWidget implements AutoRouteWrapper {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Сохранить операцию?')),
+      appBar: AppBar(title: const Text('Сохранить операцию?')),
       body: Padding(
         padding: const EdgeInsets.all(30),
         child: BlocConsumer<OperationSaveBloc, OperationSaveState>(
@@ -52,7 +52,7 @@ class OperationSaveScreen extends StatelessWidget implements AutoRouteWrapper {
                         .add(ChangeOperation(t));
                   },
                 ),
-                SizedBox(height: 48),
+                const SizedBox(height: 48),
                 Row(
                   children: [
                     Expanded(
@@ -60,21 +60,21 @@ class OperationSaveScreen extends StatelessWidget implements AutoRouteWrapper {
                         height: 55,
                         color: Colors.red,
                         child: isLoad(state)
-                            ? CircularLoader(size: 25, strokeWidth: 3)
-                            : Text('Брак', style: TextStyle(fontSize: 18)),
+                            ? const CircularLoader(size: 25, strokeWidth: 3)
+                            : const Text('Брак', style: TextStyle(fontSize: 18)),
                         onPressed: state.isCanSave
                             ? () => _rejectOperation(context)
                             : null,
                       ),
                     ),
-                    SizedBox(width: 16),
+                    const SizedBox(width: 16),
                     Expanded(
                       child: SimpleButton(
                         height: 55,
                         color: Colors.green,
                         child: isLoad(state)
-                            ? CircularLoader(size: 25, strokeWidth: 3)
-                            : Text('Сохранить', style: TextStyle(fontSize: 18)),
+                            ? const CircularLoader(size: 25, strokeWidth: 3)
+                            : const Text('Сохранить', style: TextStyle(fontSize: 18)),
                         onPressed: state.isCanSave
                             ? () => _saveOperation(context)
                             : null,
@@ -93,8 +93,8 @@ class OperationSaveScreen extends StatelessWidget implements AutoRouteWrapper {
   Future<void> _onSaveEnd(BuildContext context, SaveProcessState state) async {
     if (state.status.isSuccessful) {
       final args = ScannerResultArguments(
-        message: "Операция успешно сохранена",
-        image: "assets/images/success.png",
+        message: 'Операция успешно сохранена',
+        image: 'assets/images/success.png',
       );
       context.router.replace(ScannerResultRoute(args: args));
     } else if (state.isSaveError) {
@@ -107,7 +107,7 @@ class OperationSaveScreen extends StatelessWidget implements AutoRouteWrapper {
     } else {
       final args = ScannerResultArguments(
         message: state.failure!.message,
-        image: "assets/images/save_exception.png",
+        image: 'assets/images/save_exception.png',
       );
       context.router.replace(ScannerResultRoute(args: args));
     }
@@ -119,14 +119,14 @@ class OperationSaveScreen extends StatelessWidget implements AutoRouteWrapper {
   ) async {
     if (state.status.isSuccessful) {
       final args = ScannerResultArguments(
-        message: "Операция успешно сохранена в кеш",
-        image: "assets/images/success.png",
+        message: 'Операция успешно сохранена в кеш',
+        image: 'assets/images/success.png',
       );
       context.router.replace(ScannerResultRoute(args: args));
     } else {
       final args = ScannerResultArguments(
-        message: "Ошибка сохранения в кеш, проверте правильность данных",
-        image: "assets/images/save_exception.png",
+        message: 'Ошибка сохранения в кеш, проверте правильность данных',
+        image: 'assets/images/save_exception.png',
       );
       context.router.replace(ScannerResultRoute(args: args));
     }
@@ -136,7 +136,7 @@ class OperationSaveScreen extends StatelessWidget implements AutoRouteWrapper {
     final isCacheOperation = await showCupertinoDialog<bool>(
       context: context,
       builder: (BuildContext context) {
-        return DecisionDialog(
+        return const DecisionDialog(
           title: 'Операция не была сохранена',
           message: 'Произошла ошибка сохранения операции. '
               'Сохранить на устройстве? '

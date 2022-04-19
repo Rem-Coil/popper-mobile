@@ -22,7 +22,7 @@ class Operation {
   final DateTime time;
   final bool isSuccessful;
 
-  Operation({
+  const Operation({
     required this.id,
     required this.userId,
     required this.bobbin,
@@ -59,22 +59,22 @@ class Operation {
 
   Operation changeType(OperationType? type) {
     return Operation(
-      id: this.id,
-      userId: this.userId,
-      bobbin: this.bobbin,
+      id: id,
+      userId: userId,
+      bobbin: bobbin,
       type: type,
-      time: this.time,
+      time: time,
       isSuccessful: isSuccessful,
     );
   }
 
   Operation changeStatus(bool isSuccessful) {
     return Operation(
-      id: this.id,
-      userId: this.userId,
-      bobbin: this.bobbin,
+      id: id,
+      userId: userId,
+      bobbin: bobbin,
       type: type,
-      time: this.time,
+      time: time,
       isSuccessful: isSuccessful,
     );
   }
@@ -103,8 +103,8 @@ class Operation {
   }
 
   bool isEqualWithoutId(Operation other) {
-    return this.bobbin.id == other.bobbin.id &&
-        this.type == other.type &&
-        this.time == other.time;
+    return bobbin.id == other.bobbin.id &&
+        type == other.type &&
+        time == other.time;
   }
 }

@@ -25,12 +25,12 @@ class OperationsListButton extends StatelessWidget {
         children: [
           Text(
             '${status.title}:',
-            style: TextStyle(fontSize: 18, color: Colors.white, height: 1.2),
+            style: const TextStyle(fontSize: 18, color: Colors.white, height: 1.2),
           ),
-          Spacer(),
+          const Spacer(),
           Text(
             '$count',
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 64,
               color: Colors.white,
               fontWeight: FontWeight.bold,

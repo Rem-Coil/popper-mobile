@@ -21,7 +21,7 @@ class OperationRemote extends Operation {
   @override
   final bool isSuccessful;
 
-  OperationRemote({
+  const OperationRemote({
     required this.id,
     required this.userId,
     required this.bobbin,

@@ -20,7 +20,7 @@ class Bobbin {
   bool get isUnknown =>
       taskId == _defaultTaskId && bobbinNumber == _defaultBobbinNumber;
 
-  Bobbin({
+  const Bobbin({
     required this.id,
     required this.taskId,
     required this.bobbinNumber,

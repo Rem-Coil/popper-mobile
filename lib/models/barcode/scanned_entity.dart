@@ -8,7 +8,7 @@ class ScannedEntity {
   final EntityType type;
   final int id;
 
-  ScannedEntity._(this.type, this.id);
+  const ScannedEntity._(this.type, this.id);
 
   factory ScannedEntity.fromString(String? barcode) {
     if (barcode == null) {

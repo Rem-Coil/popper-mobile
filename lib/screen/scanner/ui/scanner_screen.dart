@@ -33,7 +33,7 @@ class _ScannerScreenState extends State<ScannerScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Отсканируйте катушку:')),
+      appBar: AppBar(title: const Text('Отсканируйте катушку:')),
       body: Column(
         children: <Widget>[
           Expanded(flex: 4, child: _buildQrView(context)),
@@ -55,9 +55,9 @@ class _ScannerScreenState extends State<ScannerScreen> {
                         future: controller?.getFlashStatus(),
                         builder: (context, snapshot) {
                           if (snapshot.data == null || !snapshot.data!) {
-                            return Icon(Icons.flash_on);
+                            return const Icon(Icons.flash_on);
                           }
-                          return Icon(Icons.flash_off);
+                          return const Icon(Icons.flash_off);
                         },
                       ),
                       onPressed: () async {
@@ -70,7 +70,7 @@ class _ScannerScreenState extends State<ScannerScreen> {
                       width: 40,
                       borderRadius: 20,
                       padding: const EdgeInsets.all(8),
-                      child: Icon(Icons.flip_camera_android),
+                      child: const Icon(Icons.flip_camera_android),
                       onPressed: () async {
                         await controller?.flipCamera();
                         setState(() {});
@@ -134,7 +134,7 @@ class _ScannerScreenState extends State<ScannerScreen> {
   void _showError(String message) {
     context.errorSnackBar(message);
     Future.delayed(
-      Duration(seconds: 1),
+      const Duration(seconds: 1),
       () => setState(() => isBusy = false),
     );
   }

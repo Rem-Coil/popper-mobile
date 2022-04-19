@@ -4,7 +4,7 @@ part of 'bloc.dart';
 class OperationSyncState {
   final List<OperationWithStatus> operations;
 
-  OperationSyncState({required this.operations});
+  const OperationSyncState({required this.operations});
 
   bool get isSyncEnd {
     final statuses = operations.map((o) => o.status).toSet();

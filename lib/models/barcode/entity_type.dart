@@ -8,7 +8,7 @@ extension ToEntity on String {
       case 'bobbin':
         return EntityType.bobbin;
       default:
-        throw NoSuchEntityTypeException();
+        throw const NoSuchEntityTypeException();
     }
   }
 }
@@ -19,7 +19,7 @@ extension ToString on EntityType {
       case EntityType.bobbin:
         return 'bobbin';
       default:
-        throw NoSuchEntityTypeException();
+        throw const NoSuchEntityTypeException();
     }
   }
 }

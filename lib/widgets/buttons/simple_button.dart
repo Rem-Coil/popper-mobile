@@ -18,13 +18,13 @@ class SimpleButton extends StatelessWidget {
     this.color,
     double? borderRadius,
     EdgeInsetsGeometry? padding,
-  })  : this.borderRadius = borderRadius ?? 12,
-        this.padding = padding ?? const EdgeInsets.all(16),
+  })  : borderRadius = borderRadius ?? 12,
+        padding = padding ?? const EdgeInsets.all(16),
         super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: width,
       height: height,
       child: ElevatedButton(

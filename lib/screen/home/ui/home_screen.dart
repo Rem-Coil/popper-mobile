@@ -37,13 +37,13 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        padding: EdgeInsets.symmetric(horizontal: 16),
+        padding: const EdgeInsets.symmetric(horizontal: 16),
         child: BlocBuilder<HomeBloc, HomeState>(
           builder: (context, state) {
             return Column(
               children: [
-                HomeHeader(),
-                SizedBox(height: 47),
+                const HomeHeader(),
+                const SizedBox(height: 47),
                 Row(
                   children: [
                     Expanded(
@@ -52,7 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         count: state.countSavedActions,
                       ),
                     ),
-                    SizedBox(width: 16),
+                    const SizedBox(width: 16),
                     Expanded(
                       child: OperationsListButton(
                         status: OperationStatus.cached,
@@ -61,7 +61,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     )
                   ],
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 SimpleButton(
                   width: double.infinity,
                   height: 67,
@@ -72,7 +72,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     context.router.push(const ScannerRoute());
                   },
                   child: Row(
-                    children: [
+                    children: const [
                       Text(
                         'Сканировать',
                         style: TextStyle(

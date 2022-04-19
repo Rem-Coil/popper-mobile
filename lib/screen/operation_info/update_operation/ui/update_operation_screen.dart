@@ -25,7 +25,7 @@ class UpdateOperationScreen extends StatelessWidget
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Обновить операцию?')),
+      appBar: AppBar(title: const Text('Обновить операцию?')),
       body: Container(
         padding: const EdgeInsets.all(30),
         child: BlocConsumer<OperationUpdateBloc, OperationUpdateState>(
@@ -47,7 +47,7 @@ class UpdateOperationScreen extends StatelessWidget
                         .add(ChangeOperation(t));
                   },
                 ),
-                SizedBox(height: 48),
+                const SizedBox(height: 48),
                 Row(
                   children: [
                     Expanded(
@@ -55,21 +55,21 @@ class UpdateOperationScreen extends StatelessWidget
                         height: 55,
                         color: Colors.red,
                         child: isLoad(state)
-                            ? CircularLoader(size: 25, strokeWidth: 3)
-                            : Text('Брак', style: TextStyle(fontSize: 18)),
+                            ? const CircularLoader(size: 25, strokeWidth: 3)
+                            : const Text('Брак', style: TextStyle(fontSize: 18)),
                         onPressed: state.isCanSave(true)
                             ? () => _rejectOperation(context)
                             : null,
                       ),
                     ),
-                    SizedBox(width: 16),
+                    const SizedBox(width: 16),
                     Expanded(
                       child: SimpleButton(
                         height: 55,
                         color: Colors.green,
                         child: isLoad(state)
-                            ? CircularLoader(size: 25, strokeWidth: 3)
-                            : Text('Успешно', style: TextStyle(fontSize: 18)),
+                            ? const CircularLoader(size: 25, strokeWidth: 3)
+                            : const Text('Успешно', style: TextStyle(fontSize: 18)),
                         onPressed: state.isCanSave(false)
                             ? () => _updateOperation(context)
                             : null,
@@ -91,14 +91,14 @@ class UpdateOperationScreen extends StatelessWidget
   ) async {
     if (state.status.isSuccessful) {
       final args = ScannerResultArguments(
-        message: "Операция успешно обновлена",
-        image: "assets/images/success.png",
+        message: 'Операция успешно обновлена',
+        image: 'assets/images/success.png',
       );
       context.router.replace(ScannerResultRoute(args: args));
     } else {
       final args = ScannerResultArguments(
         message: state.failure!.message,
-        image: "assets/images/save_exception.png",
+        image: 'assets/images/save_exception.png',
       );
       context.router.replace(ScannerResultRoute(args: args));
     }

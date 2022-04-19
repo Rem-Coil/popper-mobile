@@ -15,7 +15,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 @Singleton(as: AuthRepository)
 class AuthRepositoryImpl implements AuthRepository {
-  static const token_key = 'token';
+  static const _tokenKey = 'token';
   final ApiProvider _apiProvider;
 
   AuthRepositoryImpl(this._apiProvider);
@@ -80,13 +80,13 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<User?> getCurrentUser() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final token = prefs.getString(token_key);
+    final token = prefs.getString(_tokenKey);
     return token != null ? User.fromToken(token) : null;
   }
 
   @override
   Future<void> saveToken(Token token) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString(token_key, token.token);
+    await prefs.setString(_tokenKey, token.token);
   }
 }

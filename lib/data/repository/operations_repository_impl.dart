@@ -10,10 +10,11 @@ import 'package:popper_mobile/domain/repository/operations_repository.dart';
 import 'package:popper_mobile/models/operation/operation.dart';
 import 'package:popper_mobile/models/operation/operation_type.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:popper_mobile/core/utils/iterable_utils.dart';
 
 @Singleton(as: OperationsRepository)
 class OperationRepositoryImpl implements OperationsRepository {
-  static const String _OPERATION_TYPE_KEY = 'operation_type';
+  static const String _operationTypeKey = 'operation_type';
   final ApiProvider _apiProvider;
   final OperationsCache _operationsCache;
 
@@ -28,7 +29,7 @@ class OperationRepositoryImpl implements OperationsRepository {
       final operationWithId = operation.copyWithId(savedOperation);
       await _operationsCache.saveOperation(operationWithId);
       await setLastOperationType(savedOperation.type);
-      return Right(null);
+      return const Right(null);
     } on DioError catch (e) {
       if (e.error is SocketException) {
         return Left(NoInternetFailure());
@@ -55,7 +56,7 @@ class OperationRepositoryImpl implements OperationsRepository {
       final api = _apiProvider.getApiService();
       await api.updateOperation(remoteAction);
       await _operationsCache.updateSavedOperation(operation);
-      return Right(null);
+      return const Right(null);
     } on DioError catch (e) {
       if (e.error is SocketException) {
         return Left(NoInternetFailure());
@@ -84,7 +85,7 @@ class OperationRepositoryImpl implements OperationsRepository {
       final operationWithId = operation.copyWithId(savedOperation);
       await _operationsCache.saveOperation(operationWithId);
       await _operationsCache.deleteCacheOperation(operation);
-      return Right(null);
+      return const Right(null);
     } on DioError catch (e) {
       if (e.error is SocketException) {
         return Left(NoInternetFailure());
@@ -109,7 +110,7 @@ class OperationRepositoryImpl implements OperationsRepository {
   Future<Either<Failure, void>> cacheOperation(Operation operation) async {
     try {
       await _operationsCache.cacheOperation(operation);
-      return Right(null);
+      return const Right(null);
     } on Exception {
       return Left(CacheFailure());
     }
@@ -118,13 +119,10 @@ class OperationRepositoryImpl implements OperationsRepository {
   @override
   Future<OperationType?> getLastOperationType() async {
     final prefs = await SharedPreferences.getInstance();
-    final operation = prefs.getString(_OPERATION_TYPE_KEY);
+    final operation = prefs.getString(_operationTypeKey);
 
     if (operation == null) return null;
-    return OperationType.values.firstWhere(
-      (o) => o.name == operation,
-      orElse: null,
-    );
+    return OperationType.values.firstWhereOrNull((o) => o.name == operation);
   }
 
   @override
@@ -132,7 +130,7 @@ class OperationRepositoryImpl implements OperationsRepository {
     if (actionType == null) return;
     final prefs = await SharedPreferences.getInstance();
     final action = actionType.name;
-    prefs.setString(_OPERATION_TYPE_KEY, action);
+    prefs.setString(_operationTypeKey, action);
   }
 
   @override
@@ -141,7 +139,7 @@ class OperationRepositoryImpl implements OperationsRepository {
   ) async {
     try {
       _operationsCache.deleteCacheOperation(operation);
-      return Right(null);
+      return const Right(null);
     } catch (e) {
       return Left(CacheFailure());
     }
@@ -155,7 +153,7 @@ class OperationRepositoryImpl implements OperationsRepository {
       final api = _apiProvider.getApiService();
       await api.deleteOperation(operation.id);
       await _operationsCache.deleteSavedOperation(operation);
-      return Right(null);
+      return const Right(null);
     } on DioError catch (e) {
       if (e.error is SocketException) {
         return Left(NoInternetFailure());

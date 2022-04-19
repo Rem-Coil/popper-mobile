@@ -30,7 +30,7 @@ class _SavedOperationsScreenState extends State<SavedOperationsScreen> {
   @override
   void initState() {
     super.initState();
-    BlocProvider.of<SavedOperationsBloc>(context)..add(LoadOperations());
+    BlocProvider.of<SavedOperationsBloc>(context).add(LoadOperations());
   }
 
   @override
@@ -50,7 +50,7 @@ class _SavedOperationsScreenState extends State<SavedOperationsScreen> {
         builder: (context, state) {
           return Column(
             children: [
-              if (state.status.isLoad) LinearProgressIndicator(),
+              if (state.status.isLoad) const LinearProgressIndicator(),
               Expanded(
                 child: OperationsList(
                   failure: state.mainFailure,

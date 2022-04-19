@@ -6,11 +6,11 @@ class RegistrationState {
   final bool isLoad;
   final Failure? errorMessage;
 
-  RegistrationState._(this.user, this.isLoad, this.errorMessage);
+  const RegistrationState._(this.user, this.isLoad, this.errorMessage);
 
-  factory RegistrationState.initial() => RegistrationState._(null, false, null);
+  factory RegistrationState.initial() => const RegistrationState._(null, false, null);
 
-  factory RegistrationState.load() => RegistrationState._(null, true, null);
+  factory RegistrationState.load() => const RegistrationState._(null, true, null);
 
   factory RegistrationState.authorized(User user) =>
       RegistrationState._(user, false, null);

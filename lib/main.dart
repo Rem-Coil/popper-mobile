@@ -44,6 +44,8 @@ Future<void> hiveInitial() async {
 class MyApp extends StatelessWidget {
   final _appRouter = AppRouter();
 
+  MyApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(

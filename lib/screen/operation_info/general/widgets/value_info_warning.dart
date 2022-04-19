@@ -15,7 +15,7 @@ class ValueInfoWarning extends StatelessWidget {
         showCupertinoDialog<void>(
           context: context,
           builder: (BuildContext context) {
-            return WarningDialog(
+            return const WarningDialog(
               title: 'Данные о катушке не были загружены',
               message: 'Произошла ошибка загрзки информации о катушке. '
                   'Проверьте подключение к интернету или повторите позже',
@@ -26,8 +26,8 @@ class ValueInfoWarning extends StatelessWidget {
       child: Row(
         children: [
           ValueInfoText(text),
-          SizedBox(width: 5),
-          Icon(Icons.warning_rounded, color: Colors.red),
+          const SizedBox(width: 5),
+          const Icon(Icons.warning_rounded, color: Colors.red),
         ],
       ),
     );

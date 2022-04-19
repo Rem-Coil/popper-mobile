@@ -19,7 +19,7 @@ class SelectOperationButton extends StatelessWidget {
       onTap: () async {
         final type = await showCupertinoModalPopup<OperationType?>(
           context: context,
-          builder: (_) => SelectOperationDialog(),
+          builder: (_) => const SelectOperationDialog(),
         );
         onTypeSelected(type);
         // BlocProvider.of<OperationSaveBloc>(context).add(ChangeOperation(type));

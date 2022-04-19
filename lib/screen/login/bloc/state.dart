@@ -6,11 +6,11 @@ class LoginState {
   final bool isLoad;
   final Failure? errorMessage;
 
-  LoginState._(this.user, this.isLoad, this.errorMessage);
+  const LoginState._(this.user, this.isLoad, this.errorMessage);
 
-  factory LoginState.initial() => LoginState._(null, false, null);
+  factory LoginState.initial() => const LoginState._(null, false, null);
 
-  factory LoginState.load() => LoginState._(null, true, null);
+  factory LoginState.load() => const LoginState._(null, true, null);
 
   factory LoginState.authorized(User user) => LoginState._(user, false, null);
 

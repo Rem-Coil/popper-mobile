@@ -6,7 +6,7 @@ class BobbinLoadingState {
   final Bobbin? bobbin;
   final Failure? failure;
 
-  BobbinLoadingState._({
+  const BobbinLoadingState._({
     required this.status,
     required this.bobbin,
     required this.failure,
@@ -19,7 +19,7 @@ class BobbinLoadingState {
   bool get isLoading => status == Status.load;
 
   factory BobbinLoadingState.initial() {
-    return BobbinLoadingState._(
+    return const BobbinLoadingState._(
       status: Status.initial,
       bobbin: null,
       failure: null,

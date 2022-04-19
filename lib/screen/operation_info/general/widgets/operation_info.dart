@@ -40,19 +40,19 @@ class OperationInfo extends StatelessWidget {
           title: 'Идентификатор катушки',
           value: ValueInfoText('${operation.bobbin.id}'),
         ),
-        SizedBox(height: 24),
+        const SizedBox(height: 24),
         ValueInfoField(
           title: 'Номер катушки',
           value: isBobbinNotLoaded
               ? ValueInfoWarning(bobbinNumber)
               : ValueInfoText(bobbinNumber),
         ),
-        SizedBox(height: 24),
+        const SizedBox(height: 24),
         ValueInfoField(
           title: 'Сотрудник',
           value: ValueInfoText(_getUserName(context)),
         ),
-        SizedBox(height: 24),
+        const SizedBox(height: 24),
         ValueInfoField(
           title: 'Операция',
           value: !isImmutable
@@ -62,15 +62,15 @@ class OperationInfo extends StatelessWidget {
                 )
               : ValueInfoText(currentType),
         ),
-        SizedBox(height: 24),
+        const SizedBox(height: 24),
         ValueInfoField(
           title: 'Дата сканирования',
           value: ValueInfoText(formatter.format(operation.time)),
         ),
-        SizedBox(height: 24),
+        const SizedBox(height: 24),
         ValueInfoField(
           title: 'Статус',
-          value: ValueInfoText(operation.isSuccessful ? "Успешно" : "Брак"),
+          value: ValueInfoText(operation.isSuccessful ? 'Успешно' : 'Брак'),
         ),
       ],
     );

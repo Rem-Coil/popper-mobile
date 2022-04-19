@@ -16,6 +16,7 @@ class ApiProvider {
     return ApiService(_dio, baseUrl: baseUrl);
   }
 
+  // ignore: unused_element
   LogInterceptor get _logInterceptor {
     return LogInterceptor(
       logPrint: _logPrint,

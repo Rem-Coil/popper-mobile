@@ -5,10 +5,10 @@ class AuthState {
   final Status status;
   final User? user;
 
-  AuthState._(this.user, this.status);
+  const AuthState._(this.user, this.status);
 
   factory AuthState.initial() {
-   return AuthState._(null, Status.initial);
+   return const AuthState._(null, Status.initial);
   }
 
   AuthState loading() {

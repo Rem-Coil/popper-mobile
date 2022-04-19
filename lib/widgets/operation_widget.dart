@@ -37,12 +37,12 @@ class OperationWidget extends StatelessWidget {
         Expanded(
           child: Card(
             color: Colors.white10,
-            shape: ContinuousRectangleBorder(
+            shape: const ContinuousRectangleBorder(
               borderRadius: BorderRadius.zero,
             ),
             borderOnForeground: true,
             elevation: 0,
-            margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+            margin: const EdgeInsets.fromLTRB(0, 0, 0, 0),
             child: ListTile(
               onTap: onTap != null ? () => onTap!(operation) : null,
               trailing: trailing,
@@ -51,9 +51,9 @@ class OperationWidget extends StatelessWidget {
               subtitle: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(height: 4),
+                  const SizedBox(height: 4),
                   Text(typeName),
-                  SizedBox(height: 2),
+                  const SizedBox(height: 2),
                   Text(formattedDate.formattedDate),
                 ],
               ),

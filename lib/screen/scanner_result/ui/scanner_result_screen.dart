@@ -17,19 +17,19 @@ class ScannerResultScreen extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Column(
           children: [
-            SizedBox(height: 40),
+            const SizedBox(height: 40),
             Expanded(
               flex: 4,
               child: Image.asset(args.image),
             ),
-            SizedBox(height: 30),
+            const SizedBox(height: 30),
             Expanded(
               flex: 4,
               child: Text(
                 args.message,
                 overflow: TextOverflow.fade,
                 maxLines: 4,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 34,
                   fontWeight: FontWeight.bold,
                   height: 1.2,
@@ -37,14 +37,14 @@ class ScannerResultScreen extends StatelessWidget {
                 textAlign: TextAlign.center,
               ),
             ),
-            SizedBox(height: 30),
+            const SizedBox(height: 30),
             Expanded(
               child: SimpleButton(
-                child: Text('На главную'),
+                child: const Text('На главную'),
                 onPressed: () => context.router.navigate(const HomeRoute()),
               ),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
           ],
         ),
       ),

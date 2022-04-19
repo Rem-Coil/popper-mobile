@@ -6,14 +6,14 @@ import 'package:popper_mobile/models/operation/operation.dart';
 
 @Singleton(as: OperationsCache)
 class OperationsCacheImpl implements OperationsCache {
-  static const String _SAVED_OPERATIONS_BOX = 'saved_operations';
-  static const String _CACHED_OPERATIONS_BOX = 'cached_operations';
+  static const String _savedOperationsBox = 'saved_operations';
+  static const String _cachedOperationsBox = 'cached_operations';
 
   Future<Box<OperationLocal>> get _savedOperations =>
-      Hive.openBox(_SAVED_OPERATIONS_BOX);
+      Hive.openBox(_savedOperationsBox);
 
   Future<Box<OperationLocal>> get _cachedOperations =>
-      Hive.openBox(_CACHED_OPERATIONS_BOX);
+      Hive.openBox(_cachedOperationsBox);
 
   @override
   Future<void> saveOperation(Operation operation) async =>

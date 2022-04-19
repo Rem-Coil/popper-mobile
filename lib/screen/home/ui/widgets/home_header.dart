@@ -18,30 +18,28 @@ class HomeHeader extends StatelessWidget {
           context.router.replaceAll([const LoginRoute()]),
       builder: (context, state) {
         final username = state.user?.firstName ?? 'Незнакомец';
-        return Container(
-          child: Column(
-            children: [
-              SizedBox(height: 50),
-              Row(
-                children: [
-                  Text(
-                    'Привет, $username',
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.w900,
-                    ),
+        return Column(
+          children: [
+            const SizedBox(height: 50),
+            Row(
+              children: [
+                Text(
+                  'Привет, $username',
+                  style: const TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.w900,
                   ),
-                  Spacer(),
-                  CircleIconButton(
-                    icon: Icons.people,
-                    iconColor: Colors.white,
-                    color: Theme.of(context).primaryColor,
-                    onPressed: () => _logOut(context),
-                  ),
-                ],
-              ),
-            ],
-          ),
+                ),
+                const Spacer(),
+                CircleIconButton(
+                  icon: Icons.people,
+                  iconColor: Colors.white,
+                  color: Theme.of(context).primaryColor,
+                  onPressed: () => _logOut(context),
+                ),
+              ],
+            ),
+          ],
         );
       },
     );
@@ -51,7 +49,7 @@ class HomeHeader extends StatelessWidget {
     final isNotLogOut = await showCupertinoDialog<bool>(
       context: context,
       builder: (BuildContext context) {
-        return DecisionDialog(
+        return const DecisionDialog(
           title: 'Выйти из приложения?',
           message:
               'После выхода из приложения все сохранённые на телефоне операции '

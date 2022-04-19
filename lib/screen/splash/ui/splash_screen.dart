@@ -32,7 +32,7 @@ class SplashScreen extends StatelessWidget implements AutoRouteWrapper {
                 }
               });
             },
-            child: Logo(250),
+            child: const Logo(250),
           ),
         ),
       ),
@@ -41,7 +41,7 @@ class SplashScreen extends StatelessWidget implements AutoRouteWrapper {
 
   void _navigateDelayed(BuildContext context, PageRouteInfo route) {
     Timer(
-      Duration(seconds: 1),
+      const Duration(seconds: 1),
       () => context.router.replace(route),
     );
   }

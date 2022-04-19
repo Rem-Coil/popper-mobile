@@ -49,7 +49,7 @@ class _BobbinLoadingScreenState extends State<BobbinLoadingScreen> {
             }
           },
           builder: (_, __) {
-            return Center(
+            return const Center(
               child: LoadingWidget(
                 message: 'Загружаем информацию по катушке...',
               ),

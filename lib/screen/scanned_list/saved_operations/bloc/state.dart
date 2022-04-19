@@ -7,7 +7,7 @@ class SavedOperationsState {
   final Failure? deleteFailure;
   final List<Operation> operations;
 
-  SavedOperationsState({
+  const SavedOperationsState({
     required this.status,
     required this.mainFailure,
     required this.operations,
@@ -15,7 +15,7 @@ class SavedOperationsState {
   });
 
   factory SavedOperationsState.initial() {
-    return SavedOperationsState(
+    return const SavedOperationsState(
       status: Status.initial,
       mainFailure: null,
       deleteFailure: null,

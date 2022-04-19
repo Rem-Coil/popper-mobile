@@ -1,3 +1,5 @@
+// ignore_for_file: overridden_fields
+
 part of 'operation.dart';
 
 @HiveType(typeId: 3)
@@ -21,7 +23,7 @@ class OperationLocal extends Operation {
   @HiveField(5, defaultValue: true)
   final bool isSuccessful;
 
-  OperationLocal({
+  const OperationLocal({
     required this.id,
     required this.userId,
     required this.bobbin,

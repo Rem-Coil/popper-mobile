@@ -21,8 +21,8 @@ class LoadingButton extends StatelessWidget {
     return SimpleButton(
       width: width,
       child: isLoad
-          ? CircularLoader(size: 25, color: Colors.white)
-          : Text(text, style: TextStyle(fontSize: 20)),
+          ? const CircularLoader(size: 25, color: Colors.white)
+          : Text(text, style: const TextStyle(fontSize: 20)),
       onPressed: onPressed,
     );
   }

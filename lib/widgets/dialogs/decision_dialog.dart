@@ -17,8 +17,8 @@ class DecisionDialog extends StatelessWidget {
     this.destructiveAction,
     String? saveActionTitle,
     this.saveAction,
-  })  : this.destructiveActionTitle = destructiveActionTitle ?? 'Пропустить',
-        this.saveActionTitle = saveActionTitle ?? 'Сохранить',
+  })  : destructiveActionTitle = destructiveActionTitle ?? 'Пропустить',
+        saveActionTitle = saveActionTitle ?? 'Сохранить',
         super(key: key);
 
   @override

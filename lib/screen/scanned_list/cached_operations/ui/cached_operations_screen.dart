@@ -31,7 +31,7 @@ class _CachedOperationsScreenState extends State<CachedOperationsScreen> {
   @override
   void initState() {
     super.initState();
-    BlocProvider.of<CachedOperationsBloc>(context)..add(LoadOperations());
+    BlocProvider.of<CachedOperationsBloc>(context).add(LoadOperations());
   }
 
   @override
@@ -54,14 +54,14 @@ class _CachedOperationsScreenState extends State<CachedOperationsScreen> {
                   onPressed: () => context.router.push(
                     OperationsSyncRoute(operations: state.operations),
                   ),
-                  icon: Icon(Icons.cached),
+                  icon: const Icon(Icons.cached),
                 )
               ]
             ],
           ),
           body: Column(
             children: [
-              if (state.status.isLoad) LinearProgressIndicator(),
+              if (state.status.isLoad) const LinearProgressIndicator(),
               Expanded(
                 child: OperationsList(
                   failure: state.mainFailure,
