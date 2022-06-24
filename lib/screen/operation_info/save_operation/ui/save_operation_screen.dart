@@ -19,6 +19,14 @@ class OperationSaveScreen extends StatelessWidget implements AutoRouteWrapper {
   const OperationSaveScreen({Key? key, required this.operation})
       : super(key: key);
 
+  @override
+  Widget wrappedRoute(BuildContext context) {
+    return BlocProvider<OperationSaveBloc>(
+      create: (_) => getIt.get<OperationSaveBloc>(param1: operation),
+      child: this,
+    );
+  }
+
   bool isLoad(OperationSaveState state) {
     return state is SaveProcessState && state.status.isLoad;
   }
@@ -26,7 +34,18 @@ class OperationSaveScreen extends StatelessWidget implements AutoRouteWrapper {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Сохранить операцию?')),
+      appBar: AppBar(
+        title: const Text('Сохранить операцию?'),
+        actions: [
+          IconButton(
+            onPressed: () {
+              context.router.push(HistoryRoute(bobbin: operation.bobbin));
+            },
+            icon: const Icon(Icons.history),
+            splashRadius: 20.0,
+          ),
+        ],
+      ),
       body: Padding(
         padding: const EdgeInsets.all(30),
         child: BlocConsumer<OperationSaveBloc, OperationSaveState>(
@@ -61,7 +80,8 @@ class OperationSaveScreen extends StatelessWidget implements AutoRouteWrapper {
                         color: Colors.red,
                         child: isLoad(state)
                             ? const CircularLoader(size: 25, strokeWidth: 3)
-                            : const Text('Брак', style: TextStyle(fontSize: 18)),
+                            : const Text('Брак',
+                                style: TextStyle(fontSize: 18)),
                         onPressed: state.isCanSave
                             ? () => _rejectOperation(context)
                             : null,
@@ -74,7 +94,8 @@ class OperationSaveScreen extends StatelessWidget implements AutoRouteWrapper {
                         color: Colors.green,
                         child: isLoad(state)
                             ? const CircularLoader(size: 25, strokeWidth: 3)
-                            : const Text('Сохранить', style: TextStyle(fontSize: 18)),
+                            : const Text('Сохранить',
+                                style: TextStyle(fontSize: 18)),
                         onPressed: state.isCanSave
                             ? () => _saveOperation(context)
                             : null,
@@ -152,12 +173,4 @@ class OperationSaveScreen extends StatelessWidget implements AutoRouteWrapper {
 
   void _rejectOperation(BuildContext context) =>
       BlocProvider.of<OperationSaveBloc>(context).add(RejectOperation());
-
-  @override
-  Widget wrappedRoute(BuildContext context) {
-    return BlocProvider<OperationSaveBloc>(
-      create: (_) => getIt.get<OperationSaveBloc>(param1: operation),
-      child: this,
-    );
-  }
 }

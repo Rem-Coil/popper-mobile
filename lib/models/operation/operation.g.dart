@@ -88,3 +88,27 @@ const _$OperationTypeEnumMap = {
   OperationType.quality: 'quality',
   OperationType.testing: 'testing',
 };
+
+FullOperation _$FullOperationFromJson(Map<String, dynamic> json) =>
+    FullOperation(
+      bobbinId: json['bobbinId'] as int,
+      bobbinNumber: json['bobbin_number'] as String,
+      firstName: json['firstname'] as String,
+      secondName: json['second_name'] as String,
+      surname: json['surname'] as String,
+      type: $enumDecode(_$OperationTypeEnumMap, json['action_type']),
+      time: FullOperation._dateFromJson(json['done_time'] as String),
+      isSuccessful: json['successful'] as bool,
+    );
+
+Map<String, dynamic> _$FullOperationToJson(FullOperation instance) =>
+    <String, dynamic>{
+      'bobbinId': instance.bobbinId,
+      'bobbin_number': instance.bobbinNumber,
+      'firstname': instance.firstName,
+      'second_name': instance.secondName,
+      'surname': instance.surname,
+      'action_type': _$OperationTypeEnumMap[instance.type],
+      'done_time': FullOperation._dateToJson(instance.time),
+      'successful': instance.isSuccessful,
+    };

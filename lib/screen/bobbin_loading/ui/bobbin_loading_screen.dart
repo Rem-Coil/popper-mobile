@@ -40,13 +40,11 @@ class _BobbinLoadingScreenState extends State<BobbinLoadingScreen> {
       backgroundColor: Colors.white,
       body: SafeArea(
         child: BlocConsumer<BobbinLoadingBloc, BobbinLoadingState>(
-          listenWhen: (_, s) => !s.isLoading,
+          listenWhen: (_, s) => s.isSuccessful || s.hasError,
           listener: (context, state) {
-            if (state.isSuccessful || state.hasError) {
-              final bobbin = state.bobbin ?? Bobbin.unknown(widget.bobbin.id);
-              final operation = generateOperation(context, bobbin);
-              context.router.replace(OperationSaveRoute(operation: operation));
-            }
+            final bobbin = state.bobbin ?? Bobbin.unknown(widget.bobbin.id);
+            final operation = generateOperation(context, bobbin);
+            context.router.replace(OperationSaveRoute(operation: operation));
           },
           builder: (_, __) {
             return const Center(

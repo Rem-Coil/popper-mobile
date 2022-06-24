@@ -7,18 +7,19 @@ import 'package:popper_mobile/core/error/failure.dart';
 import 'package:popper_mobile/data/api/api_provider.dart';
 import 'package:popper_mobile/domain/cache/operations_cache.dart';
 import 'package:popper_mobile/domain/repository/operations_repository.dart';
+import 'package:popper_mobile/models/bobbin/bobbin.dart';
 import 'package:popper_mobile/models/operation/operation.dart';
 import 'package:popper_mobile/models/operation/operation_type.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:popper_mobile/core/utils/iterable_utils.dart';
 
 @Singleton(as: OperationsRepository)
-class OperationRepositoryImpl implements OperationsRepository {
+class OperationsRepositoryImpl implements OperationsRepository {
   static const String _operationTypeKey = 'operation_type';
   final ApiProvider _apiProvider;
   final OperationsCache _operationsCache;
 
-  OperationRepositoryImpl(this._apiProvider, this._operationsCache);
+  OperationsRepositoryImpl(this._apiProvider, this._operationsCache);
 
   @override
   Future<Either<Failure, void>> saveOperation(Operation operation) async {
@@ -154,6 +155,31 @@ class OperationRepositoryImpl implements OperationsRepository {
       await api.deleteOperation(operation.id);
       await _operationsCache.deleteSavedOperation(operation);
       return const Right(null);
+    } on DioError catch (e) {
+      if (e.error is SocketException) {
+        return Left(NoInternetFailure());
+      }
+
+      switch (e.response?.statusCode) {
+        case HttpStatus.internalServerError:
+        case HttpStatus.badGateway:
+          return Left(ServerFailure());
+        case HttpStatus.unauthorized:
+          return Left(WrongCredentialsFailure());
+        case HttpStatus.forbidden:
+          return Left(OperationAlreadyExistFailure());
+      }
+
+      return Left(UnknownFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<FullOperation>>> getAll(Bobbin bobbin) async {
+    try {
+      final api = _apiProvider.getApiService();
+      final operations = await api.getBobbinHistory(bobbin.id);
+      return Right(operations);
     } on DioError catch (e) {
       if (e.error is SocketException) {
         return Left(NoInternetFailure());

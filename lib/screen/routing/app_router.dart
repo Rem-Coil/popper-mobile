@@ -2,7 +2,9 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/widgets.dart';
 import 'package:popper_mobile/models/barcode/scanned_entity.dart';
 import 'package:popper_mobile/models/operation/operation.dart';
+import 'package:popper_mobile/models/bobbin/bobbin.dart';
 import 'package:popper_mobile/screen/bobbin_loading/ui/bobbin_loading_screen.dart';
+import 'package:popper_mobile/screen/history/ui/history_screen.dart';
 import 'package:popper_mobile/screen/home/ui/home_screen.dart';
 import 'package:popper_mobile/screen/login/ui/login_screen.dart';
 import 'package:popper_mobile/screen/operation_info/save_operation/ui/save_operation_screen.dart';
@@ -35,6 +37,7 @@ part 'app_router.gr.dart';
     AutoRoute(page: SavedOperationsScreen),
     AutoRoute(page: CachedOperationsScreen),
     AutoRoute(page: OperationsSyncScreen),
+    AutoRoute(page: HistoryScreen),
   ],
 )
 class AppRouter extends _$AppRouter {}

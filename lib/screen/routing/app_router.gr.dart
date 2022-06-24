@@ -82,6 +82,12 @@ class _$AppRouter extends RootStackRouter {
           routeData: routeData,
           child:
               OperationsSyncScreen(key: args.key, operations: args.operations));
+    },
+    HistoryRoute.name: (routeData) {
+      final args = routeData.argsAs<HistoryRouteArgs>();
+      return CupertinoPageX<dynamic>(
+          routeData: routeData,
+          child: HistoryScreen(key: args.key, bobbin: args.bobbin));
     }
   };
 
@@ -102,7 +108,8 @@ class _$AppRouter extends RootStackRouter {
             path: '/saved-operations-screen'),
         RouteConfig(CachedOperationsRoute.name,
             path: '/cached-operations-screen'),
-        RouteConfig(OperationsSyncRoute.name, path: '/operations-sync-screen')
+        RouteConfig(OperationsSyncRoute.name, path: '/operations-sync-screen'),
+        RouteConfig(HistoryRoute.name, path: '/history-screen')
       ];
 }
 
@@ -306,5 +313,29 @@ class OperationsSyncRouteArgs {
   @override
   String toString() {
     return 'OperationsSyncRouteArgs{key: $key, operations: $operations}';
+  }
+}
+
+/// generated route for
+/// [HistoryScreen]
+class HistoryRoute extends PageRouteInfo<HistoryRouteArgs> {
+  HistoryRoute({Key? key, required Bobbin bobbin})
+      : super(HistoryRoute.name,
+            path: '/history-screen',
+            args: HistoryRouteArgs(key: key, bobbin: bobbin));
+
+  static const String name = 'HistoryRoute';
+}
+
+class HistoryRouteArgs {
+  const HistoryRouteArgs({this.key, required this.bobbin});
+
+  final Key? key;
+
+  final Bobbin bobbin;
+
+  @override
+  String toString() {
+    return 'HistoryRouteArgs{key: $key, bobbin: $bobbin}';
   }
 }

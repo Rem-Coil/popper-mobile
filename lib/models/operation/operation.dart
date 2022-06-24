@@ -8,6 +8,7 @@ import 'package:popper_mobile/models/operation/operation_type.dart';
 part 'operation.g.dart';
 part 'operation_local.dart';
 part 'operation_remote.dart';
+part 'full_operation.dart';
 
 final formatter = DateFormat('yyyy-MM-ddTHH:mm:ss');
 
