@@ -17,12 +17,10 @@ class OnDataEntered extends RegistrationEvent {
     required this.phone,
     required this.password,
   });
+}
 
-  UserRemote get toModel => UserRemote(
-      id: -1,
-      firstName: firstName,
-      surname: surname,
-      secondName: secondName,
-      phone: phone,
-      password: password);
+class ChangeUserRole extends RegistrationEvent {
+  final UserRole? role;
+
+  ChangeUserRole(this.role);
 }

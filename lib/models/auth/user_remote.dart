@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:popper_mobile/models/auth/user_role.dart';
 
 part 'user_remote.g.dart';
 
@@ -14,6 +15,7 @@ class UserRemote {
   final String phone;
   final String password;
   final bool active;
+  final UserRole role;
 
   UserRemote({
     required this.id,
@@ -23,6 +25,7 @@ class UserRemote {
     required this.phone,
     required this.password,
     this.active = true,
+    required this.role,
   });
 
   Map<String, dynamic> toJson() => _$UserRemoteToJson(this);

@@ -6,7 +6,7 @@ import 'package:popper_mobile/models/auth/user.dart';
 part 'splash_event.dart';
 part 'splash_state.dart';
 
-@singleton
+@injectable
 class SplashBloc extends Bloc<SplashEvent, SplashState> {
   SplashBloc() : super(InitialState()) {
     on<Initialize>(initial);

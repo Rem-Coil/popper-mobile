@@ -11,7 +11,7 @@ part 'event.dart';
 
 part 'state.dart';
 
-@singleton
+@injectable
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final AuthRepository _repository;
   final AuthBloc _authBloc;

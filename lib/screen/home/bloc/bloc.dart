@@ -6,7 +6,7 @@ import 'package:popper_mobile/domain/cache/operations_cache.dart';
 part 'event.dart';
 part 'state.dart';
 
-@singleton
+@injectable
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   final OperationsCache _operationsCache;
 

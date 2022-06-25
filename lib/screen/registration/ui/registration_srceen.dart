@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:popper_mobile/core/di/injection.dart';
 import 'package:popper_mobile/core/utils/context_utils.dart';
+import 'package:popper_mobile/models/auth/user_role.dart';
 import 'package:popper_mobile/screen/registration/bloc/bloc.dart';
 import 'package:popper_mobile/screen/routing/app_router.dart';
 import 'package:popper_mobile/widgets/buttons/loading_button.dart';
@@ -40,18 +41,18 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       backgroundColor: Colors.white,
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 70),
+          padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 30),
           child: BlocConsumer<RegistrationBloc, RegistrationState>(
             listener: (context, state) {
-              if (state.user != null) {
+              if (state is RegistrationSuccessful) {
                 context.successSnackBar('Успешно');
                 Future.delayed(const Duration(seconds: 1), () {
                   context.router.replaceAll([const HomeRoute()]);
                 });
               }
 
-              if (state.errorMessage != null) {
-                context.errorSnackBar(state.errorMessage!.message);
+              if (state is RegistrationFailed) {
+                context.errorSnackBar(state.failure.message);
               }
             },
             builder: (context, state) {
@@ -117,11 +118,50 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             ? null
                             : 'Введите пароль',
                       ),
+                      const SizedBox(height: 16),
+                      Container(
+                        width: double.infinity,
+                        height: 59,
+                        padding: const EdgeInsets.all(11),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(color: Colors.grey),
+                        ),
+                        child: Row(
+                          children: [
+                            const Padding(
+                              padding: EdgeInsets.only(right: 12),
+                              child: Icon(Icons.people, color: Colors.grey),
+                            ),
+                            Expanded(
+                              child: DropdownButton(
+                                value: state.role,
+                                underline: const SizedBox.shrink(),
+                                isExpanded: true,
+                                alignment: Alignment.centerRight,
+                                items: UserRole.values
+                                    .map<DropdownMenuItem<UserRole>>(
+                                        (value) => DropdownMenuItem(
+                                            value: value,
+                                            child: Text(
+                                              value.localizedRole,
+                                              style: TextStyle(
+                                                  color: Colors.grey[600]),
+                                            )))
+                                    .toList(),
+                                onChanged: (UserRole? newRole) => context
+                                    .read<RegistrationBloc>()
+                                    .add(ChangeUserRole(newRole)),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                       const SizedBox(height: 48),
                       Center(
                         child: LoadingButton(
                           width: 270,
-                          isLoad: state.isLoad,
+                          isLoad: state is TryRegister,
                           text: 'Зарегистрироваться',
                           onPressed: () {
                             FocusScope.of(context).unfocus();
@@ -162,10 +202,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
   @override
   void dispose() {
-    phoneController.dispose();
-    surnameController.dispose();
     firstnameController.dispose();
+    secondNameController.dispose();
     surnameController.dispose();
+    phoneController.dispose();
     passwordController.dispose();
     super.dispose();
   }

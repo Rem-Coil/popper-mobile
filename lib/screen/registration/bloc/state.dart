@@ -2,19 +2,21 @@ part of 'bloc.dart';
 
 @immutable
 class RegistrationState {
-  final User? user;
-  final bool isLoad;
-  final Failure? errorMessage;
+  final UserRole role;
 
-  const RegistrationState._(this.user, this.isLoad, this.errorMessage);
+  const RegistrationState(this.role);
+}
 
-  factory RegistrationState.initial() => const RegistrationState._(null, false, null);
+class TryRegister extends RegistrationState {
+  TryRegister(RegistrationState state) : super(state.role);
+}
 
-  factory RegistrationState.load() => const RegistrationState._(null, true, null);
+class RegistrationFailed extends RegistrationState {
+  final Failure failure;
 
-  factory RegistrationState.authorized(User user) =>
-      RegistrationState._(user, false, null);
+  RegistrationFailed(RegistrationState state, this.failure) : super(state.role);
+}
 
-  factory RegistrationState.error(Failure failure) =>
-      RegistrationState._(null, false, failure);
+class RegistrationSuccessful extends RegistrationState {
+  RegistrationSuccessful(RegistrationState state) : super(state.role);
 }
