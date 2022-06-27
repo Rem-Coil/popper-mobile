@@ -1,14 +1,18 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
-import 'package:popper_mobile/models/auth/user.dart';
+import 'package:popper_mobile/domain/repository/auth_repository.dart';
 
-part 'splash_event.dart';
-part 'splash_state.dart';
+part 'event.dart';
+part 'state.dart';
 
 @injectable
 class SplashBloc extends Bloc<SplashEvent, SplashState> {
-  SplashBloc() : super(InitialState()) {
+  final AuthRepository _authRepository;
+
+  SplashBloc(this._authRepository) : super(InitialState()) {
     on<Initialize>(initial);
   }
 
@@ -16,7 +20,8 @@ class SplashBloc extends Bloc<SplashEvent, SplashState> {
     Initialize event,
     Emitter<SplashState> emit,
   ) async {
-    if (event.user == null) {
+    final user = await _authRepository.getCurrentUser();
+    if (user == null) {
       emit(NavigateToLogin());
     } else {
       emit(NavigateToHome());

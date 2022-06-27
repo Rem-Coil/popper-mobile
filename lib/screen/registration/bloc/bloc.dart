@@ -5,7 +5,6 @@ import 'package:popper_mobile/core/error/failure.dart';
 import 'package:popper_mobile/domain/repository/auth_repository.dart';
 import 'package:popper_mobile/models/auth/user_remote.dart';
 import 'package:popper_mobile/models/auth/user_role.dart';
-import 'package:popper_mobile/screen/auth/bloc/auth_bloc.dart';
 
 part 'event.dart';
 part 'state.dart';
@@ -13,9 +12,8 @@ part 'state.dart';
 @injectable
 class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
   final AuthRepository _authRepository;
-  final AuthBloc _authBloc;
 
-  RegistrationBloc(this._authRepository, this._authBloc)
+  RegistrationBloc(this._authRepository)
       : super(const RegistrationState(UserRole.operator)) {
     on<OnDataEntered>(onDataEntered);
     on<ChangeUserRole>(onChangeUserRole);
@@ -31,10 +29,7 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
 
     final newState = serverAnswer.fold(
       (failure) => RegistrationFailed(state, failure),
-      (user) {
-        _authBloc.add(ChangeUser(user));
-        return RegistrationSuccessful(state);
-      },
+      (user) => RegistrationSuccessful(state),
     );
     emit(newState);
   }

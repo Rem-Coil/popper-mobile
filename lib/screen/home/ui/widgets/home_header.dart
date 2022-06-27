@@ -2,40 +2,47 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:popper_mobile/screen/auth/bloc/auth_bloc.dart';
+import 'package:popper_mobile/screen/user_info/bloc/bloc.dart';
 import 'package:popper_mobile/screen/routing/app_router.dart';
 import 'package:popper_mobile/widgets/buttons/circle_icon_button.dart';
+import 'package:popper_mobile/widgets/circular_loader.dart';
 import 'package:popper_mobile/widgets/dialogs/decision_dialog.dart';
 
-class HomeHeader extends StatelessWidget {
+class HomeHeader extends StatefulWidget {
   const HomeHeader({Key? key}) : super(key: key);
 
   @override
+  State<HomeHeader> createState() => _HomeHeaderState();
+}
+
+class _HomeHeaderState extends State<HomeHeader> {
+  @override
+  void initState() {
+    super.initState();
+    BlocProvider.of<UserInfoBloc>(context).add(LoadUserEvent());
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return BlocConsumer<AuthBloc, AuthState>(
-      listenWhen: (_, state) => state.user == null,
+    return BlocConsumer<UserInfoBloc, UserInfoState>(
+      listenWhen: (_, state) => state is LogOutState,
       listener: (context, state) =>
           context.router.replaceAll([const LoginRoute()]),
       builder: (context, state) {
-        final username = state.user?.firstName ?? 'Незнакомец';
         return Column(
           children: [
             const SizedBox(height: 50),
             Row(
               children: [
-                Text(
-                  'Привет, $username',
-                  style: const TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.w900,
-                  ),
-                ),
+                (state is UserInfoLoadingState)
+                    ? const CircularLoader(size: 24)
+                    : _HelloUserWidget(state: state as UserInfoSuccessState),
                 const Spacer(),
                 CircleIconButton(
                   icon: Icons.people,
                   iconColor: Colors.white,
                   color: Theme.of(context).primaryColor,
-                  onPressed: () => _logOut(context),
+                  onPressed: _logOut,
                 ),
               ],
             ),
@@ -45,7 +52,7 @@ class HomeHeader extends StatelessWidget {
     );
   }
 
-  Future<void> _logOut(BuildContext context) async {
+  Future<void> _logOut() async {
     final isNotLogOut = await showCupertinoDialog<bool>(
       context: context,
       builder: (BuildContext context) {
@@ -60,6 +67,29 @@ class HomeHeader extends StatelessWidget {
         );
       },
     );
-    if (isNotLogOut != true) BlocProvider.of<AuthBloc>(context).add(LogOut());
+    if (isNotLogOut != true) {
+      if (!mounted) return;
+      context.read<UserInfoBloc>().add(LogOutEvent());
+    }
+  }
+}
+
+class _HelloUserWidget extends StatelessWidget {
+  const _HelloUserWidget({
+    Key? key,
+    required this.state,
+  }) : super(key: key);
+
+  final UserInfoSuccessState state;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      'Привет, ${state.user.firstName}',
+      style: const TextStyle(
+        fontSize: 24,
+        fontWeight: FontWeight.w900,
+      ),
+    );
   }
 }

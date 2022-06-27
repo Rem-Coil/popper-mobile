@@ -2,7 +2,7 @@ part of 'operation.dart';
 
 @JsonSerializable()
 class FullOperation {
-  // @JsonKey(fromJson: _bobbinFromJson, toJson: _bobbinToJson)
+  @JsonKey(name: 'bobbin_id')
   final int bobbinId;
   @JsonKey(name: 'bobbin_number')
   final String bobbinNumber;

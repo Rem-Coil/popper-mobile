@@ -3,9 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:popper_mobile/core/di/injection.dart';
 import 'package:popper_mobile/models/barcode/scanned_entity.dart';
-import 'package:popper_mobile/models/bobbin/bobbin.dart';
-import 'package:popper_mobile/models/operation/operation.dart';
-import 'package:popper_mobile/screen/auth/bloc/auth_bloc.dart';
 import 'package:popper_mobile/screen/bobbin_loading/bloc/bloc.dart';
 import 'package:popper_mobile/screen/routing/app_router.dart';
 import 'package:popper_mobile/widgets/loading_widget.dart';
@@ -39,11 +36,10 @@ class _BobbinLoadingScreenState extends State<BobbinLoadingScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
-        child: BlocConsumer<BobbinLoadingBloc, BobbinLoadingState>(
-          listenWhen: (_, s) => s.isSuccessful || s.hasError,
+        child: BlocConsumer<BobbinLoadingBloc, BobbinState>(
+          listenWhen: (_, s) => s is BobbinSuccessState,
           listener: (context, state) {
-            final bobbin = state.bobbin ?? Bobbin.unknown(widget.bobbin.id);
-            final operation = generateOperation(context, bobbin);
+            final operation = (state as BobbinSuccessState).operation;
             context.router.replace(OperationSaveRoute(operation: operation));
           },
           builder: (_, __) {
@@ -55,15 +51,6 @@ class _BobbinLoadingScreenState extends State<BobbinLoadingScreen> {
           },
         ),
       ),
-    );
-  }
-
-  Operation generateOperation(BuildContext context, Bobbin bobbin) {
-    final userId = BlocProvider.of<AuthBloc>(context).state.user!.id;
-    return Operation.create(
-      userId: userId,
-      bobbin: bobbin,
-      date: DateTime.now(),
     );
   }
 }

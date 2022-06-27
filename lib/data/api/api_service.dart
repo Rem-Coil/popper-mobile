@@ -30,6 +30,6 @@ abstract class ApiService {
   @DELETE('/action/{id}')
   Future<void> deleteOperation(@Path('id') int id);
 
-  @GET('/action/bobbin/{id}')
+  @GET('/action/full/bobbin/{id}')
   Future<List<FullOperation>> getBobbinHistory(@Path('id') int id);
 }
