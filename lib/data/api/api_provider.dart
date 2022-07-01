@@ -12,7 +12,7 @@ class ApiProvider {
   ApiProvider(@Named('BaseUrl') this.baseUrl);
 
   ApiService getApiService() {
-    // _dio.interceptors.add(_logInterceptor);
+    _dio.interceptors.add(_logInterceptor);
     return ApiService(_dio, baseUrl: baseUrl);
   }
 
@@ -20,9 +20,12 @@ class ApiProvider {
   LogInterceptor get _logInterceptor {
     return LogInterceptor(
       logPrint: _logPrint,
-      request: false,
-      requestHeader: false,
-      responseBody: false,
+      error: true,
+      requestBody: true,
+      responseHeader: true,
+      request: true,
+      requestHeader: true,
+      responseBody: true,
     );
   }
 

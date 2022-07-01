@@ -5,7 +5,7 @@ class OperationRemote extends Operation {
   @JsonKey(name: 'id')
   @override
   final int id;
-  @JsonKey(name: 'operator_id')
+  @JsonKey(name: 'operator_id', includeIfNull: false, toJson: _operatorIdToJson)
   @override
   final int userId;
   @JsonKey(name: 'bobbin_id', fromJson: _bobbinFromJson, toJson: _bobbinToJson)
@@ -49,4 +49,6 @@ class OperationRemote extends Operation {
   static String _dateToJson(DateTime time) => formatter.format(time);
 
   static int _bobbinToJson(Bobbin bobbin) => bobbin.id;
+
+  static String? _operatorIdToJson(int id) => null;
 }

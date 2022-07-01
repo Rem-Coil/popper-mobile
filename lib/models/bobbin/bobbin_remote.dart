@@ -6,17 +6,17 @@ class BobbinRemote extends Bobbin {
   @JsonKey(name: 'id')
   final int id;
   @override
-  @JsonKey(name: 'task_id')
-  final int taskId;
+  @JsonKey(name: 'batch_id')
+  final int batchId;
   @override
   @JsonKey(name: 'bobbin_number')
   final String bobbinNumber;
 
   const BobbinRemote({
     required this.id,
-    required this.taskId,
+    required this.batchId,
     required this.bobbinNumber,
-  }) : super(id: id, taskId: taskId, bobbinNumber: bobbinNumber);
+  }) : super(id: id, batchId: batchId, bobbinNumber: bobbinNumber);
 
   factory BobbinRemote.fromJson(Map<String, dynamic> json) =>
       _$BobbinRemoteFromJson(json);

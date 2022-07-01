@@ -4,16 +4,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:popper_mobile/core/bloc/status.dart';
 import 'package:popper_mobile/core/di/injection.dart';
+import 'package:popper_mobile/models/auth/user_role.dart';
 import 'package:popper_mobile/models/operation/operation.dart';
 import 'package:popper_mobile/screen/operation_info/general/widgets/operation_info.dart';
 import 'package:popper_mobile/screen/operation_info/save_operation/bloc/bloc.dart';
 import 'package:popper_mobile/screen/routing/app_router.dart';
 import 'package:popper_mobile/screen/scanner_result/model/scanner_result_arguments.dart';
+import 'package:popper_mobile/screen/user_info/bloc/bloc.dart';
 import 'package:popper_mobile/widgets/buttons/simple_button.dart';
 import 'package:popper_mobile/widgets/circular_loader.dart';
 import 'package:popper_mobile/widgets/dialogs/decision_dialog.dart';
 
-class OperationSaveScreen extends StatelessWidget implements AutoRouteWrapper {
+class OperationSaveScreen extends StatefulWidget implements AutoRouteWrapper {
   final Operation operation;
 
   const OperationSaveScreen({Key? key, required this.operation})
@@ -21,10 +23,25 @@ class OperationSaveScreen extends StatelessWidget implements AutoRouteWrapper {
 
   @override
   Widget wrappedRoute(BuildContext context) {
-    return BlocProvider<OperationSaveBloc>(
-      create: (_) => getIt.get<OperationSaveBloc>(param1: operation),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<OperationSaveBloc>(
+            create: (_) => getIt.get<OperationSaveBloc>(param1: operation)),
+        BlocProvider<UserInfoBloc>(create: (_) => getIt<UserInfoBloc>()),
+      ],
       child: this,
     );
+  }
+
+  @override
+  State<OperationSaveScreen> createState() => _OperationSaveScreenState();
+}
+
+class _OperationSaveScreenState extends State<OperationSaveScreen> {
+  @override
+  void initState() {
+    super.initState();
+    BlocProvider.of<UserInfoBloc>(context).add(LoadUserEvent());
   }
 
   bool isLoad(OperationSaveState state) {
@@ -39,7 +56,8 @@ class OperationSaveScreen extends StatelessWidget implements AutoRouteWrapper {
         actions: [
           IconButton(
             onPressed: () {
-              context.router.push(HistoryRoute(bobbin: operation.bobbin));
+              context.router
+                  .push(HistoryRoute(bobbin: widget.operation.bobbin));
             },
             icon: const Icon(Icons.history),
             splashRadius: 20.0,
@@ -72,37 +90,42 @@ class OperationSaveScreen extends StatelessWidget implements AutoRouteWrapper {
                   },
                 ),
                 const SizedBox(height: 48),
-                Row(
-                  children: [
-                    Expanded(
-                      child: SimpleButton(
-                        height: 55,
-                        color: Colors.red,
-                        child: isLoad(state)
-                            ? const CircularLoader(size: 25, strokeWidth: 3)
-                            : const Text('Брак',
-                                style: TextStyle(fontSize: 18)),
-                        onPressed: state.isCanSave
-                            ? () => _rejectOperation(context)
-                            : null,
-                      ),
-                    ),
-                    const SizedBox(width: 16),
-                    Expanded(
-                      child: SimpleButton(
-                        height: 55,
-                        color: Colors.green,
-                        child: isLoad(state)
-                            ? const CircularLoader(size: 25, strokeWidth: 3)
-                            : const Text('Сохранить',
-                                style: TextStyle(fontSize: 18)),
-                        onPressed: state.isCanSave
-                            ? () => _saveOperation(context)
-                            : null,
-                      ),
-                    ),
-                  ],
-                ),
+                BlocBuilder<UserInfoBloc, UserInfoState>(
+                    builder: (userContext, userState) {
+                  if (userState is UserInfoSuccessState) {
+                    switch ((userState as UserInfoSuccessState).user.role) {
+                      case UserRole.operator:
+                        return SimpleButton(
+                          width: double.infinity,
+                          height: 55,
+                          color: Colors.green,
+                          onPressed: state.isCanSave
+                              ? () => _saveOperation(context)
+                              : null,
+                          child: isLoad(state)
+                              ? const CircularLoader(size: 25, strokeWidth: 3)
+                              : const Text('Сохранить',
+                                  style: TextStyle(fontSize: 18)),
+                        );
+                      case UserRole.qualityEngineer:
+                        return SimpleButton(
+                          width: double.infinity,
+                          height: 55,
+                          color: Colors.red,
+                          onPressed: state.isCanSave
+                              ? () => _rejectOperation(context)
+                              : null,
+                          child: isLoad(state)
+                              ? const CircularLoader(size: 25, strokeWidth: 3)
+                              : const Text('Брак',
+                                  style: TextStyle(fontSize: 18)),
+                        );
+                    }
+                  } else {
+                    return const CircularLoader(size: 24);
+                  }
+                }),
+                const SizedBox(width: 16),
               ],
             );
           },

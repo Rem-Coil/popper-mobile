@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:popper_mobile/core/error/failure.dart';
 import 'package:popper_mobile/domain/repository/auth_repository.dart';
-import 'package:popper_mobile/models/auth/user_remote.dart';
+import 'package:popper_mobile/models/auth/user.dart';
 import 'package:popper_mobile/models/auth/user_role.dart';
 
 part 'event.dart';

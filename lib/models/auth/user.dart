@@ -1,5 +1,9 @@
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:popper_mobile/models/auth/user_role.dart';
+import 'package:json_annotation/json_annotation.dart';
+
+part 'user.g.dart';
+part 'user_remote.dart';
 
 class User {
   final int id;
@@ -26,8 +30,7 @@ class User {
       jwtData['surname'],
       jwtData['second_name'],
       jwtData['phone'],
-      // create(jwtData['role']),
-      UserRole.operator, // TODO: использовать токен вместо заданного значения
+      $enumDecode(_$UserRoleEnumMap, jwtData['role']),
     );
   }
 }

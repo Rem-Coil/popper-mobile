@@ -8,7 +8,7 @@ class BobbinLocal extends Bobbin {
 
   @override
   @HiveField(1)
-  final int taskId;
+  final int batchId;
 
   @override
   @HiveField(2)
@@ -17,6 +17,6 @@ class BobbinLocal extends Bobbin {
   const BobbinLocal({
     required this.bobbinNumber,
     required this.id,
-    required this.taskId,
-  }) : super(id: id, taskId: taskId, bobbinNumber: bobbinNumber);
+    required this.batchId,
+  }) : super(id: id, batchId: batchId, bobbinNumber: bobbinNumber);
 }

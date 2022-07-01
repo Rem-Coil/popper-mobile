@@ -54,12 +54,13 @@ class UpdateOperationScreen extends StatelessWidget
                       child: SimpleButton(
                         height: 55,
                         color: Colors.red,
-                        child: isLoad(state)
-                            ? const CircularLoader(size: 25, strokeWidth: 3)
-                            : const Text('Брак', style: TextStyle(fontSize: 18)),
                         onPressed: state.isCanSave(true)
                             ? () => _rejectOperation(context)
                             : null,
+                        child: isLoad(state)
+                            ? const CircularLoader(size: 25, strokeWidth: 3)
+                            : const Text('Брак',
+                                style: TextStyle(fontSize: 18)),
                       ),
                     ),
                     const SizedBox(width: 16),
@@ -67,12 +68,13 @@ class UpdateOperationScreen extends StatelessWidget
                       child: SimpleButton(
                         height: 55,
                         color: Colors.green,
-                        child: isLoad(state)
-                            ? const CircularLoader(size: 25, strokeWidth: 3)
-                            : const Text('Успешно', style: TextStyle(fontSize: 18)),
                         onPressed: state.isCanSave(false)
                             ? () => _updateOperation(context)
                             : null,
+                        child: isLoad(state)
+                            ? const CircularLoader(size: 25, strokeWidth: 3)
+                            : const Text('Успешно',
+                                style: TextStyle(fontSize: 18)),
                       ),
                     ),
                   ],

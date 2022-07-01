@@ -6,6 +6,7 @@ import 'package:injectable/injectable.dart';
 import 'package:popper_mobile/core/error/failure.dart';
 import 'package:popper_mobile/data/api/api_provider.dart';
 import 'package:popper_mobile/domain/cache/operations_cache.dart';
+import 'package:popper_mobile/domain/repository/auth_repository.dart';
 import 'package:popper_mobile/domain/repository/operations_repository.dart';
 import 'package:popper_mobile/models/bobbin/bobbin.dart';
 import 'package:popper_mobile/models/operation/operation.dart';
@@ -18,15 +19,22 @@ class OperationsRepositoryImpl implements OperationsRepository {
   static const String _operationTypeKey = 'operation_type';
   final ApiProvider _apiProvider;
   final OperationsCache _operationsCache;
+  final AuthRepository _authRepository;
 
-  OperationsRepositoryImpl(this._apiProvider, this._operationsCache);
+  OperationsRepositoryImpl(
+    this._apiProvider,
+    this._operationsCache,
+    this._authRepository,
+  );
 
   @override
   Future<Either<Failure, void>> saveOperation(Operation operation) async {
     try {
       final remoteOperation = operation.toRemote();
       final api = _apiProvider.getApiService();
-      final savedOperation = await api.saveOperation(remoteOperation);
+      final token = await _authRepository.getUserToken();
+      final savedOperation =
+          await api.saveOperation('Bearer $token', remoteOperation);
       final operationWithId = operation.copyWithId(savedOperation);
       await _operationsCache.saveOperation(operationWithId);
       await setLastOperationType(savedOperation.type);
@@ -55,7 +63,8 @@ class OperationsRepositoryImpl implements OperationsRepository {
     try {
       final remoteAction = operation.toRemote();
       final api = _apiProvider.getApiService();
-      await api.updateOperation(remoteAction);
+      final token = await _authRepository.getUserToken();
+      await api.updateOperation('Bearer $token', remoteAction);
       await _operationsCache.updateSavedOperation(operation);
       return const Right(null);
     } on DioError catch (e) {
@@ -82,7 +91,9 @@ class OperationsRepositoryImpl implements OperationsRepository {
     try {
       final remoteOperation = operation.toRemote();
       final api = _apiProvider.getApiService();
-      final savedOperation = await api.saveOperation(remoteOperation);
+      final token = await _authRepository.getUserToken();
+      final savedOperation =
+          await api.saveOperation('Bearer $token', remoteOperation);
       final operationWithId = operation.copyWithId(savedOperation);
       await _operationsCache.saveOperation(operationWithId);
       await _operationsCache.deleteCacheOperation(operation);
@@ -152,7 +163,8 @@ class OperationsRepositoryImpl implements OperationsRepository {
   ) async {
     try {
       final api = _apiProvider.getApiService();
-      await api.deleteOperation(operation.id);
+      final token = await _authRepository.getUserToken();
+      await api.deleteOperation('Bearer $token', operation.id);
       await _operationsCache.deleteSavedOperation(operation);
       return const Right(null);
     } on DioError catch (e) {

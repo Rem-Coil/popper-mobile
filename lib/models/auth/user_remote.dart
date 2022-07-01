@@ -1,9 +1,6 @@
-import 'package:json_annotation/json_annotation.dart';
-import 'package:popper_mobile/models/auth/user_role.dart';
+part of 'user.dart';
 
-part 'user_remote.g.dart';
-
-@JsonSerializable(createFactory: false)
+@JsonSerializable(createFactory: true)
 class UserRemote {
   final int id;
   @JsonKey(name: 'first_name')

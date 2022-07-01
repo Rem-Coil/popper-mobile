@@ -10,12 +10,12 @@ import 'package:popper_mobile/domain/repository/auth_repository.dart';
 import 'package:popper_mobile/models/auth/token.dart';
 import 'package:popper_mobile/models/auth/user.dart';
 import 'package:popper_mobile/models/auth/user_credentials.dart';
-import 'package:popper_mobile/models/auth/user_remote.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+const tokenKey = 'token';
 
 @Singleton(as: AuthRepository)
 class AuthRepositoryImpl implements AuthRepository {
-  static const _tokenKey = 'token';
   final ApiProvider _apiProvider;
 
   AuthRepositoryImpl(this._apiProvider);
@@ -80,13 +80,19 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<User?> getCurrentUser() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final token = prefs.getString(_tokenKey);
+    final token = prefs.getString(tokenKey);
     return token != null ? User.fromToken(token) : null;
   }
 
   @override
   Future<void> saveToken(Token token) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString(_tokenKey, token.token);
+    await prefs.setString(tokenKey, token.token);
+  }
+
+  @override
+  Future<String?> getUserToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString(tokenKey);
   }
 }
