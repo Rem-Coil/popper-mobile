@@ -1,4 +1,4 @@
-import 'package:dartz/dartz.dart';
+import 'package:either_dart/either.dart';
 import 'package:popper_mobile/core/error/failure.dart';
 import 'package:popper_mobile/models/auth/token.dart';
 import 'package:popper_mobile/models/auth/user.dart';

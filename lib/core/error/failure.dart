@@ -20,7 +20,7 @@ class WrongCredentialsFailure extends Failure {
   String get message => 'Неправильные данные пользователя';
 }
 
-class NoSuchBobbinException extends Failure {
+class NoSuchBobbinFailure extends Failure {
   @override
   String get message => 'Отсканированной катушки не существует';
 }

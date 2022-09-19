@@ -1,9 +1,9 @@
-import 'dart:io';
-
-import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
+import 'package:either_dart/either.dart';
 import 'package:injectable/injectable.dart';
 import 'package:popper_mobile/core/error/failure.dart';
+import 'package:popper_mobile/core/repository/base_repository.dart';
+import 'package:popper_mobile/core/utils/iterable_utils.dart';
 import 'package:popper_mobile/data/api/api_provider.dart';
 import 'package:popper_mobile/domain/cache/operations_cache.dart';
 import 'package:popper_mobile/domain/repository/auth_repository.dart';
@@ -12,10 +12,11 @@ import 'package:popper_mobile/models/bobbin/bobbin.dart';
 import 'package:popper_mobile/models/operation/operation.dart';
 import 'package:popper_mobile/models/operation/operation_type.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:popper_mobile/core/utils/iterable_utils.dart';
 
+// TODO - протестировать появление повторяющихся операций
 @Singleton(as: OperationsRepository)
-class OperationsRepositoryImpl implements OperationsRepository {
+class OperationsRepositoryImpl extends BaseRepository
+    implements OperationsRepository {
   static const String _operationTypeKey = 'operation_type';
   final ApiProvider _apiProvider;
   final OperationsCache _operationsCache;
@@ -40,21 +41,7 @@ class OperationsRepositoryImpl implements OperationsRepository {
       await setLastOperationType(savedOperation.type);
       return const Right(null);
     } on DioError catch (e) {
-      if (e.error is SocketException) {
-        return Left(NoInternetFailure());
-      }
-
-      switch (e.response?.statusCode) {
-        case HttpStatus.internalServerError:
-        case HttpStatus.badGateway:
-          return Left(ServerFailure());
-        case HttpStatus.unauthorized:
-          return Left(WrongCredentialsFailure());
-        case HttpStatus.forbidden:
-          return Left(OperationAlreadyExistFailure());
-      }
-
-      return Left(UnknownFailure());
+      return Left(handleError(e));
     }
   }
 
@@ -68,21 +55,7 @@ class OperationsRepositoryImpl implements OperationsRepository {
       await _operationsCache.updateSavedOperation(operation);
       return const Right(null);
     } on DioError catch (e) {
-      if (e.error is SocketException) {
-        return Left(NoInternetFailure());
-      }
-
-      switch (e.response?.statusCode) {
-        case HttpStatus.internalServerError:
-        case HttpStatus.badGateway:
-          return Left(ServerFailure());
-        case HttpStatus.unauthorized:
-          return Left(WrongCredentialsFailure());
-        case HttpStatus.forbidden:
-          return Left(OperationAlreadyExistFailure());
-      }
-
-      return Left(UnknownFailure());
+      return Left(handleError(e));
     }
   }
 
@@ -99,22 +72,7 @@ class OperationsRepositoryImpl implements OperationsRepository {
       await _operationsCache.deleteCacheOperation(operation);
       return const Right(null);
     } on DioError catch (e) {
-      if (e.error is SocketException) {
-        return Left(NoInternetFailure());
-      }
-
-      switch (e.response?.statusCode) {
-        case HttpStatus.internalServerError:
-        case HttpStatus.badGateway:
-          return Left(ServerFailure());
-        case HttpStatus.unauthorized:
-          return Left(WrongCredentialsFailure());
-        case HttpStatus.forbidden:
-          await _operationsCache.deleteCacheOperation(operation);
-          return Left(OperationAlreadyExistFailure());
-      }
-
-      return Left(UnknownFailure());
+      return Left(handleError(e));
     }
   }
 
@@ -168,21 +126,7 @@ class OperationsRepositoryImpl implements OperationsRepository {
       await _operationsCache.deleteSavedOperation(operation);
       return const Right(null);
     } on DioError catch (e) {
-      if (e.error is SocketException) {
-        return Left(NoInternetFailure());
-      }
-
-      switch (e.response?.statusCode) {
-        case HttpStatus.internalServerError:
-        case HttpStatus.badGateway:
-          return Left(ServerFailure());
-        case HttpStatus.unauthorized:
-          return Left(WrongCredentialsFailure());
-        case HttpStatus.forbidden:
-          return Left(OperationAlreadyExistFailure());
-      }
-
-      return Left(UnknownFailure());
+      return Left(handleError(e));
     }
   }
 
@@ -193,21 +137,7 @@ class OperationsRepositoryImpl implements OperationsRepository {
       final operations = await api.getBobbinHistory(bobbin.id);
       return Right(operations);
     } on DioError catch (e) {
-      if (e.error is SocketException) {
-        return Left(NoInternetFailure());
-      }
-
-      switch (e.response?.statusCode) {
-        case HttpStatus.internalServerError:
-        case HttpStatus.badGateway:
-          return Left(ServerFailure());
-        case HttpStatus.unauthorized:
-          return Left(WrongCredentialsFailure());
-        case HttpStatus.forbidden:
-          return Left(OperationAlreadyExistFailure());
-      }
-
-      return Left(UnknownFailure());
+      return Left(handleError(e));
     }
   }
 }
