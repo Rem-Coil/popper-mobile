@@ -1,29 +1,19 @@
 part of 'bloc.dart';
 
+final _pages = <PageModel>[
+  OperationsPage.model,
+  SettingsPage.model,
+];
+
 @immutable
-class HomeState {
-  final int countSavedActions;
-  final int countCachedActions;
+class PagesControllerState {
+  const PagesControllerState.initial() : currentPage = 0;
 
-  const HomeState._({
-    required this.countSavedActions,
-    required this.countCachedActions,
-  });
+  const PagesControllerState.change(this.currentPage);
 
-  factory HomeState.setup(int savedCount, int cachedCount) => HomeState._(
-      countSavedActions: savedCount, countCachedActions: cachedCount);
+  final int currentPage;
 
-  HomeState changeSaved(int saved) {
-    return HomeState._(
-      countSavedActions: saved,
-      countCachedActions: countCachedActions,
-    );
-  }
+  Widget get page => _pages[currentPage].page;
 
-  HomeState changeCached(int cached) {
-    return HomeState._(
-      countSavedActions: countSavedActions,
-      countCachedActions: cached,
-    );
-  }
+  List<PageModel> get items => _pages;
 }

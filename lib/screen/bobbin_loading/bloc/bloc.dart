@@ -10,6 +10,7 @@ import 'package:popper_mobile/models/bobbin/bobbin.dart';
 import 'package:popper_mobile/models/operation/operation.dart';
 
 part 'event.dart';
+
 part 'state.dart';
 
 @injectable
@@ -34,7 +35,7 @@ class BobbinLoadingBloc extends Bloc<BobbinLoadingEvent, BobbinState> {
     final operation = Operation.create(
       userId: user!.id,
       bobbin: bobbin,
-      date: DateTime.now(),
+      time: DateTime.now(),
     );
 
     emit(BobbinSuccessState(operation));

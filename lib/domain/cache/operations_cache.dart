@@ -1,25 +1,29 @@
+import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
-import 'package:popper_mobile/core/utils/typedefs.dart';
 import 'package:popper_mobile/models/operation/operation.dart';
 
 abstract class OperationsCache {
-  Future<List<Operation>> getSavedOperation();
+  Future<List<Operation>> getCompletedOperations();
 
-  Future<List<Operation>> getCachedOperation();
+  Future<List<Operation>> getCachedOperations();
 
-  Future<void> saveOperation(Operation operation);
+  Future<void> addCompletedOperation(Operation operation);
 
-  Future<void> cacheOperation(Operation operation);
+  Future<void> addCachedOperation(Operation operation);
 
-  Future<void> updateSavedOperation(Operation operation);
+  Future<void> moveCachedToCompleted(Operation operation);
 
-  Future<void> deleteSavedOperation(Operation operation);
+  Future<void> deleteCompletedOperation(Operation operation);
 
   Future<void> deleteCacheOperation(Operation operation);
 
-  Future<void> subscribeToSavedOperations(ListCallback<Operation> listener);
+  Future<void> subscribeToCompletedOperations(VoidCallback listener);
 
-  Future<void> subscribeToCachedOperations(ListCallback<Operation> listener);
+  Future<void> subscribeToCachedOperations(VoidCallback listener);
+
+  Future<void> unsubscribeToCompletedOperations(VoidCallback listener);
+
+  Future<void> unsubscribeToCachedOperations(VoidCallback listener);
 
   @disposeMethod
   Future<void> dispose();

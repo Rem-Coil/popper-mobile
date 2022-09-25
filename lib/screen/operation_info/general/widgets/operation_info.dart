@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:popper_mobile/core/di/injection.dart';
+import 'package:popper_mobile/core/setup/injection.dart';
 import 'package:popper_mobile/models/operation/operation.dart';
 import 'package:popper_mobile/models/operation/operation_type.dart';
 import 'package:popper_mobile/screen/operation_info/general/widgets/select_operation_field.dart';

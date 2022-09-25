@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:popper_mobile/core/error/failure.dart';
 import 'package:popper_mobile/domain/repository/operations_repository.dart';
-import 'package:popper_mobile/domain/usecase/operation_history_usecase.dart';
+import 'package:popper_mobile/domain/usecase/operations/operation_history_usecase.dart';
 import 'package:popper_mobile/models/bobbin/bobbin.dart';
 import 'package:popper_mobile/models/operation/expansion_panel_item.dart';
 

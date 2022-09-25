@@ -1,11 +1,11 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:popper_mobile/core/di/injection.dart';
+import 'package:popper_mobile/core/setup/injection.dart';
+import 'package:popper_mobile/core/setup/app_router.dart';
 import 'package:popper_mobile/models/operation/operation.dart';
 import 'package:popper_mobile/screen/operations_sync/bloc/bloc.dart';
 import 'package:popper_mobile/screen/operations_sync/ui/widgets/synchronization_operation.dart';
-import 'package:popper_mobile/screen/routing/app_router.dart';
 import 'package:popper_mobile/widgets/buttons/simple_button.dart';
 
 class OperationsSyncScreen extends StatefulWidget implements AutoRouteWrapper {
@@ -66,9 +66,12 @@ class _OperationsSyncScreenState extends State<OperationsSyncScreen> {
                       ? SimpleButton(
                           width: 150,
                           borderRadius: 20,
-                          child: const Text('Готово', style: TextStyle(fontSize: 18)),
                           onPressed: () =>
                               context.router.navigate(const HomeRoute()),
+                          child: const Text(
+                            'Готово',
+                            style: TextStyle(fontSize: 18),
+                          ),
                         )
                       : const SizedBox.expand(),
                 ),

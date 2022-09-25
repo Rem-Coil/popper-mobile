@@ -37,7 +37,7 @@ class OperationsRepositoryImpl extends BaseRepository
       final savedOperation =
           await api.saveOperation('Bearer $token', remoteOperation);
       final operationWithId = operation.copyWithId(savedOperation);
-      await _operationsCache.saveOperation(operationWithId);
+      await _operationsCache.addCompletedOperation(operationWithId);
       await setLastOperationType(savedOperation.type);
       return const Right(null);
     } on DioError catch (e) {
@@ -52,7 +52,7 @@ class OperationsRepositoryImpl extends BaseRepository
       final api = _apiProvider.getApiService();
       final token = await _authRepository.getUserToken();
       await api.updateOperation('Bearer $token', remoteAction);
-      await _operationsCache.updateSavedOperation(operation);
+      await _operationsCache.moveCachedToCompleted(operation);
       return const Right(null);
     } on DioError catch (e) {
       return Left(handleError(e));
@@ -68,7 +68,7 @@ class OperationsRepositoryImpl extends BaseRepository
       final savedOperation =
           await api.saveOperation('Bearer $token', remoteOperation);
       final operationWithId = operation.copyWithId(savedOperation);
-      await _operationsCache.saveOperation(operationWithId);
+      await _operationsCache.addCompletedOperation(operationWithId);
       await _operationsCache.deleteCacheOperation(operation);
       return const Right(null);
     } on DioError catch (e) {
@@ -79,7 +79,7 @@ class OperationsRepositoryImpl extends BaseRepository
   @override
   Future<Either<Failure, void>> cacheOperation(Operation operation) async {
     try {
-      await _operationsCache.cacheOperation(operation);
+      await _operationsCache.addCachedOperation(operation);
       return const Right(null);
     } on Exception {
       return Left(CacheFailure());
@@ -123,7 +123,7 @@ class OperationsRepositoryImpl extends BaseRepository
       final api = _apiProvider.getApiService();
       final token = await _authRepository.getUserToken();
       await api.deleteOperation('Bearer $token', operation.id);
-      await _operationsCache.deleteSavedOperation(operation);
+      await _operationsCache.deleteCompletedOperation(operation);
       return const Right(null);
     } on DioError catch (e) {
       return Left(handleError(e));

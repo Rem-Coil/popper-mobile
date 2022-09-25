@@ -18,7 +18,7 @@ class FullOperation {
   @JsonKey(name: 'successful')
   final bool isSuccessful;
 
-  FullOperation({
+  const FullOperation({
     required this.bobbinId,
     required this.bobbinNumber,
     required this.firstName,

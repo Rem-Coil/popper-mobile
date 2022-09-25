@@ -1,18 +1,10 @@
 part of 'bloc.dart';
 
 @immutable
-abstract class HomeEvent {}
+abstract class PagesControllerEvent {}
 
-class Initial extends HomeEvent {}
+class ChangeScreenEvent implements PagesControllerEvent {
+  final int index;
 
-class ChangeSavedCount extends HomeEvent {
-  final int count;
-
-  ChangeSavedCount(this.count);
-}
-
-class ChangeCachedCount extends HomeEvent {
-  final int count;
-
-  ChangeCachedCount(this.count);
+  const ChangeScreenEvent(this.index);
 }

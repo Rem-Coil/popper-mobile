@@ -36,9 +36,6 @@ class ApiProvider {
 abstract class ServerAddressModule {
   @Named('BaseUrl')
   @Environment('dev')
-  String get baseUrlTest => 'https://popper-service.herokuapp.com';
-
-  @Named('BaseUrl')
   @Environment('prod')
-  String get baseUrlProd => 'https://webpanel.remcoil.space';
+  String get baseUrlTest => 'https://popper-service.herokuapp.com';
 }

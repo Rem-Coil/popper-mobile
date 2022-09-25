@@ -1,10 +1,10 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:popper_mobile/core/di/injection.dart';
+import 'package:popper_mobile/core/setup/injection.dart';
+import 'package:popper_mobile/core/setup/app_router.dart';
 import 'package:popper_mobile/models/barcode/scanned_entity.dart';
 import 'package:popper_mobile/screen/bobbin_loading/bloc/bloc.dart';
-import 'package:popper_mobile/screen/routing/app_router.dart';
 import 'package:popper_mobile/widgets/loading_widget.dart';
 
 class BobbinLoadingScreen extends StatefulWidget implements AutoRouteWrapper {

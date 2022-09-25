@@ -3,12 +3,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:popper_mobile/core/bloc/status.dart';
-import 'package:popper_mobile/core/di/injection.dart';
+import 'package:popper_mobile/core/setup/injection.dart';
+import 'package:popper_mobile/core/setup/app_router.dart';
 import 'package:popper_mobile/models/auth/user_role.dart';
 import 'package:popper_mobile/models/operation/operation.dart';
 import 'package:popper_mobile/screen/operation_info/general/widgets/operation_info.dart';
 import 'package:popper_mobile/screen/operation_info/save_operation/bloc/bloc.dart';
-import 'package:popper_mobile/screen/routing/app_router.dart';
 import 'package:popper_mobile/screen/scanner_result/model/scanner_result_arguments.dart';
 import 'package:popper_mobile/screen/user_info/bloc/bloc.dart';
 import 'package:popper_mobile/widgets/buttons/simple_button.dart';
@@ -93,7 +93,7 @@ class _OperationSaveScreenState extends State<OperationSaveScreen> {
                 BlocBuilder<UserInfoBloc, UserInfoState>(
                     builder: (userContext, userState) {
                   if (userState is UserInfoSuccessState) {
-                    switch ((userState as UserInfoSuccessState).user.role) {
+                    switch (userState.user.role) {
                       case UserRole.operator:
                         return SimpleButton(
                           width: double.infinity,
@@ -146,7 +146,7 @@ class _OperationSaveScreenState extends State<OperationSaveScreen> {
       if (isSaveInCache == null || !isSaveInCache) {
         context.router.navigate(const HomeRoute());
       } else {
-        BlocProvider.of<OperationSaveBloc>(context).add(CacheOperation());
+        context.read<OperationSaveBloc>().add(CacheOperation());
       }
     } else {
       final args = ScannerResultArguments(

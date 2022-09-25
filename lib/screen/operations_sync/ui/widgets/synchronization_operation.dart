@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:popper_mobile/core/utils/date_utils.dart';
+import 'package:popper_mobile/core/utils/typedefs.dart';
+import 'package:popper_mobile/models/operation/operation.dart';
 import 'package:popper_mobile/screen/operations_sync/models/operation_with_status.dart';
 import 'package:popper_mobile/screen/operations_sync/models/synchronization_status.dart';
 import 'package:popper_mobile/widgets/circular_loader.dart';
-import 'package:popper_mobile/widgets/operation_widget.dart';
+import 'package:popper_mobile/models/operation/operation_type.dart';
 
 class SynchronizationOperation extends StatelessWidget {
   final OperationWithStatus operation;
@@ -61,5 +64,55 @@ class SynchronizationOperation extends StatelessWidget {
       case SynchronizationStatus.error:
         return const Icon(Icons.error, color: Colors.red);
     }
+  }
+}
+
+class OperationWidget extends StatelessWidget {
+  final Operation operation;
+  final OperationCallback? onTap;
+  final Widget? trailing;
+
+  const OperationWidget({
+    Key? key,
+    this.trailing,
+    required this.operation,
+    required this.onTap,
+  }) : super(key: key);
+
+  String get typeName => operation.type?.localizedName ?? 'Unknown';
+
+  String get bobbinName {
+    if (operation.bobbin.isUnknown) return 'Катшука: ${operation.bobbin.id}';
+    return operation.bobbin.bobbinNumber;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Container(
+          width: 4,
+          height: 90,
+          color: operation.id != -1 ? Colors.green : Colors.yellow,
+        ),
+        Expanded(
+          child: ListTile(
+            onTap: onTap != null ? () => onTap!(operation) : null,
+            trailing: trailing,
+            title: Text(bobbinName),
+            isThreeLine: true,
+            subtitle: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 4),
+                Text(typeName),
+                const SizedBox(height: 2),
+                Text(operation.time.formatted),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
   }
 }

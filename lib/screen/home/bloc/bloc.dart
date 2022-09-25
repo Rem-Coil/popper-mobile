@@ -1,38 +1,20 @@
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
-import 'package:popper_mobile/domain/cache/operations_cache.dart';
+import 'package:popper_mobile/screen/home/ui/pages/operations/operations_page.dart';
+import 'package:popper_mobile/screen/home/ui/pages/settings/settings.dart';
+import 'package:popper_mobile/screen/home/ui/widgets/navigation_bar.dart';
 
 part 'event.dart';
+
 part 'state.dart';
 
 @injectable
-class HomeBloc extends Bloc<HomeEvent, HomeState> {
-  final OperationsCache _operationsCache;
-
-  HomeBloc(this._operationsCache) : super(HomeState.setup(0, 0)) {
-    on<Initial>(onInitial);
-    on<ChangeSavedCount>((event, emit) => emit(state.changeSaved(event.count)));
-    on<ChangeCachedCount>(
-      (event, emit) => emit(state.changeCached(event.count)),
+class PagesControllerBloc
+    extends Bloc<PagesControllerEvent, PagesControllerState> {
+  PagesControllerBloc() : super(const PagesControllerState.initial()) {
+    on<ChangeScreenEvent>(
+      (event, emit) => emit(PagesControllerState.change(event.index)),
     );
-  }
-
-  Future<void> onInitial(Initial event, Emitter emit) async {
-    await _operationsCache
-        .subscribeToSavedOperations((c) => add(ChangeSavedCount(c.length)));
-
-    await _operationsCache
-        .subscribeToCachedOperations((c) => add(ChangeCachedCount(c.length)));
-
-    final operations = await Future.wait([
-      _operationsCache.getSavedOperation(),
-      _operationsCache.getCachedOperation(),
-    ]);
-
-    emit(HomeState.setup(
-      operations[0].length,
-      operations[1].length,
-    ));
   }
 }

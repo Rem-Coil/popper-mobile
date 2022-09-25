@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:popper_mobile/screen/operation_info/general/widgets/value_info_text.dart';
-import 'package:popper_mobile/widgets/dialogs/warning_dialog.dart';
+import 'package:popper_mobile/widgets/widget_with_warning.dart';
 
 class ValueInfoWarning extends StatelessWidget {
   final String text;
@@ -10,26 +10,11 @@ class ValueInfoWarning extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        showCupertinoDialog<void>(
-          context: context,
-          builder: (BuildContext context) {
-            return const WarningDialog(
-              title: 'Данные о катушке не были загружены',
-              message: 'Произошла ошибка загрзки информации о катушке. '
-                  'Проверьте подключение к интернету или повторите позже',
-            );
-          },
-        );
-      },
-      child: Row(
-        children: [
-          ValueInfoText(text),
-          const SizedBox(width: 5),
-          const Icon(Icons.warning_rounded, color: Colors.red),
-        ],
-      ),
+    return WidgetWithWarning(
+      warningTitle: 'Данные о катушке не были загружены',
+      warningMessage: 'Произошла ошибка загрзки информации о катушке. '
+          'Проверьте подключение к интернету или повторите позже',
+      child: ValueInfoText(text),
     );
   }
 }

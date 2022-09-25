@@ -21,5 +21,5 @@ class ScannedEntity {
     return ScannedEntity._(type, id);
   }
 
-  String get name => type.simpleName + ' $id';
+  String get name => '${type.simpleName} $id';
 }

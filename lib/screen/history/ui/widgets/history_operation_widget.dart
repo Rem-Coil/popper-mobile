@@ -4,13 +4,11 @@ import 'package:popper_mobile/models/operation/operation.dart';
 
 class HistoryOperationWidget extends StatelessWidget {
   final FullOperation operation;
-  final FormattedDateTime formattedDate;
 
-  HistoryOperationWidget({
+  const HistoryOperationWidget({
     Key? key,
     required this.operation,
-  })  : formattedDate = FormattedDateTime(operation.time),
-        super(key: key);
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -24,18 +22,9 @@ class HistoryOperationWidget extends StatelessWidget {
             color: operation.isSuccessful ? Colors.green : Colors.red,
           ),
           Expanded(
-            child: Card(
-              color: Colors.white10,
-              shape: const ContinuousRectangleBorder(
-                borderRadius: BorderRadius.zero,
-              ),
-              borderOnForeground: true,
-              elevation: 0,
-              margin: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-              child: ListTile(
-                title: Text(operation.operatorName),
-                subtitle: Text(formattedDate.formattedDate),
-              ),
+            child: ListTile(
+              title: Text(operation.operatorName),
+              subtitle: Text(operation.time.formatted),
             ),
           ),
         ],

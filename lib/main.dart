@@ -6,14 +6,14 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:popper_mobile/core/di/injection.dart';
+import 'package:popper_mobile/core/setup/injection.dart';
+import 'package:popper_mobile/core/setup/app_router.dart';
 import 'package:popper_mobile/core/theme/colors.dart';
 import 'package:popper_mobile/core/theme/fonts.dart';
 import 'package:popper_mobile/firebase/firebase_crashlytics.dart';
 import 'package:popper_mobile/models/bobbin/bobbin.dart';
 import 'package:popper_mobile/models/operation/operation.dart';
 import 'package:popper_mobile/models/operation/operation_type.dart';
-import 'package:popper_mobile/screen/routing/app_router.dart';
 
 Future<void> main() async {
   runZonedGuarded<Future<void>>(() async {
@@ -23,7 +23,7 @@ Future<void> main() async {
     await crashlyticsInit();
 
     await hiveInitial();
-    await initializeDateFormatting('ru_RU', null);
+    await initializeDateFormatting();
 
     configureDependencies(kDebugMode ? 'dev' : 'prod');
 

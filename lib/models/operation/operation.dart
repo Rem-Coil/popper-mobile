@@ -6,11 +6,12 @@ import 'package:popper_mobile/models/bobbin/bobbin.dart';
 import 'package:popper_mobile/models/operation/operation_type.dart';
 
 part 'operation.g.dart';
-part 'operation_local.dart';
-part 'operation_remote.dart';
-part 'full_operation.dart';
 
-final formatter = DateFormat('yyyy-MM-ddTHH:mm:ss');
+part 'operation_local.dart';
+
+part 'operation_remote.dart';
+
+part 'full_operation.dart';
 
 @immutable
 class Operation {
@@ -32,20 +33,13 @@ class Operation {
     required this.isSuccessful,
   });
 
-  factory Operation.create({
-    required int userId,
-    required Bobbin bobbin,
-    required DateTime date,
-  }) {
-    return Operation(
-      id: defaultId,
-      userId: userId,
-      bobbin: bobbin,
-      type: null,
-      time: date,
-      isSuccessful: true,
-    );
-  }
+  const Operation.create({
+    required this.userId,
+    required this.bobbin,
+    required this.time,
+  })  : id = defaultId,
+        type = null,
+        isSuccessful = true;
 
   Operation copyWithId(Operation operation) {
     return Operation(

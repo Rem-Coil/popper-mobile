@@ -29,8 +29,8 @@ class SimpleButton extends StatelessWidget {
       height: height,
       child: ElevatedButton(
         onPressed: onPressed,
-        child: child,
         style: _style,
+        child: child,
       ),
     );
   }

@@ -20,10 +20,10 @@ class LoadingButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return SimpleButton(
       width: width,
+      onPressed: onPressed,
       child: isLoad
           ? const CircularLoader(size: 25, color: Colors.white)
           : Text(text, style: const TextStyle(fontSize: 20)),
-      onPressed: onPressed,
     );
   }
 }

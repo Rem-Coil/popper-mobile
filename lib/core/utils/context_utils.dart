@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 extension SnackBars on BuildContext {
-  void successSnackBar(String message, {int seconds = 1}) {
+  void showSuccessSnackBar(String message, {int seconds = 1}) {
     ScaffoldMessenger.of(this).showSnackBar(
       SnackBar(
         backgroundColor: Colors.green,
@@ -11,7 +11,7 @@ extension SnackBars on BuildContext {
     );
   }
 
-  void errorSnackBar(String message, {int seconds = 1}) {
+  void showErrorSnackBar(String message, {int seconds = 1}) {
     ScaffoldMessenger.of(this).showSnackBar(
       SnackBar(
         backgroundColor: Colors.red,

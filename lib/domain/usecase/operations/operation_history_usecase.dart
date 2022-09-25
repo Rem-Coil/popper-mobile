@@ -6,15 +6,13 @@ import 'package:popper_mobile/models/operation/operation_type.dart';
 @singleton
 class OperationHistoryUsecase {
   List<OperationHistoryItem> call(List<FullOperation> operations) {
-    var operationsList = OperationType.values.map((o) {
-      var opList = operations.where((e) => e.type == o).toList();
-      opList.sort((op1, op2) => op1.time.compareTo(op2.time));
+    return OperationType.values.map((o) {
+      final operationsByType = operations.where((e) => e.type == o).toList();
+      operationsByType.sort((op1, op2) => op1.time.compareTo(op2.time));
       return OperationHistoryItem(
-        operations: opList,
+        operations: operationsByType,
         type: o,
       );
     }).toList();
-
-    return operationsList;
   }
 }

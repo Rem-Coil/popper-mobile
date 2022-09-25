@@ -28,14 +28,14 @@ class DecisionDialog extends StatelessWidget {
       content: message != null ? Text(message!) : null,
       actions: <CupertinoDialogAction>[
         CupertinoDialogAction(
-          child: Text(destructiveActionTitle),
           isDestructiveAction: true,
           onPressed: () => destructiveAction ?? Navigator.pop(context, false),
+          child: Text(destructiveActionTitle),
         ),
         CupertinoDialogAction(
-          child: Text(saveActionTitle),
           isDefaultAction: true,
           onPressed: () => saveAction ?? Navigator.pop(context, true),
+          child: Text(saveActionTitle),
         )
       ],
     );

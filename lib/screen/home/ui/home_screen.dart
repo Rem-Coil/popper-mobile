@@ -1,102 +1,64 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:popper_mobile/core/di/injection.dart';
+import 'package:popper_mobile/core/setup/app_router.dart';
+import 'package:popper_mobile/core/setup/injection.dart';
+import 'package:popper_mobile/models/barcode/scanned_entity.dart';
 import 'package:popper_mobile/screen/home/bloc/bloc.dart';
-import 'package:popper_mobile/screen/home/ui/widgets/home_header.dart';
-import 'package:popper_mobile/screen/home/ui/widgets/operations_list_button.dart';
-import 'package:popper_mobile/screen/routing/app_router.dart';
-import 'package:popper_mobile/screen/scanned_list/models/operation_status.dart';
-import 'package:popper_mobile/screen/user_info/bloc/bloc.dart';
-import 'package:popper_mobile/widgets/buttons/simple_button.dart';
+import 'package:popper_mobile/screen/home/ui/pages/operations/bloc/bloc.dart';
+import 'package:popper_mobile/screen/home/ui/widgets/navigation_bar.dart';
 
-class HomeScreen extends StatefulWidget implements AutoRouteWrapper {
-  static const route = '/home';
-
-  const HomeScreen({Key? key}) : super(key: key);
-
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
+class HomeScreen extends StatelessWidget implements AutoRouteWrapper {
+  const HomeScreen({super.key});
 
   @override
   Widget wrappedRoute(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider<HomeBloc>(create: (_) => getIt<HomeBloc>()),
-        BlocProvider<UserInfoBloc>(create: (_) => getIt<UserInfoBloc>())
+        BlocProvider<OperationsBloc>(create: (_) => getIt<OperationsBloc>()),
+        BlocProvider<PagesControllerBloc>(
+          create: (_) => getIt<PagesControllerBloc>(),
+        ),
       ],
       child: this,
     );
   }
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-  @override
-  void initState() {
-    super.initState();
-    BlocProvider.of<HomeBloc>(context).add(Initial());
-  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: BlocBuilder<HomeBloc, HomeState>(
-          builder: (context, state) {
-            return Column(
-              children: [
-                const HomeHeader(),
-                const SizedBox(height: 47),
-                Row(
-                  children: [
-                    Expanded(
-                      child: OperationsListButton(
-                        status: OperationStatus.saved,
-                        count: state.countSavedActions,
-                      ),
-                    ),
-                    const SizedBox(width: 16),
-                    Expanded(
-                      child: OperationsListButton(
-                        status: OperationStatus.cached,
-                        count: state.countCachedActions,
-                      ),
-                    )
-                  ],
-                ),
-                const SizedBox(height: 16),
-                SimpleButton(
-                  width: double.infinity,
-                  height: 67,
-                  borderRadius: 16,
-                  onPressed: () {
-                    // final scanned = ScannedEntity.fromString(
-                    //     'bobbin:201'); //TODO:не забыть убрать перед коммитом
-                    // context.router.push(BobbinLoadingRoute(bobbin: scanned));
-                    context.router.push(const ScannerRoute());
-                  },
-                  child: Row(
-                    children: const [
-                      Text(
-                        'Сканировать',
-                        style: TextStyle(
-                            fontSize: 24, fontWeight: FontWeight.bold),
-                      ),
-                      Spacer(),
-                      Icon(
-                        Icons.add_circle_outline,
-                        color: Colors.white,
-                        size: 30,
-                      )
-                    ],
-                  ),
-                ),
-              ],
-            );
-          },
-        ),
-      ),
+    final theme = Theme.of(context);
+    return BlocBuilder<PagesControllerBloc, PagesControllerState>(
+      builder: (context, state) {
+        return Scaffold(
+          body: Container(
+            color: theme.backgroundColor,
+            child: SafeArea(
+              child: Container(
+                padding: const EdgeInsets.only(bottom: 16),
+                color: Colors.white,
+                child: state.page,
+              ),
+            ),
+          ),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              // TODO: не забыть убрать перед коммитом в релиз
+              // final scanned = ScannedEntity.fromString('bobbin:201');
+              // context.router.push(BobbinLoadingRoute(bobbin: scanned));
+              context.router.push(const ScannerRoute());
+            },
+            child: const Icon(Icons.add),
+          ),
+          floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+          bottomNavigationBar: NavigationAppBar(
+            items: state.items,
+            currentIndex: state.currentPage,
+            onTap: (i) {
+              context.read<PagesControllerBloc>().add(ChangeScreenEvent(i));
+            },
+          ),
+        );
+      },
     );
   }
 }

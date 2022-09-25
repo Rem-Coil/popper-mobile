@@ -1,5 +1,7 @@
 part of 'operation.dart';
 
+final formatter = DateFormat('yyyy-MM-ddTHH:mm:ss');
+
 @JsonSerializable()
 class OperationRemote extends Operation {
   @JsonKey(name: 'id')

@@ -1,7 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:popper_mobile/core/di/injection.dart';
+import 'package:popper_mobile/core/setup/injection.dart';
 import 'package:popper_mobile/models/bobbin/bobbin.dart';
 import 'package:popper_mobile/models/operation/expansion_panel_item.dart';
 import 'package:popper_mobile/models/operation/operation_type.dart';
@@ -68,9 +68,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                 return ExpansionPanel(
                   canTapOnHeader: true,
                   headerBuilder: (BuildContext context, bool isExpanded) {
-                    return ListTile(
-                      title: Text(item.type.localizedName),
-                    );
+                    return ListTile(title: Text(item.type.localizedName));
                   },
                   body: item.operations.isNotEmpty
                       ? Column(

@@ -12,8 +12,6 @@ import 'package:popper_mobile/screen/operation_info/simple_info/ui/simple_info_s
 import 'package:popper_mobile/screen/operation_info/update_operation/ui/update_operation_screen.dart';
 import 'package:popper_mobile/screen/operations_sync/ui/operations_sync_screen.dart';
 import 'package:popper_mobile/screen/registration/ui/registration_srceen.dart';
-import 'package:popper_mobile/screen/scanned_list/cached_operations/ui/cached_operations_screen.dart';
-import 'package:popper_mobile/screen/scanned_list/saved_operations/ui/saved_operations_screen.dart';
 import 'package:popper_mobile/screen/scanner/ui/scanner_screen.dart';
 import 'package:popper_mobile/screen/scanner_result/model/scanner_result_arguments.dart';
 import 'package:popper_mobile/screen/scanner_result/ui/scanner_result_screen.dart';
@@ -34,8 +32,6 @@ part 'app_router.gr.dart';
     AutoRoute(page: SimpleInfoScreen),
     AutoRoute(page: BobbinLoadingScreen),
     AutoRoute(page: ScannerResultScreen),
-    AutoRoute(page: SavedOperationsScreen),
-    AutoRoute(page: CachedOperationsScreen),
     AutoRoute(page: OperationsSyncScreen),
     AutoRoute(page: HistoryScreen),
   ],

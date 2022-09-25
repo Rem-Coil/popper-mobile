@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:popper_mobile/core/di/injection.dart';
-import 'package:popper_mobile/screen/routing/app_router.dart';
+import 'package:popper_mobile/core/setup/injection.dart';
+import 'package:popper_mobile/core/setup/app_router.dart';
 import 'package:popper_mobile/screen/splash/bloc/bloc.dart';
 import 'package:popper_mobile/widgets/logo.dart';
 

@@ -5,7 +5,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:popper_mobile/core/utils/context_utils.dart';
 import 'package:popper_mobile/models/barcode/scanned_entity.dart';
-import 'package:popper_mobile/screen/routing/app_router.dart';
+import 'package:popper_mobile/core/setup/app_router.dart';
 import 'package:popper_mobile/widgets/buttons/simple_button.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
@@ -132,7 +132,7 @@ class _ScannerScreenState extends State<ScannerScreen> {
   }
 
   void _showError(String message) {
-    context.errorSnackBar(message);
+    context.showErrorSnackBar(message);
     Future.delayed(
       const Duration(seconds: 1),
       () => setState(() => isBusy = false),
