@@ -1,13 +1,7 @@
-import 'dart:developer';
-import 'dart:io';
-
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:popper_mobile/core/utils/context_utils.dart';
-import 'package:popper_mobile/models/barcode/scanned_entity.dart';
-import 'package:popper_mobile/core/setup/app_router.dart';
-import 'package:popper_mobile/widgets/buttons/simple_button.dart';
-import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:popper_mobile/screen/scanner/ui/widgets/icon_button_with_dual_state.dart';
+import 'package:popper_mobile/screen/scanner/ui/widgets/scanner_view.dart';
 
 class ScannerScreen extends StatefulWidget {
   const ScannerScreen({Key? key}) : super(key: key);
@@ -17,17 +11,12 @@ class ScannerScreen extends StatefulWidget {
 }
 
 class _ScannerScreenState extends State<ScannerScreen> {
-  final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
-  QRViewController? controller;
-  bool isBusy = false;
+  late final MobileScannerController cameraController;
 
   @override
-  void reassemble() {
-    super.reassemble();
-    if (Platform.isAndroid) {
-      controller!.pauseCamera();
-    }
-    controller!.resumeCamera();
+  void initState() {
+    super.initState();
+    cameraController = MobileScannerController();
   }
 
   @override
@@ -36,7 +25,10 @@ class _ScannerScreenState extends State<ScannerScreen> {
       appBar: AppBar(title: const Text('Отсканируйте катушку:')),
       body: Column(
         children: <Widget>[
-          Expanded(flex: 4, child: _buildQrView(context)),
+          Expanded(
+            flex: 4,
+            child: ScannerView(controller: cameraController),
+          ),
           Expanded(
             flex: 1,
             child: Column(
@@ -46,35 +38,31 @@ class _ScannerScreenState extends State<ScannerScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    SimpleButton(
-                      height: 40,
-                      width: 40,
-                      borderRadius: 20,
-                      padding: const EdgeInsets.all(8),
-                      child: FutureBuilder<bool?>(
-                        future: controller?.getFlashStatus(),
-                        builder: (context, snapshot) {
-                          if (snapshot.data == null || !snapshot.data!) {
-                            return const Icon(Icons.flash_on);
-                          }
-                          return const Icon(Icons.flash_off);
-                        },
+                    IconButtonWithDualState(
+                      onPressed: () => cameraController.toggleTorch(),
+                      valueListenable: cameraController.torchState,
+                      firstValue: TorchState.off,
+                      firstIcon: const Icon(
+                        Icons.flash_off,
+                        color: Colors.grey,
                       ),
-                      onPressed: () async {
-                        await controller?.toggleFlash();
-                        setState(() {});
-                      },
+                      anotherIcon: const Icon(
+                        Icons.flash_on,
+                        color: Colors.yellow,
+                      ),
                     ),
-                    SimpleButton(
-                      height: 40,
-                      width: 40,
-                      borderRadius: 20,
-                      padding: const EdgeInsets.all(8),
-                      child: const Icon(Icons.flip_camera_android),
-                      onPressed: () async {
-                        await controller?.flipCamera();
-                        setState(() {});
-                      },
+                    IconButtonWithDualState(
+                      onPressed: () => cameraController.switchCamera(),
+                      valueListenable: cameraController.cameraFacingState,
+                      firstValue: CameraFacing.front,
+                      firstIcon: const Icon(
+                        Icons.camera_front,
+                        color: Colors.grey,
+                      ),
+                      anotherIcon: const Icon(
+                        Icons.camera_rear,
+                        color: Colors.grey,
+                      ),
                     ),
                   ],
                 ),
@@ -86,71 +74,9 @@ class _ScannerScreenState extends State<ScannerScreen> {
     );
   }
 
-  Widget _buildQrView(BuildContext context) {
-    var scanArea = (MediaQuery.of(context).size.width < 400 ||
-            MediaQuery.of(context).size.height < 400)
-        ? 150.0
-        : 300.0;
-
-    return QRView(
-      key: qrKey,
-      onQRViewCreated: _onQRViewCreated,
-      overlay: QrScannerOverlayShape(
-        borderColor: Colors.red,
-        borderRadius: 10,
-        borderLength: 30,
-        borderWidth: 10,
-        cutOutSize: scanArea,
-      ),
-      onPermissionSet: (ctrl, p) => _onPermissionSet(ctrl, p),
-    );
-  }
-
-  void _onQRViewCreated(QRViewController controller) {
-    setState(() {
-      this.controller = controller;
-    });
-    controller.scannedDataStream.listen(onCode);
-  }
-
-  void onCode(Barcode code) {
-    if (isBusy) return;
-    setState(() {
-      isBusy = true;
-    });
-
-    try {
-      final scanned = ScannedEntity.fromString(code.code);
-      if (scanned.type == EntityType.bobbin) {
-        context.router.replace(BobbinLoadingRoute(bobbin: scanned));
-      } else {
-        _showError('Вы отсканировали не катушку');
-      }
-    } catch (e) {
-      _showError('Ошибка сканирования катушки, попробуйте позже');
-    }
-  }
-
-  void _showError(String message) {
-    context.showErrorSnackBar(message);
-    Future.delayed(
-      const Duration(seconds: 1),
-      () => setState(() => isBusy = false),
-    );
-  }
-
-  void _onPermissionSet(QRViewController ctrl, bool p) {
-    log('${DateTime.now().toIso8601String()}_onPermissionSet $p');
-    if (!p) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('no Permission')),
-      );
-    }
-  }
-
   @override
   void dispose() {
-    controller?.dispose();
+    cameraController.dispose();
     super.dispose();
   }
 }
