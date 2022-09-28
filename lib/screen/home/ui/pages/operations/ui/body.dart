@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:popper_mobile/core/setup/app_router.dart';
+import 'package:popper_mobile/core/theme/fonts.dart';
 import 'package:popper_mobile/models/operation/operation.dart';
 import 'package:popper_mobile/screen/home/ui/pages/operations/ui/operations_list.dart';
 
@@ -11,22 +12,36 @@ class Body extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: Text(
-            'Последение операции',
-            style: Theme.of(context).textTheme.titleLarge,
+    return Padding(
+      padding: const EdgeInsets.only(top: 20),
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(20),
+            topRight: Radius.circular(20),
           ),
         ),
-        OperationsList(
-          operations: operations,
-          onTap: (o) => context.router.push(
-            UpdateOperationRoute(operation: o),
-          ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Последение операции',
+              style: Theme.of(context).textTheme.headlineSmall.bold,
+            ),
+            Flexible(
+              child: OperationsList(
+                operations: operations,
+                onTap: (o) => context.router.push(
+                  UpdateOperationRoute(operation: o),
+                ),
+              ),
+            ),
+          ],
         ),
-      ],
+      ),
     );
   }
 }

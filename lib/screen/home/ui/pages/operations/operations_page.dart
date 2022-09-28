@@ -10,6 +10,7 @@ class OperationsPage extends StatefulWidget {
     icon: Icons.home,
     label: 'Главная',
     page: OperationsPage(),
+    color: Colors.white,
   );
 
   const OperationsPage({super.key});
@@ -27,16 +28,16 @@ class _OperationsPageState extends State<OperationsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
+    final theme = Theme.of(context);
+    return Container(
+      color: theme.backgroundColor,
       child: BlocBuilder<OperationsBloc, OperationsState>(
         builder: (context, state) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+          return NestedScrollView(
+            headerSliverBuilder: (context, _) => [
               Header(total: state.todayTotal),
-              const SizedBox(height: 16),
-              Body(operations: state.operations),
             ],
+            body: Body(operations: state.operations),
           );
         },
       ),

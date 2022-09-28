@@ -3,19 +3,17 @@ import 'package:popper_mobile/core/utils/date_utils.dart';
 import 'package:popper_mobile/core/utils/typedefs.dart';
 import 'package:popper_mobile/models/operation/operation.dart';
 import 'package:popper_mobile/models/operation/operation_type.dart';
-import 'package:popper_mobile/widgets/widget_with_warning.dart';
+import 'package:popper_mobile/widgets/circle_view.dart';
 
 class OperationItem extends StatelessWidget {
-  final Operation operation;
-  final OperationCallback? onTap;
-  final Widget? trailing;
-
   const OperationItem({
     Key? key,
-    this.trailing,
     required this.operation,
     required this.onTap,
   }) : super(key: key);
+
+  final Operation operation;
+  final OperationCallback? onTap;
 
   String get typeName => operation.type?.localizedName ?? 'Unknown';
 
@@ -26,55 +24,81 @@ class OperationItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
+    return InkWell(
       onTap: onTap != null ? () => onTap!(operation) : null,
-      trailing: trailing,
-      title: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            child: _Title(
-              title: bobbinName,
-              isSync: operation.id != Operation.defaultId,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text('катушка', style: Theme.of(context).textTheme.bodySmall),
+                Text(
+                  operation.time.formatted,
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
+              ],
             ),
-          ),
-          const SizedBox(width: 16),
-          Text(
-            operation.time.formatted,
-            style: Theme.of(context).textTheme.bodySmall,
-          )
-        ],
+            const SizedBox(height: 4),
+            _TitleView(title: bobbinName),
+            const SizedBox(height: 8),
+            Text(
+              typeName,
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
+            if (operation.id == Operation.defaultId) ...[
+              const SizedBox(height: 4),
+              const _NotSyncView(),
+            ],
+          ],
+        ),
       ),
-      subtitle: Text(typeName),
     );
   }
 }
 
-class _Title extends StatelessWidget {
-  final bool isSync;
-  final String title;
+class _TitleView extends StatelessWidget {
+  const _TitleView({required this.title});
 
-  const _Title({required this.isSync, required this.title});
+  final String title;
 
   @override
   Widget build(BuildContext context) {
-    final text = Text(
-      title,
-      maxLines: 1,
-      overflow: TextOverflow.ellipsis,
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Expanded(
+          child: Text(
+            title,
+            style: Theme.of(context).textTheme.subtitle1,
+          ),
+        ),
+        const SizedBox(width: 16),
+        const Icon(
+          Icons.arrow_forward_ios_rounded,
+          size: 16,
+        ),
+      ],
     );
+  }
+}
 
-    if (isSync) {
-      return text;
-    }
+class _NotSyncView extends StatelessWidget {
+  const _NotSyncView();
 
-    return WidgetWithWarning(
-      warningTitle: 'Данная опреация не синхронизированна',
-      warningMessage:
-          'Данная операция не была синхронизированна и храниться только '
-          'на текущем устройстве. Данная операция может быть утерена.',
-      child: Text(title),
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        const CircleView(size: 8),
+        const SizedBox(width: 8),
+        Text(
+          'не синхронизированно',
+          style: Theme.of(context).textTheme.bodySmall,
+        ),
+      ],
     );
   }
 }

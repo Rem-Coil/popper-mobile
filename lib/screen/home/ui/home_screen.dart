@@ -34,23 +34,24 @@ class HomeScreen extends StatelessWidget implements AutoRouteWrapper {
             color: theme.backgroundColor,
             child: SafeArea(
               child: Container(
+                color: state.page.color ?? theme.scaffoldBackgroundColor,
                 padding: const EdgeInsets.only(bottom: 16),
-                color: Colors.white,
-                child: state.page,
+                child: state.page.page,
               ),
             ),
           ),
           floatingActionButton: FloatingActionButton(
             onPressed: () {
               // TODO: не забыть убрать перед коммитом в релиз
-              // final scanned = ScannedEntity.fromString('bobbin:201');
-              // context.router.push(BobbinLoadingRoute(bobbin: scanned));
-              context.router.push(const ScannerRoute());
+              final scanned = ScannedEntity.fromString('bobbin:201');
+              context.router.push(BobbinLoadingRoute(bobbin: scanned));
+              // context.router.push(const ScannerRoute());
             },
             child: const Icon(Icons.add),
           ),
           floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
           bottomNavigationBar: NavigationAppBar(
+            backgroundColor: state.page.color,
             items: state.items,
             currentIndex: state.currentPage,
             onTap: (i) {

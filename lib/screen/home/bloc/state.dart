@@ -13,7 +13,7 @@ class PagesControllerState {
 
   final int currentPage;
 
-  Widget get page => _pages[currentPage].page;
+  PageModel get page => _pages[currentPage];
 
   List<PageModel> get items => _pages;
 }

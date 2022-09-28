@@ -16,11 +16,9 @@ class OperationsList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 16, right: 16, top: 16),
+      padding: const EdgeInsets.only(left: 8, right: 8, top: 16),
       child: ListView.separated(
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        separatorBuilder: (context, _) => const Divider(),
+        separatorBuilder: (context, _) => const Divider(color: Colors.grey),
         itemCount: operations.length,
         itemBuilder: (context, i) {
           return OperationItem(

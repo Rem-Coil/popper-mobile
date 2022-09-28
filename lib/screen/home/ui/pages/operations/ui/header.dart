@@ -11,32 +11,29 @@ class Header extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return Container(
-      height: 100,
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
-      decoration: const BoxDecoration(
-        color: Colors.blue,
-        borderRadius: BorderRadius.only(
-          bottomLeft: Radius.circular(40),
-          bottomRight: Radius.circular(40),
+    return SliverAppBar(
+      backgroundColor: theme.backgroundColor,
+      expandedHeight: 80,
+      floating: true,
+      pinned: false,
+      flexibleSpace: FlexibleSpaceBar(
+        centerTitle: true,
+        titlePadding: const EdgeInsets.only(bottom: 8),
+        title: SizedBox(
+          height: 40,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Text(
+                'Выполнено за сегодня',
+                style: theme.textTheme.titleSmall?.copyWith(
+                  color: Colors.white54,
+                ),
+              ),
+              Text('$total'),
+            ],
+          ),
         ),
-      ),
-      child: Column(
-        children: [
-          Text(
-            'Выполнено за сегодня',
-            style: theme.textTheme.titleLarge?.copyWith(
-              color: Colors.white54,
-            ),
-          ),
-          Text(
-            '$total',
-            style: theme.textTheme.headlineMedium?.copyWith(
-              color: Colors.white,
-            ),
-          ),
-        ],
       ),
     );
   }
