@@ -5,6 +5,7 @@ import 'package:popper_mobile/core/setup/injection.dart';
 import 'package:popper_mobile/core/setup/app_router.dart';
 import 'package:popper_mobile/core/utils/context_utils.dart';
 import 'package:popper_mobile/models/auth/user_role.dart';
+import 'package:popper_mobile/screen/current_user/bloc/bloc.dart';
 import 'package:popper_mobile/screen/registration/bloc/bloc.dart';
 import 'package:popper_mobile/widgets/buttons/loading_button.dart';
 import 'package:popper_mobile/widgets/field.dart';
@@ -46,6 +47,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             listener: (context, state) {
               if (state is RegistrationSuccessful) {
                 context.showSuccessSnackBar('Успешно');
+                context.read<CurrentUserBloc>().add(const LoadUserEvent());
+
                 Future.delayed(const Duration(seconds: 1), () {
                   context.router.replaceAll([const HomeRoute()]);
                 });

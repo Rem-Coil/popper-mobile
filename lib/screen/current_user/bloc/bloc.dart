@@ -10,24 +10,31 @@ part 'event.dart';
 part 'state.dart';
 
 @injectable
-class UserInfoBloc extends Bloc<UserInfoEvent, UserInfoState> {
+class CurrentUserBloc extends Bloc<CurrentUserEvent, CurrentUserState> {
   final AuthRepository _authRepository;
 
-  UserInfoBloc(this._authRepository) : super(UserInfoLoadingState()) {
+  CurrentUserBloc(this._authRepository) : super(const UnknownUserState()) {
     on<LoadUserEvent>(onLoadUser);
     on<LogOutEvent>(onLogOut);
   }
 
   Future<void> onLoadUser(
     LoadUserEvent event,
-    Emitter<UserInfoState> emit,
+    Emitter<CurrentUserState> emit,
   ) async {
     final user = await _authRepository.getCurrentUser();
-    emit(UserInfoSuccessState(user!));
+    if (user == null) {
+      emit(const UserNotSetState());
+    } else {
+      emit(WithUserState(user));
+    }
   }
 
-  Future<void> onLogOut(LogOutEvent event, Emitter<UserInfoState> emit) async {
+  Future<void> onLogOut(
+    LogOutEvent event,
+    Emitter<CurrentUserState> emit,
+  ) async {
     await _authRepository.logOut();
-    emit(LogOutState(state as UserInfoSuccessState));
+    emit(const UserNotSetState());
   }
 }

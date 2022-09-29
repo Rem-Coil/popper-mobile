@@ -5,8 +5,11 @@ extension SnackBars on BuildContext {
     ScaffoldMessenger.of(this).showSnackBar(
       SnackBar(
         backgroundColor: Colors.green,
-        content: Text(message),
         duration: Duration(seconds: seconds),
+        content: Text(
+          message,
+          style: const TextStyle(fontSize: 16),
+        ),
       ),
     );
   }
@@ -15,6 +18,7 @@ extension SnackBars on BuildContext {
     ScaffoldMessenger.of(this).showSnackBar(
       SnackBar(
         backgroundColor: Colors.red,
+        duration: Duration(seconds: seconds),
         content: Text(
           message,
           style: const TextStyle(fontSize: 16),

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:popper_mobile/core/setup/injection.dart';
 import 'package:popper_mobile/models/operation/operation.dart';
 import 'package:popper_mobile/models/operation/operation_type.dart';
 import 'package:popper_mobile/screen/operation_info/general/widgets/select_operation_field.dart';
@@ -9,7 +7,6 @@ import 'package:popper_mobile/screen/operation_info/general/widgets/user_field.d
 import 'package:popper_mobile/screen/operation_info/general/widgets/value_info_field.dart';
 import 'package:popper_mobile/screen/operation_info/general/widgets/value_info_text.dart';
 import 'package:popper_mobile/screen/operation_info/general/widgets/value_info_warning.dart';
-import 'package:popper_mobile/screen/user_info/bloc/bloc.dart';
 
 class OperationInfo extends StatelessWidget {
   final formatter = DateFormat('d MMM yyyy, HH:mm', 'ru_RU');
@@ -49,10 +46,7 @@ class OperationInfo extends StatelessWidget {
               : ValueInfoText(bobbinNumber),
         ),
         const SizedBox(height: 24),
-        BlocProvider(
-          create: (ctx) => getIt<UserInfoBloc>(),
-          child: const UserField(),
-        ),
+        const UserField(),
         const SizedBox(height: 24),
         ValueInfoField(
           title: 'Операция',

@@ -4,16 +4,18 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:popper_mobile/core/setup/injection.dart';
 import 'package:popper_mobile/core/setup/app_router.dart';
+import 'package:popper_mobile/core/setup/injection.dart';
 import 'package:popper_mobile/core/theme/colors.dart';
 import 'package:popper_mobile/core/theme/fonts.dart';
 import 'package:popper_mobile/firebase/firebase_crashlytics.dart';
 import 'package:popper_mobile/models/bobbin/bobbin.dart';
 import 'package:popper_mobile/models/operation/operation.dart';
 import 'package:popper_mobile/models/operation/operation_type.dart';
+import 'package:popper_mobile/screen/current_user/bloc/bloc.dart';
 
 Future<void> main() async {
   runZonedGuarded<Future<void>>(() async {
@@ -46,15 +48,18 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      title: 'Rem&Coil',
-      theme: ThemeData(
-        textTheme: fonts(context),
-        primarySwatch: primarySwatch,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
+    return BlocProvider<CurrentUserBloc>(
+      create: (_) => getIt<CurrentUserBloc>(),
+      child: MaterialApp.router(
+        title: 'Rem&Coil',
+        theme: ThemeData(
+          textTheme: fonts(context),
+          primarySwatch: primarySwatch,
+          visualDensity: VisualDensity.adaptivePlatformDensity,
+        ),
+        routerDelegate: _appRouter.delegate(),
+        routeInformationParser: _appRouter.defaultRouteParser(),
       ),
-      routerDelegate: _appRouter.delegate(),
-      routeInformationParser: _appRouter.defaultRouteParser(),
     );
   }
 }

@@ -7,10 +7,10 @@ import 'package:popper_mobile/core/setup/injection.dart';
 import 'package:popper_mobile/core/setup/app_router.dart';
 import 'package:popper_mobile/models/auth/user_role.dart';
 import 'package:popper_mobile/models/operation/operation.dart';
+import 'package:popper_mobile/screen/current_user/bloc/bloc.dart';
 import 'package:popper_mobile/screen/operation_info/general/widgets/operation_info.dart';
 import 'package:popper_mobile/screen/operation_info/save_operation/bloc/bloc.dart';
 import 'package:popper_mobile/screen/scanner_result/model/scanner_result_arguments.dart';
-import 'package:popper_mobile/screen/user_info/bloc/bloc.dart';
 import 'package:popper_mobile/widgets/buttons/simple_button.dart';
 import 'package:popper_mobile/widgets/circular_loader.dart';
 import 'package:popper_mobile/widgets/dialogs/decision_dialog.dart';
@@ -26,8 +26,8 @@ class OperationSaveScreen extends StatefulWidget implements AutoRouteWrapper {
     return MultiBlocProvider(
       providers: [
         BlocProvider<OperationSaveBloc>(
-            create: (_) => getIt.get<OperationSaveBloc>(param1: operation)),
-        BlocProvider<UserInfoBloc>(create: (_) => getIt<UserInfoBloc>()),
+          create: (_) => getIt.get<OperationSaveBloc>(param1: operation),
+        ),
       ],
       child: this,
     );
@@ -38,12 +38,6 @@ class OperationSaveScreen extends StatefulWidget implements AutoRouteWrapper {
 }
 
 class _OperationSaveScreenState extends State<OperationSaveScreen> {
-  @override
-  void initState() {
-    super.initState();
-    BlocProvider.of<UserInfoBloc>(context).add(LoadUserEvent());
-  }
-
   bool isLoad(OperationSaveState state) {
     return state is SaveProcessState && state.status.isLoad;
   }
@@ -73,7 +67,7 @@ class _OperationSaveScreenState extends State<OperationSaveScreen> {
             }
 
             if (state is CacheProcessState && !state.status.isLoad) {
-              await _onSaveInCacheEnd(context, state);
+              await _onSaveInCacheEnd(state);
             }
           },
           builder: (context, state) {
@@ -90,41 +84,10 @@ class _OperationSaveScreenState extends State<OperationSaveScreen> {
                   },
                 ),
                 const SizedBox(height: 48),
-                BlocBuilder<UserInfoBloc, UserInfoState>(
-                    builder: (userContext, userState) {
-                  if (userState is UserInfoSuccessState) {
-                    switch (userState.user.role) {
-                      case UserRole.operator:
-                        return SimpleButton(
-                          width: double.infinity,
-                          height: 55,
-                          color: Colors.green,
-                          onPressed: state.isCanSave
-                              ? () => _saveOperation(context)
-                              : null,
-                          child: isLoad(state)
-                              ? const CircularLoader(size: 25, strokeWidth: 3)
-                              : const Text('Сохранить',
-                                  style: TextStyle(fontSize: 18)),
-                        );
-                      case UserRole.qualityEngineer:
-                        return SimpleButton(
-                          width: double.infinity,
-                          height: 55,
-                          color: Colors.red,
-                          onPressed: state.isCanSave
-                              ? () => _rejectOperation(context)
-                              : null,
-                          child: isLoad(state)
-                              ? const CircularLoader(size: 25, strokeWidth: 3)
-                              : const Text('Брак',
-                                  style: TextStyle(fontSize: 18)),
-                        );
-                    }
-                  } else {
-                    return const CircularLoader(size: 24);
-                  }
-                }),
+                _ActionButton(
+                  isActive: state.isCanSave,
+                  isLoad: isLoad(state),
+                ),
                 const SizedBox(width: 16),
               ],
             );
@@ -146,6 +109,7 @@ class _OperationSaveScreenState extends State<OperationSaveScreen> {
       if (isSaveInCache == null || !isSaveInCache) {
         context.router.navigate(const HomeRoute());
       } else {
+        if (!mounted) return;
         context.read<OperationSaveBloc>().add(CacheOperation());
       }
     } else {
@@ -157,10 +121,7 @@ class _OperationSaveScreenState extends State<OperationSaveScreen> {
     }
   }
 
-  Future<void> _onSaveInCacheEnd(
-    BuildContext context,
-    CacheProcessState state,
-  ) async {
+  Future<void> _onSaveInCacheEnd(CacheProcessState state) async {
     if (state.status.isSuccessful) {
       final args = ScannerResultArguments(
         message: 'Операция успешно сохранена в кеш',
@@ -189,6 +150,43 @@ class _OperationSaveScreenState extends State<OperationSaveScreen> {
       },
     );
     return isCacheOperation;
+  }
+}
+
+class _ActionButton extends StatelessWidget {
+  const _ActionButton({
+    required this.isActive,
+    required this.isLoad,
+  });
+
+  final bool isActive;
+  final bool isLoad;
+
+  @override
+  Widget build(BuildContext context) {
+    final userState = context.read<CurrentUserBloc>().state as WithUserState;
+    switch (userState.user.role) {
+      case UserRole.operator:
+        return SimpleButton(
+          width: double.infinity,
+          height: 55,
+          color: Colors.green,
+          onPressed: isActive ? () => _saveOperation(context) : null,
+          child: isLoad
+              ? const CircularLoader(size: 25, strokeWidth: 3)
+              : const Text('Сохранить', style: TextStyle(fontSize: 18)),
+        );
+      case UserRole.qualityEngineer:
+        return SimpleButton(
+          width: double.infinity,
+          height: 55,
+          color: Colors.red,
+          onPressed: isActive ? () => _rejectOperation(context) : null,
+          child: isLoad
+              ? const CircularLoader(size: 25, strokeWidth: 3)
+              : const Text('Брак', style: TextStyle(fontSize: 18)),
+        );
+    }
   }
 
   void _saveOperation(BuildContext context) =>
