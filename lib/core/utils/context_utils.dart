@@ -1,6 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:popper_mobile/widgets/circular_loader.dart';
 
 extension SnackBars on BuildContext {
+  void showLoadingSnackBar({String? message}) {
+    ScaffoldMessenger.of(this).showSnackBar(
+      SnackBar(
+        duration: const Duration(days: 365),
+        content: Row(
+          children: [
+            const CircularLoader(
+              size: 24,
+              strokeWidth: 2,
+            ),
+            const SizedBox(width: 16),
+            if (message != null) Text(message)
+          ],
+        ),
+      ),
+    );
+  }
+
   void showSuccessSnackBar(String message, {int seconds = 1}) {
     ScaffoldMessenger.of(this).showSnackBar(
       SnackBar(
@@ -26,4 +45,7 @@ extension SnackBars on BuildContext {
       ),
     );
   }
+
+  void hideCurrentSnackBar() =>
+      ScaffoldMessenger.of(this).hideCurrentSnackBar();
 }

@@ -59,17 +59,27 @@ class OperationsRepositoryImpl extends BaseRepository
     }
   }
 
+  Future<void> _syncOperation(Operation operation) async {
+    final remoteOperation = operation.toRemote();
+    final api = _apiProvider.getApiService();
+
+    final token = await _authRepository.getUserToken();
+    final savedOperation =
+        await api.saveOperation('Bearer $token', remoteOperation);
+
+    final operationWithId = operation.copyWithId(savedOperation);
+
+    await _operationsCache.addCompletedOperation(operationWithId);
+    await _operationsCache.deleteCacheOperation(operation);
+  }
+
   @override
-  Future<Either<Failure, void>> syncOperation(Operation operation) async {
+  Future<Either<Failure, void>> syncOperations() async {
     try {
-      final remoteOperation = operation.toRemote();
-      final api = _apiProvider.getApiService();
-      final token = await _authRepository.getUserToken();
-      final savedOperation =
-          await api.saveOperation('Bearer $token', remoteOperation);
-      final operationWithId = operation.copyWithId(savedOperation);
-      await _operationsCache.addCompletedOperation(operationWithId);
-      await _operationsCache.deleteCacheOperation(operation);
+      final cached = await _operationsCache.getCachedOperations();
+      for (var operation in cached) {
+        await _syncOperation(operation);
+      }
       return const Right(null);
     } on DioError catch (e) {
       return Left(handleError(e));

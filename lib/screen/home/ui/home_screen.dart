@@ -6,6 +6,7 @@ import 'package:popper_mobile/core/setup/injection.dart';
 import 'package:popper_mobile/models/barcode/scanned_entity.dart';
 import 'package:popper_mobile/screen/home/bloc/bloc.dart';
 import 'package:popper_mobile/screen/home/ui/pages/operations/bloc/bloc.dart';
+import 'package:popper_mobile/screen/home/ui/pages/settings/bloc/bloc.dart';
 import 'package:popper_mobile/screen/home/ui/widgets/navigation_bar.dart';
 
 class HomeScreen extends StatelessWidget implements AutoRouteWrapper {
@@ -16,6 +17,9 @@ class HomeScreen extends StatelessWidget implements AutoRouteWrapper {
     return MultiBlocProvider(
       providers: [
         BlocProvider<OperationsBloc>(create: (_) => getIt<OperationsBloc>()),
+        BlocProvider<SynchronizationBloc>(
+          create: (_) => getIt<SynchronizationBloc>(),
+        ),
         BlocProvider<PagesControllerBloc>(
           create: (_) => getIt<PagesControllerBloc>(),
         ),

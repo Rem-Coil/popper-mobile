@@ -1,25 +1,23 @@
 import 'package:flutter/cupertino.dart';
 
 class DecisionDialog extends StatelessWidget {
-  final String title;
-  final String? message;
-
-  final String destructiveActionTitle;
-  final VoidCallback? destructiveAction;
-  final String saveActionTitle;
-  final VoidCallback? saveAction;
-
   const DecisionDialog({
     Key? key,
     required this.title,
     this.message,
-    String? destructiveActionTitle,
-    this.destructiveAction,
-    String? saveActionTitle,
-    this.saveAction,
-  })  : destructiveActionTitle = destructiveActionTitle ?? 'Пропустить',
-        saveActionTitle = saveActionTitle ?? 'Сохранить',
-        super(key: key);
+    this.cancelActionTitle = 'Пропустить',
+    this.cancelAction,
+    this.acceptActionTitle = 'Сохранить',
+    this.acceptAction,
+  }) : super(key: key);
+
+  final String title;
+  final String? message;
+
+  final String cancelActionTitle;
+  final VoidCallback? cancelAction;
+  final String acceptActionTitle;
+  final VoidCallback? acceptAction;
 
   @override
   Widget build(BuildContext context) {
@@ -29,13 +27,13 @@ class DecisionDialog extends StatelessWidget {
       actions: <CupertinoDialogAction>[
         CupertinoDialogAction(
           isDestructiveAction: true,
-          onPressed: () => destructiveAction ?? Navigator.pop(context, false),
-          child: Text(destructiveActionTitle),
+          onPressed: () => cancelAction ?? Navigator.pop(context, false),
+          child: Text(cancelActionTitle),
         ),
         CupertinoDialogAction(
           isDefaultAction: true,
-          onPressed: () => saveAction ?? Navigator.pop(context, true),
-          child: Text(saveActionTitle),
+          onPressed: () => acceptAction ?? Navigator.pop(context, true),
+          child: Text(acceptActionTitle),
         )
       ],
     );
