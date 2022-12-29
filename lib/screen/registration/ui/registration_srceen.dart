@@ -4,9 +4,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:popper_mobile/core/setup/injection.dart';
 import 'package:popper_mobile/core/setup/app_router.dart';
 import 'package:popper_mobile/core/utils/context_utils.dart';
-import 'package:popper_mobile/models/auth/user_role.dart';
 import 'package:popper_mobile/screen/current_user/bloc/bloc.dart';
 import 'package:popper_mobile/screen/registration/bloc/bloc.dart';
+import 'package:popper_mobile/screen/registration/ui/widgets/select_role_button.dart';
 import 'package:popper_mobile/widgets/buttons/loading_button.dart';
 import 'package:popper_mobile/widgets/field.dart';
 import 'package:popper_mobile/widgets/logo.dart';
@@ -137,24 +137,13 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                               child: Icon(Icons.people, color: Colors.grey),
                             ),
                             Expanded(
-                              child: DropdownButton(
-                                value: state.role,
-                                underline: const SizedBox.shrink(),
-                                isExpanded: true,
-                                alignment: Alignment.centerRight,
-                                items: UserRole.values
-                                    .map<DropdownMenuItem<UserRole>>(
-                                        (value) => DropdownMenuItem(
-                                            value: value,
-                                            child: Text(
-                                              value.localizedRole,
-                                              style: TextStyle(
-                                                  color: Colors.grey[600]),
-                                            )))
-                                    .toList(),
-                                onChanged: (UserRole? newRole) => context
-                                    .read<RegistrationBloc>()
-                                    .add(ChangeUserRole(newRole)),
+                              child: SelectRoleButton(
+                                current: state.role,
+                                onChanged: (role) {
+                                  context
+                                      .read<RegistrationBloc>()
+                                      .add(ChangeUserRole(role));
+                                },
                               ),
                             ),
                           ],

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:popper_mobile/core/utils/date_utils.dart';
 import 'package:popper_mobile/core/utils/typedefs.dart';
-import 'package:popper_mobile/models/operation/operation.dart';
-import 'package:popper_mobile/models/operation/operation_type.dart';
+import 'package:popper_mobile/domain/models/operation/operation.dart';
+import 'package:popper_mobile/domain/models/operation/operation_type.dart';
 import 'package:popper_mobile/widgets/circle_view.dart';
 
 class OperationItem extends StatelessWidget {
@@ -17,11 +17,6 @@ class OperationItem extends StatelessWidget {
 
   String get typeName => operation.type?.localizedName ?? 'Unknown';
 
-  String get bobbinName {
-    if (operation.bobbin.isUnknown) return 'Катшука: ${operation.bobbin.id}';
-    return operation.bobbin.bobbinNumber;
-  }
-
   @override
   Widget build(BuildContext context) {
     return InkWell(
@@ -34,7 +29,10 @@ class OperationItem extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('катушка', style: Theme.of(context).textTheme.bodySmall),
+                Text(
+                  operation.item.type.toLowerCase(),
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
                 Text(
                   operation.time.formatted,
                   style: Theme.of(context).textTheme.bodySmall,
@@ -42,13 +40,13 @@ class OperationItem extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 4),
-            _TitleView(title: bobbinName),
+            _TitleView(title: operation.item.number),
             const SizedBox(height: 8),
             Text(
               typeName,
               style: Theme.of(context).textTheme.bodySmall,
             ),
-            if (operation.id == Operation.defaultId) ...[
+            if (operation.status == OperationStatus.notSync) ...[
               const SizedBox(height: 4),
               const _NotSyncView(),
             ],

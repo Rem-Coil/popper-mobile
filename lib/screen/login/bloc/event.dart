@@ -9,6 +9,5 @@ class OnDataEntered extends LoginEvent {
 
   OnDataEntered({required this.phone, required this.password});
 
-  UserCredentials get credentials =>
-      UserCredentials(phone: phone, password: password);
+  Credentials get credentials => Credentials(phone: phone, password: password);
 }

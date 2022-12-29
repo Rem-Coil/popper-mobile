@@ -2,18 +2,33 @@ import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
+import 'package:popper_mobile/core/setup/injection.dart';
 import 'package:popper_mobile/data/api/api_service.dart';
+import 'package:popper_mobile/data/api/token_interceptor.dart';
 
 @singleton
 class ApiProvider {
   final String baseUrl;
-  final Dio _dio = Dio();
+
+  final _options = BaseOptions(
+    connectTimeout: 500,
+    sendTimeout: 500,
+    receiveTimeout: 1500,
+  );
 
   ApiProvider(@Named('BaseUrl') this.baseUrl);
 
-  ApiService getApiService() {
-    // _dio.interceptors.add(_logInterceptor);
-    return ApiService(_dio, baseUrl: baseUrl);
+  ApiService getApiService({bool isSafe = false, bool isLogging = false}) {
+    final dio = Dio(_options);
+    if (isSafe) {
+      dio.interceptors.add(getIt<TokenInterceptor>());
+    }
+
+    if (isLogging) {
+      dio.interceptors.add(_logInterceptor);
+    }
+
+    return ApiService(dio, baseUrl: baseUrl);
   }
 
   // ignore: unused_element
@@ -37,5 +52,5 @@ abstract class ServerAddressModule {
   @Named('BaseUrl')
   @Environment('dev')
   @Environment('prod')
-  String get baseUrlTest => 'https://popper-service.herokuapp.com';
+  String get baseUrlTest => 'http://remcoil.space:8080';
 }

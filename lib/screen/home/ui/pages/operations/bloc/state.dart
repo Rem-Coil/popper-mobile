@@ -1,12 +1,22 @@
 part of 'bloc.dart';
 
 @immutable
-class OperationsState {
-  const OperationsState.initial() : operations = const [];
+abstract class OperationsState {
+  int get todayTotal;
+}
 
-  const OperationsState.update(this.operations);
+class LoadingOperationsState implements OperationsState {
+  const LoadingOperationsState();
+
+  @override
+  int get todayTotal => 0;
+}
+
+class OperationsLoadedState implements OperationsState {
+  const OperationsLoadedState(this.operations);
 
   final List<Operation> operations;
 
+  @override
   int get todayTotal => operations.where((o) => o.time.isToday).length;
 }

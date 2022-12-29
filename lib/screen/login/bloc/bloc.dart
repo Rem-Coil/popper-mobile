@@ -2,12 +2,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:popper_mobile/core/error/failure.dart';
+import 'package:popper_mobile/domain/models/user/credentials.dart';
 import 'package:popper_mobile/domain/repository/auth_repository.dart';
-import 'package:popper_mobile/models/auth/user.dart';
-import 'package:popper_mobile/models/auth/user_credentials.dart';
 
 part 'event.dart';
-
 part 'state.dart';
 
 @injectable
@@ -27,7 +25,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
     emit(serverAnswer.fold(
       (failure) => LoginState.error(failure),
-      (user) => LoginState.authorized(user),
+      (_) => LoginState.authorized(),
     ));
   }
 }

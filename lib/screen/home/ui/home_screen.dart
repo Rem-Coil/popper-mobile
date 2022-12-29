@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:popper_mobile/core/setup/app_router.dart';
 import 'package:popper_mobile/core/setup/injection.dart';
-import 'package:popper_mobile/models/barcode/scanned_entity.dart';
 import 'package:popper_mobile/screen/home/bloc/bloc.dart';
 import 'package:popper_mobile/screen/home/ui/pages/operations/bloc/bloc.dart';
 import 'package:popper_mobile/screen/home/ui/pages/settings/bloc/bloc.dart';
@@ -47,9 +46,9 @@ class HomeScreen extends StatelessWidget implements AutoRouteWrapper {
           floatingActionButton: FloatingActionButton(
             onPressed: () {
               // TODO: не забыть убрать перед коммитом в релиз
-              final scanned = ScannedEntity.fromString('bobbin:201');
-              context.router.push(BobbinLoadingRoute(bobbin: scanned));
-              // context.router.push(const ScannerRoute());
+              // final scanned = ScannedEntityFactory.create('bobbin:201');
+              // context.router.push(SaveOperationRoute(entity: scanned));
+              context.router.push(const ScannerRoute());
             },
             child: const Icon(Icons.add),
           ),

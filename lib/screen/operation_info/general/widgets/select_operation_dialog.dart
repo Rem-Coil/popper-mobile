@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:popper_mobile/models/operation/operation_type.dart';
+import 'package:popper_mobile/domain/models/operation/operation_type.dart';
 
 class SelectOperationDialog extends StatelessWidget {
   const SelectOperationDialog({Key? key}) : super(key: key);

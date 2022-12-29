@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:popper_mobile/core/utils/date_utils.dart';
-import 'package:popper_mobile/models/operation/operation.dart';
+import 'package:popper_mobile/domain/models/operation/operation.dart';
 
 class HistoryOperationWidget extends StatelessWidget {
-  final FullOperation operation;
+  final Operation operation;
 
   const HistoryOperationWidget({
     Key? key,
@@ -23,7 +23,7 @@ class HistoryOperationWidget extends StatelessWidget {
           ),
           Expanded(
             child: ListTile(
-              title: Text(operation.operatorName),
+              title: Text(operation.user.fullName),
               subtitle: Text(operation.time.formatted),
             ),
           ),

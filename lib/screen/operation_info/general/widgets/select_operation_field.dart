@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:popper_mobile/models/operation/operation_type.dart';
+import 'package:popper_mobile/domain/models/operation/operation_type.dart';
 import 'package:popper_mobile/screen/operation_info/general/widgets/select_operation_dialog.dart';
 import 'package:popper_mobile/screen/operation_info/general/widgets/value_info_text.dart';
 
@@ -22,7 +22,6 @@ class SelectOperationButton extends StatelessWidget {
           builder: (_) => const SelectOperationDialog(),
         );
         onTypeSelected(type);
-        // BlocProvider.of<OperationSaveBloc>(context).add(ChangeOperation(type));
       },
       child: ValueInfoText(type),
     );

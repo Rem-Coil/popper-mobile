@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:popper_mobile/core/utils/typedefs.dart';
-import 'package:popper_mobile/models/operation/operation.dart';
+import 'package:popper_mobile/domain/models/operation/operation.dart';
 import 'package:popper_mobile/screen/home/ui/pages/operations/ui/operation_item.dart';
 
 class OperationsList extends StatelessWidget {

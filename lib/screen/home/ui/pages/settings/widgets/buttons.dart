@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:popper_mobile/core/utils/context_utils.dart';
+import 'package:popper_mobile/data/cache/core/app_cache.dart';
 import 'package:popper_mobile/screen/home/ui/pages/settings/bloc/bloc.dart';
 import 'package:popper_mobile/screen/home/ui/pages/settings/widgets/settings_button.dart';
 import 'package:popper_mobile/widgets/dialogs/decision_dialog.dart';
@@ -39,7 +39,7 @@ class _ClearCacheButtonState extends State<ClearCacheButton> {
     );
 
     if (isClear == true && mounted) {
-      await Hive.deleteFromDisk();
+      await AppCache.clear();
     }
   }
 }

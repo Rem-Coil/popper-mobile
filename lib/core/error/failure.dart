@@ -25,9 +25,20 @@ class NoSuchBobbinFailure extends Failure {
   String get message => 'Отсканированной катушки не существует';
 }
 
+class NoSuchBatchFailure extends Failure {
+  @override
+  String get message => 'Отсканированной партии не существует';
+}
+
 class OperationAlreadyExistFailure extends Failure {
   @override
   String get message => 'Данная опреация уже совершена над катушкой';
+}
+
+class ItemNotExistOrNotActiveFailure extends Failure {
+  @override
+  String get message =>
+      'Операция не может быть сохранена, так как обект не существует или не активен';
 }
 
 class UnknownFailure extends Failure {
@@ -38,4 +49,9 @@ class UnknownFailure extends Failure {
 class CacheFailure extends Failure {
   @override
   String get message => 'Ошибка кеша';
+}
+
+extension Test on Failure {
+  bool get isNetworkFailure =>
+      this is NoInternetFailure || this is ServerFailure;
 }

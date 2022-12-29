@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
+import 'package:popper_mobile/domain/models/user/user.dart';
 import 'package:popper_mobile/domain/repository/auth_repository.dart';
-import 'package:popper_mobile/models/auth/user.dart';
 
 part 'event.dart';
 
@@ -22,7 +22,7 @@ class CurrentUserBloc extends Bloc<CurrentUserEvent, CurrentUserState> {
     LoadUserEvent event,
     Emitter<CurrentUserState> emit,
   ) async {
-    final user = await _authRepository.getCurrentUser();
+    final user = await _authRepository.getCurrentUserOrNull();
     if (user == null) {
       emit(const UserNotSetState());
     } else {

@@ -5,9 +5,7 @@ import 'package:popper_mobile/screen/operation_info/general/widgets/value_info_f
 import 'package:popper_mobile/screen/operation_info/general/widgets/value_info_text.dart';
 
 class UserField extends StatelessWidget {
-  const UserField({
-    Key? key,
-  }) : super(key: key);
+  const UserField({super.key});
 
   @override
   Widget build(BuildContext context) {

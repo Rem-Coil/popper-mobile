@@ -9,13 +9,13 @@ class LoadHistoryState extends HistoryState {
 }
 
 class SuccessHistoryState extends HistoryState {
-  final List<OperationHistoryItem> items;
+  final List<PanelItem> items;
 
   const SuccessHistoryState(this.items);
 
-  SuccessHistoryState changeExtendedState(int index) {
-    final changedItems = List<OperationHistoryItem>.from(items);
-    changedItems[index].isExpanded = !changedItems[index].isExpanded;
+  SuccessHistoryState changeExpandedState(int index) {
+    final changedItems = List<PanelItem>.from(items);
+    changedItems[index].expand();
     return SuccessHistoryState(changedItems);
   }
 }

@@ -12,15 +12,18 @@ class ValueInfoField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          title,
-          style: const TextStyle(fontSize: 18, color: Color(0xFFA8A8A8)),
-        ),
-        value
-      ],
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title,
+            style: const TextStyle(fontSize: 18, color: Color(0xFFA8A8A8)),
+          ),
+          value
+        ],
+      ),
     );
   }
 }

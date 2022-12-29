@@ -20,7 +20,7 @@ class SplashBloc extends Bloc<SplashEvent, SplashState> {
     Initialize event,
     Emitter<SplashState> emit,
   ) async {
-    final user = await _authRepository.getCurrentUser();
+    final user = await _authRepository.getCurrentUserOrNull();
     if (user == null) {
       emit(NavigateToLogin());
     } else {

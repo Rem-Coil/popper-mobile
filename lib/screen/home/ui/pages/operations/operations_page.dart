@@ -4,6 +4,7 @@ import 'package:popper_mobile/screen/home/ui/pages/operations/bloc/bloc.dart';
 import 'package:popper_mobile/screen/home/ui/pages/operations/ui/body.dart';
 import 'package:popper_mobile/screen/home/ui/pages/operations/ui/header.dart';
 import 'package:popper_mobile/screen/home/ui/widgets/navigation_bar.dart';
+import 'package:popper_mobile/widgets/circular_loader.dart';
 
 class OperationsPage extends StatefulWidget {
   static const model = PageModel(
@@ -33,11 +34,36 @@ class _OperationsPageState extends State<OperationsPage> {
       color: theme.backgroundColor,
       child: BlocBuilder<OperationsBloc, OperationsState>(
         builder: (context, state) {
+          late final Widget body;
+
+          if (state is LoadingOperationsState) {
+            body = const Center(child: CircularLoader(size: 50));
+          }
+
+          if (state is OperationsLoadedState) {
+            body = BodyWithList(operations: state.operations);
+          }
+
           return NestedScrollView(
             headerSliverBuilder: (context, _) => [
               Header(total: state.todayTotal),
             ],
-            body: Body(operations: state.operations),
+            body: Padding(
+              padding: const EdgeInsets.only(top: 20),
+              child: Container(
+                width: double.infinity,
+                height: double.infinity,
+                padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    topRight: Radius.circular(20),
+                  ),
+                ),
+                child: body,
+              ),
+            ),
           );
         },
       ),

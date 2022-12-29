@@ -2,7 +2,7 @@ part of 'bloc.dart';
 
 @immutable
 class RegistrationState {
-  final UserRole role;
+  final Role role;
 
   const RegistrationState(this.role);
 }

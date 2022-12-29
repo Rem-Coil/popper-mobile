@@ -2,11 +2,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:popper_mobile/core/error/failure.dart';
+import 'package:popper_mobile/domain/models/user/role.dart';
+import 'package:popper_mobile/domain/models/user/user.dart';
 import 'package:popper_mobile/domain/repository/auth_repository.dart';
-import 'package:popper_mobile/models/auth/user.dart';
-import 'package:popper_mobile/models/auth/user_role.dart';
 
 part 'event.dart';
+
 part 'state.dart';
 
 @injectable
@@ -14,7 +15,7 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
   final AuthRepository _authRepository;
 
   RegistrationBloc(this._authRepository)
-      : super(const RegistrationState(UserRole.operator)) {
+      : super(const RegistrationState(Role.operator)) {
     on<OnDataEntered>(onDataEntered);
     on<ChangeUserRole>(onChangeUserRole);
   }
@@ -24,14 +25,13 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
     Emitter emit,
   ) async {
     emit(TryRegister(state));
-    final serverAnswer =
-        await _authRepository.singUp(toModel(state.role, event));
+    final user = _toModel(state.role, event);
+    final serverAnswer = await _authRepository.singUp(user, event.password);
 
-    final newState = serverAnswer.fold(
+    emit(serverAnswer.fold(
       (failure) => RegistrationFailed(state, failure),
-      (user) => RegistrationSuccessful(state),
-    );
-    emit(newState);
+      (_) => RegistrationSuccessful(state),
+    ));
   }
 
   void onChangeUserRole(ChangeUserRole event, Emitter emit) {
@@ -39,14 +39,13 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
     emit(RegistrationState(event.role!));
   }
 
-  UserRemote toModel(UserRole role, OnDataEntered event) {
-    return UserRemote(
+  User _toModel(Role role, OnDataEntered event) {
+    return User(
       id: -1,
       firstName: event.firstName,
       surname: event.surname,
       secondName: event.secondName,
       phone: event.phone,
-      password: event.password,
       role: role,
     );
   }

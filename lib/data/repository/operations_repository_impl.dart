@@ -1,99 +1,179 @@
+import 'dart:io';
+import 'dart:ui';
+
 import 'package:dio/dio.dart';
 import 'package:either_dart/either.dart';
 import 'package:injectable/injectable.dart';
 import 'package:popper_mobile/core/error/failure.dart';
 import 'package:popper_mobile/core/repository/base_repository.dart';
 import 'package:popper_mobile/core/utils/iterable_utils.dart';
+import 'package:popper_mobile/core/utils/typedefs.dart';
 import 'package:popper_mobile/data/api/api_provider.dart';
-import 'package:popper_mobile/domain/cache/operations_cache.dart';
+import 'package:popper_mobile/data/cache/cached_operations_cache.dart';
+import 'package:popper_mobile/data/cache/completed_operations_cache.dart';
+import 'package:popper_mobile/data/factories/operation_factory.dart';
+import 'package:popper_mobile/data/models/operation/cached_operation.dart';
+import 'package:popper_mobile/data/models/operation/completed_operation.dart';
+import 'package:popper_mobile/data/models/operation/local_operation.dart';
+import 'package:popper_mobile/data/models/operation/remote_operation.dart';
+import 'package:popper_mobile/data/repository/scanned_entities_repository_impl.dart';
+import 'package:popper_mobile/domain/models/bobbin/bobbin.dart';
+import 'package:popper_mobile/domain/models/operation/operation.dart';
+import 'package:popper_mobile/domain/models/operation/operation_type.dart';
 import 'package:popper_mobile/domain/repository/auth_repository.dart';
 import 'package:popper_mobile/domain/repository/operations_repository.dart';
-import 'package:popper_mobile/models/bobbin/bobbin.dart';
-import 'package:popper_mobile/models/operation/operation.dart';
-import 'package:popper_mobile/models/operation/operation_type.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-// TODO - протестировать появление повторяющихся операций
+const _operationTypeKey = 'operation_type';
+
 @Singleton(as: OperationsRepository)
 class OperationsRepositoryImpl extends BaseRepository
     implements OperationsRepository {
-  static const String _operationTypeKey = 'operation_type';
-  final ApiProvider _apiProvider;
-  final OperationsCache _operationsCache;
-  final AuthRepository _authRepository;
-
-  OperationsRepositoryImpl(
-    this._apiProvider,
-    this._operationsCache,
+  const OperationsRepositoryImpl(
+    this._completedOperationCache,
+    this._cachedOperationCache,
+    this._scannedEntitiesRepository,
     this._authRepository,
+    this._apiProvider,
   );
 
+  final CompletedOperationsCache _completedOperationCache;
+  final CachedOperationsCache _cachedOperationCache;
+
+  final LocalScannedEntitiesRepository _scannedEntitiesRepository;
+  final AuthRepository _authRepository;
+
+  final ApiProvider _apiProvider;
+
   @override
-  Future<Either<Failure, void>> saveOperation(Operation operation) async {
-    try {
-      final remoteOperation = operation.toRemote();
-      final api = _apiProvider.getApiService();
-      final token = await _authRepository.getUserToken();
-      final savedOperation =
-          await api.saveOperation('Bearer $token', remoteOperation);
-      final operationWithId = operation.copyWithId(savedOperation);
-      await _operationsCache.addCompletedOperation(operationWithId);
-      await setLastOperationType(savedOperation.type);
-      return const Right(null);
-    } on DioError catch (e) {
-      return Left(handleError(e));
-    }
+  Future<List<Operation>> getAll() async {
+    final operations = await Future.wait([
+      _completedOperationCache.getAll(),
+      _cachedOperationCache.getAll(),
+    ]);
+
+    return await Future.wait(
+      operations.expand((e) => e).map(_updateOperationInfo),
+    );
+  }
+
+  Future<Operation> _updateOperationInfo(LocalOperation local) async {
+    final user = await _authRepository.getCurrentUserOrNull();
+    final entity = await _scannedEntitiesRepository.getLocalEntityInfo(
+      local.entityId,
+      local.entityType,
+    );
+
+    return OperationFactory.mapToOperation(
+      user!,
+      local,
+      entity,
+    );
   }
 
   @override
-  Future<Either<Failure, void>> updateOperation(Operation operation) async {
-    try {
-      final remoteAction = operation.toRemote();
-      final api = _apiProvider.getApiService();
-      final token = await _authRepository.getUserToken();
-      await api.updateOperation('Bearer $token', remoteAction);
-      await _operationsCache.moveCachedToCompleted(operation);
-      return const Right(null);
-    } on DioError catch (e) {
-      return Left(handleError(e));
-    }
-  }
-
-  Future<void> _syncOperation(Operation operation) async {
-    final remoteOperation = operation.toRemote();
-    final api = _apiProvider.getApiService();
-
-    final token = await _authRepository.getUserToken();
-    final savedOperation =
-        await api.saveOperation('Bearer $token', remoteOperation);
-
-    final operationWithId = operation.copyWithId(savedOperation);
-
-    await _operationsCache.addCompletedOperation(operationWithId);
-    await _operationsCache.deleteCacheOperation(operation);
+  FResult<List<Operation>> getByBobbin(Bobbin bobbin) {
+    // TODO: implement getByBobbin
+    throw UnimplementedError();
   }
 
   @override
-  Future<Either<Failure, void>> syncOperations() async {
+  FResult<void> save(Operation operation) async {
     try {
-      final cached = await _operationsCache.getCachedOperations();
-      for (var operation in cached) {
-        await _syncOperation(operation);
+      final api = _apiProvider.getApiService(isSafe: true);
+      final remoteOperation = OperationFactory.mapToRemote(operation);
+
+      if (remoteOperation is RemoteBobbinOperation) {
+        final answer = await api.saveBobbinOperation(remoteOperation);
+        final saved = operation.setId(answer.id);
+        await _saveLocally(saved);
       }
+
+      if (remoteOperation is RemoteBatchOperation) {
+        final remotes = await api.saveBatchOperation(remoteOperation);
+        final operations = await _getOperationInfo(remotes);
+
+        for (var o in operations) {
+          await _saveLocally(o);
+        }
+      }
+
+      await setLastOperationType(operation.type);
       return const Right(null);
     } on DioError catch (e) {
-      return Left(handleError(e));
+      final failure = handleError(e, {
+        HttpStatus.badRequest: ItemNotExistOrNotActiveFailure(),
+      });
+
+      return Left(failure);
     }
   }
 
+  Future<List<Operation>> _getOperationInfo(
+    List<RemoteBobbinOperation> remotes,
+  ) async {
+    final user = await _authRepository.getCurrentUserOrNull();
+
+    return remotes.map((remote) {
+      final entity = Bobbin.unknown(remote.bobbinId);
+      return OperationFactory.mapFromRemoteToOperation(
+        user!,
+        remote,
+        entity,
+      );
+    }).toList();
+  }
+
+  Future<void> _saveLocally(Operation operation) async {
+    final local = OperationFactory.mapToLocal(operation) as CompletedOperation;
+    await _completedOperationCache.save(local);
+  }
+
   @override
-  Future<Either<Failure, void>> cacheOperation(Operation operation) async {
+  FResult<void> cache(Operation operation) async {
     try {
-      await _operationsCache.addCachedOperation(operation);
+      final notSynced = operation.setStatus(OperationStatus.notSync);
+      final local = OperationFactory.mapToLocal(notSynced) as CachedOperation;
+
+      await _cachedOperationCache.save(local);
+
       return const Right(null);
     } on Exception {
       return Left(CacheFailure());
     }
+  }
+
+  @override
+  FResult<void> delete(Operation operation) async {
+    final local = OperationFactory.mapToLocal(operation);
+
+    if (local is CompletedOperation) {
+      await _completedOperationCache.delete(local);
+    }
+
+    if (local is CachedOperation) {
+      await _cachedOperationCache.delete(local);
+    }
+
+    return const Right(null);
+  }
+
+  @override
+  FResult<void> syncOperations() async {
+    final operations = await _cachedOperationCache.getAll();
+
+    for (var o in operations) {
+      final operation = await _updateOperationInfo(o);
+      final result = await save(operation);
+
+      if (result.isLeft) {
+        return Left(result.left);
+      } else {
+        await delete(operation);
+      }
+    }
+
+    return const Right(null);
   }
 
   @override
@@ -114,40 +194,14 @@ class OperationsRepositoryImpl extends BaseRepository
   }
 
   @override
-  Future<Either<Failure, void>> deleteCachedOperation(
-    Operation operation,
-  ) async {
-    try {
-      _operationsCache.deleteCacheOperation(operation);
-      return const Right(null);
-    } catch (e) {
-      return Left(CacheFailure());
-    }
+  Future<void> subscribe(VoidCallback listener) async {
+    _completedOperationCache.subscribe(listener);
+    _cachedOperationCache.subscribe(listener);
   }
 
   @override
-  Future<Either<Failure, void>> deleteSavedOperation(
-    Operation operation,
-  ) async {
-    try {
-      final api = _apiProvider.getApiService();
-      final token = await _authRepository.getUserToken();
-      await api.deleteOperation('Bearer $token', operation.id);
-      await _operationsCache.deleteCompletedOperation(operation);
-      return const Right(null);
-    } on DioError catch (e) {
-      return Left(handleError(e));
-    }
-  }
-
-  @override
-  Future<Either<Failure, List<FullOperation>>> getAll(Bobbin bobbin) async {
-    try {
-      final api = _apiProvider.getApiService();
-      final operations = await api.getBobbinHistory(bobbin.id);
-      return Right(operations);
-    } on DioError catch (e) {
-      return Left(handleError(e));
-    }
+  Future<void> unsubscribe(VoidCallback listener) async {
+    _completedOperationCache.unsubscribe(listener);
+    _cachedOperationCache.unsubscribe(listener);
   }
 }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:popper_mobile/models/auth/user.dart';
+import 'package:popper_mobile/domain/models/user/user.dart';
 import 'package:popper_mobile/screen/current_user/bloc/bloc.dart';
 import 'package:popper_mobile/screen/home/ui/pages/settings/widgets/container_with_shadow.dart';
 

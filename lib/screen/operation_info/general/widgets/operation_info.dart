@@ -1,20 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:popper_mobile/models/operation/operation.dart';
-import 'package:popper_mobile/models/operation/operation_type.dart';
+import 'package:popper_mobile/domain/models/operation/operation.dart';
+import 'package:popper_mobile/domain/models/operation/operation_type.dart';
 import 'package:popper_mobile/screen/operation_info/general/widgets/select_operation_field.dart';
 import 'package:popper_mobile/screen/operation_info/general/widgets/user_field.dart';
 import 'package:popper_mobile/screen/operation_info/general/widgets/value_info_field.dart';
 import 'package:popper_mobile/screen/operation_info/general/widgets/value_info_text.dart';
 import 'package:popper_mobile/screen/operation_info/general/widgets/value_info_warning.dart';
 
-class OperationInfo extends StatelessWidget {
-  final formatter = DateFormat('d MMM yyyy, HH:mm', 'ru_RU');
-  final Operation operation;
-  final bool isImmutable;
-  final OnTypeSelected? onTypeSelected;
+final formatter = DateFormat('d MMM yyyy, HH:mm', 'ru_RU');
 
-  OperationInfo({
+class OperationInfo extends StatelessWidget {
+  const OperationInfo({
     Key? key,
     required this.operation,
     required this.isImmutable,
@@ -22,32 +19,43 @@ class OperationInfo extends StatelessWidget {
   })  : assert(isImmutable || onTypeSelected != null),
         super(key: key);
 
+  final Operation operation;
+  final bool isImmutable;
+  final OnTypeSelected? onTypeSelected;
+
   String get currentType =>
       operation.type?.localizedName ?? 'Выберете операцию';
 
-  bool get isBobbinNotLoaded => operation.bobbin.isUnknown;
-
-  String get bobbinNumber => operation.bobbin.bobbinNumber;
+  String get number => operation.item.number;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        ValueInfoField(
-          title: 'Идентификатор катушки',
-          value: ValueInfoText('${operation.bobbin.id}'),
+        Row(
+          children: [
+            Expanded(
+              child: ValueInfoField(
+                title: 'Тип',
+                value: ValueInfoText(operation.item.type),
+              ),
+            ),
+            Expanded(
+              child: ValueInfoField(
+                title: 'Идентификатор',
+                value: ValueInfoText('${operation.item.id}'),
+              ),
+            ),
+          ],
         ),
-        const SizedBox(height: 24),
         ValueInfoField(
-          title: 'Номер катушки',
-          value: isBobbinNotLoaded
-              ? ValueInfoWarning(bobbinNumber)
-              : ValueInfoText(bobbinNumber),
+          title: 'Номер',
+          value: !operation.item.isLoaded
+              ? ValueInfoWarning(number)
+              : ValueInfoText(number),
         ),
-        const SizedBox(height: 24),
         const UserField(),
-        const SizedBox(height: 24),
         ValueInfoField(
           title: 'Операция',
           value: !isImmutable
@@ -57,15 +65,13 @@ class OperationInfo extends StatelessWidget {
                 )
               : ValueInfoText(currentType),
         ),
-        const SizedBox(height: 24),
         ValueInfoField(
           title: 'Дата сканирования',
           value: ValueInfoText(formatter.format(operation.time)),
         ),
-        const SizedBox(height: 24),
         ValueInfoField(
-          title: 'Статус',
-          value: ValueInfoText(operation.isSuccessful ? 'Успешно' : 'Брак'),
+          title: 'Тип операции',
+          value: ValueInfoText(operation.isSuccessful ? 'Успешная' : 'Брак'),
         ),
       ],
     );

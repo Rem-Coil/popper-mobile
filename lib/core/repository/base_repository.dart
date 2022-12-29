@@ -6,7 +6,9 @@ import 'package:popper_mobile/core/error/failure.dart';
 
 typedef MappingRule = Map<int, Failure>;
 
-class BaseRepository {
+abstract class BaseRepository {
+  const BaseRepository();
+
   @protected
   Failure handleError(DioError e, [MappingRule rules = const {}]) {
     if (e.error is SocketException) {

@@ -1,25 +1,27 @@
-import 'package:either_dart/either.dart';
-import 'package:popper_mobile/core/error/failure.dart';
-import 'package:popper_mobile/models/bobbin/bobbin.dart';
-import 'package:popper_mobile/models/operation/operation.dart';
-import 'package:popper_mobile/models/operation/operation_type.dart';
+import 'package:flutter/foundation.dart';
+import 'package:popper_mobile/core/utils/typedefs.dart';
+import 'package:popper_mobile/domain/models/bobbin/bobbin.dart';
+import 'package:popper_mobile/domain/models/operation/operation.dart';
+import 'package:popper_mobile/domain/models/operation/operation_type.dart';
 
 abstract class OperationsRepository {
-  Future<Either<Failure, void>> saveOperation(Operation operation);
+  Future<List<Operation>> getAll();
 
-  Future<Either<Failure, void>> cacheOperation(Operation operation);
+  FResult<List<Operation>> getByBobbin(Bobbin bobbin);
 
-  Future<Either<Failure, void>> updateOperation(Operation operation);
+  FResult<void> save(Operation operation);
 
-  Future<Either<Failure, void>> syncOperations();
+  FResult<void> cache(Operation operation);
 
-  Future<Either<Failure, void>> deleteSavedOperation(Operation operation);
+  FResult<void> syncOperations();
 
-  Future<Either<Failure, void>> deleteCachedOperation(Operation operation);
+  FResult<void> delete(Operation operation);
+
+  Future<void> subscribe(VoidCallback listener);
+
+  Future<void> unsubscribe(VoidCallback listener);
 
   Future<OperationType?> getLastOperationType();
-
-  Future<Either<Failure, List<FullOperation>>> getAll(Bobbin bobbin);
 
   Future<void> setLastOperationType(OperationType? actionType);
 }

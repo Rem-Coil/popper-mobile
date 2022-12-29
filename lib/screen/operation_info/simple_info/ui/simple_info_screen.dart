@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:popper_mobile/models/operation/operation.dart';
+import 'package:popper_mobile/domain/models/operation/operation.dart';
 import 'package:popper_mobile/screen/operation_info/general/widgets/operation_info.dart';
 
 class SimpleInfoScreen extends StatelessWidget {

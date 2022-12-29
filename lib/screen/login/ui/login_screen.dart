@@ -43,7 +43,7 @@ class _LoginScreenState extends State<LoginScreen> {
             height: 540,
             child: BlocConsumer<LoginBloc, LoginState>(
               listener: (context, state) {
-                if (state.user != null) {
+                if (state.isAuthenticated) {
                   context.showSuccessSnackBar('Успешно');
                   context.read<CurrentUserBloc>().add(const LoadUserEvent());
 

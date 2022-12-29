@@ -1,106 +1,46 @@
 part of 'bloc.dart';
 
 @immutable
-abstract class OperationSaveState {
+abstract class OperationSaveState {}
+
+class FetchInfoState implements OperationSaveState {
+  const FetchInfoState(this.entity);
+
+  final ScannedEntity entity;
+}
+
+abstract class WithOperationState implements OperationSaveState {
+  const WithOperationState({required this.operation});
+
   final Operation operation;
 
-  bool get isCanSave => this is SelectTypeState && operation.type != null;
-
-  const OperationSaveState._({required this.operation});
-
-  OperationSaveState startSave() {
-    return SaveProcessState.load(operation);
-  }
-
-  OperationSaveState startCache() {
-    return CacheProcessState.load(operation);
-  }
+  bool get isCanSave => operation.type != null;
 }
 
-class SelectTypeState extends OperationSaveState {
-  const SelectTypeState._({required Operation operation})
-      : super._(operation: operation);
-
-  factory SelectTypeState.initial(Operation action) {
-    return SelectTypeState._(operation: action);
-  }
-
-  SelectTypeState changeType(OperationType? type) {
-    return SelectTypeState._(operation: operation.changeType(type));
-  }
-
-  SelectTypeState changeStatus(bool isSuccessful) {
-    return SelectTypeState._(operation: operation.changeStatus(isSuccessful));
-  }
+class SelectTypeState extends WithOperationState {
+  const SelectTypeState({required super.operation});
 }
 
-class SaveProcessState extends OperationSaveState {
-  final Status status;
-  final Failure? failure;
-
-  bool get isSaveError =>
-      failure is NoInternetFailure || failure is ServerFailure;
-
-  const SaveProcessState._({
-    required Operation operation,
-    required this.status,
-    required this.failure,
-  }) : super._(operation: operation);
-
-  SaveProcessState _copyWith({
-    Status? status,
-    Failure? failure,
-  }) {
-    return SaveProcessState._(
-      operation: operation,
-      status: status ?? this.status,
-      failure: failure ?? this.failure,
-    );
-  }
-
-  factory SaveProcessState.load(Operation operation) {
-    return SaveProcessState._(
-      operation: operation,
-      status: Status.load,
-      failure: null,
-    );
-  }
-
-  SaveProcessState error(Failure failure) {
-    return _copyWith(status: Status.error, failure: failure);
-  }
-
-  SaveProcessState success() {
-    return _copyWith(status: Status.success);
-  }
+class SaveProcessState extends WithOperationState {
+  const SaveProcessState({required super.operation});
 }
 
-class CacheProcessState extends OperationSaveState {
-  final Status status;
+class CanCacheState extends WithOperationState {
+  const CanCacheState({required super.operation});
+}
 
-  const CacheProcessState._({
-    required Operation operation,
-    required this.status,
-  }) : super._(operation: operation);
+class CacheProcessState extends WithOperationState {
+  const CacheProcessState({required super.operation});
+}
 
-  CacheProcessState _copyWith({
-    Status? status,
-  }) {
-    return CacheProcessState._(
-      operation: operation,
-      status: status ?? this.status,
-    );
-  }
+class FailedState implements OperationSaveState {
+  const FailedState(this.failure);
 
-  factory CacheProcessState.load(Operation operation) {
-    return CacheProcessState._(operation: operation, status: Status.load);
-  }
+  final Failure failure;
+}
 
-  CacheProcessState error() {
-    return _copyWith(status: Status.error);
-  }
+class SuccessState implements OperationSaveState {
+  const SuccessState(this.message);
 
-  CacheProcessState success() {
-    return _copyWith(status: Status.success);
-  }
+  final String message;
 }

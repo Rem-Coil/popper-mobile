@@ -20,7 +20,7 @@ class OnDataEntered extends RegistrationEvent {
 }
 
 class ChangeUserRole extends RegistrationEvent {
-  final UserRole? role;
+  final Role? role;
 
   ChangeUserRole(this.role);
 }
