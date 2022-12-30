@@ -6,6 +6,7 @@ import 'package:popper_mobile/data/models/operation/local_operation.dart';
 import 'package:popper_mobile/data/models/operation/remote_operation.dart';
 import 'package:popper_mobile/domain/models/operation/operation.dart';
 import 'package:popper_mobile/domain/models/operation/operation_type.dart';
+import 'package:popper_mobile/domain/models/operation/operation_with_comment.dart';
 import 'package:popper_mobile/domain/models/operation/scanned_entity.dart';
 import 'package:popper_mobile/domain/models/user/user.dart';
 
@@ -119,6 +120,7 @@ class OperationFactory {
     User user,
     LocalOperation operation,
     ScannedEntity item,
+    String? comment,
   ) {
     late final int id;
     late final OperationStatus status;
@@ -132,6 +134,19 @@ class OperationFactory {
     if (operation is CachedOperation) {
       id = -1;
       status = OperationStatus.notSync;
+    }
+
+    if (comment != null) {
+      return OperationWithComment(
+        id: id,
+        user: user,
+        item: item,
+        type: type,
+        time: operation.time,
+        status: status,
+        isSuccessful: operation.isSuccessful,
+        comment: comment,
+      );
     }
 
     return Operation(

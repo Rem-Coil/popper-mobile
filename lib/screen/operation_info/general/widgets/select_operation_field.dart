@@ -4,24 +4,29 @@ import 'package:popper_mobile/screen/operation_info/general/widgets/select_opera
 import 'package:popper_mobile/screen/operation_info/general/widgets/value_info_text.dart';
 
 class SelectOperationButton extends StatelessWidget {
-  final String type;
-  final OnTypeSelected onTypeSelected;
-
   const SelectOperationButton({
     Key? key,
     required this.type,
     required this.onTypeSelected,
-  }) : super(key: key);
+    required this.isImmutable,
+  })  : assert(isImmutable || onTypeSelected != null),
+        super(key: key);
+
+  final String type;
+  final OnTypeSelected? onTypeSelected;
+  final bool isImmutable;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () async {
-        final type = await showCupertinoModalPopup<OperationType?>(
-          context: context,
-          builder: (_) => const SelectOperationDialog(),
-        );
-        onTypeSelected(type);
+        if (!isImmutable) {
+          final type = await showCupertinoModalPopup<OperationType>(
+            context: context,
+            builder: (_) => const SelectOperationDialog(),
+          );
+          onTypeSelected!(type);
+        }
       },
       child: ValueInfoText(type),
     );

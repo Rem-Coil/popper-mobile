@@ -36,13 +36,14 @@ class Operation {
   final OperationStatus status;
   final bool isSuccessful;
 
-  Operation setId(int id) => _copy(id: id, status: OperationStatus.sync);
+  Operation setId(int id) => copy(id: id, status: OperationStatus.sync);
 
-  Operation setType(OperationType? type) => _copy(type: type);
+  Operation setType(OperationType? type) => copy(type: type);
 
-  Operation setStatus(OperationStatus status) => _copy(status: status);
+  Operation setStatus(OperationStatus status) => copy(status: status);
 
-  Operation _copy({
+  @protected
+  Operation copy({
     int? id,
     User? user,
     ScannedEntity? item,

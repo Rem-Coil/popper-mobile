@@ -16,10 +16,12 @@ import 'package:popper_mobile/data/models/operation/cached_operation.dart';
 import 'package:popper_mobile/data/models/operation/completed_operation.dart';
 import 'package:popper_mobile/data/models/operation/local_operation.dart';
 import 'package:popper_mobile/data/models/operation/remote_operation.dart';
+import 'package:popper_mobile/data/repository/comments_repository.dart';
 import 'package:popper_mobile/data/repository/scanned_entities_repository_impl.dart';
 import 'package:popper_mobile/domain/models/bobbin/bobbin.dart';
 import 'package:popper_mobile/domain/models/operation/operation.dart';
 import 'package:popper_mobile/domain/models/operation/operation_type.dart';
+import 'package:popper_mobile/domain/models/operation/operation_with_comment.dart';
 import 'package:popper_mobile/domain/repository/auth_repository.dart';
 import 'package:popper_mobile/domain/repository/operations_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -35,10 +37,13 @@ class OperationsRepositoryImpl extends BaseRepository
     this._scannedEntitiesRepository,
     this._authRepository,
     this._apiProvider,
+    this._commentsRepository,
   );
 
   final CompletedOperationsCache _completedOperationCache;
   final CachedOperationsCache _cachedOperationCache;
+
+  final CommentsRepository _commentsRepository;
 
   final LocalScannedEntitiesRepository _scannedEntitiesRepository;
   final AuthRepository _authRepository;
@@ -53,7 +58,9 @@ class OperationsRepositoryImpl extends BaseRepository
     ]);
 
     return await Future.wait(
-      operations.expand((e) => e).map(_updateOperationInfo),
+      operations
+          .expand((e) => e)
+          .map((o) => _updateOperationInfo(o as LocalOperation)),
     );
   }
 
@@ -64,11 +71,11 @@ class OperationsRepositoryImpl extends BaseRepository
       local.entityType,
     );
 
-    return OperationFactory.mapToOperation(
-      user!,
-      local,
-      entity,
+    final comment = await _commentsRepository.getByOperation(
+      local.key.toString(),
     );
+
+    return OperationFactory.mapToOperation(user!, local, entity, comment);
   }
 
   @override
@@ -87,6 +94,10 @@ class OperationsRepositoryImpl extends BaseRepository
         final answer = await api.saveBobbinOperation(remoteOperation);
         final saved = operation.setId(answer.id);
 
+        if (operation is OperationWithComment) {
+          await _commentsRepository.save(saved.id, operation.comment);
+        }
+
         final local = OperationFactory.mapToLocal(saved) as CompletedOperation;
         await _completedOperationCache.save(local);
       }
@@ -94,6 +105,12 @@ class OperationsRepositoryImpl extends BaseRepository
       if (remoteOperation is RemoteBatchOperation) {
         final remotes = await api.saveBatchOperation(remoteOperation);
         final operations = await _getOperationInfo(remotes);
+        if (operation is OperationWithComment) {
+          for (var o in operations) {
+            await _commentsRepository.save(o.id, operation.comment);
+          }
+        }
+
         final local = operations
             .map((o) => OperationFactory.mapToLocal(o) as CompletedOperation)
             .toList();
@@ -132,8 +149,10 @@ class OperationsRepositoryImpl extends BaseRepository
       final notSynced = operation.setStatus(OperationStatus.notSync);
       final local = OperationFactory.mapToLocal(notSynced) as CachedOperation;
 
+      if (operation is OperationWithComment) {
+        await _commentsRepository.cache(local.key, operation.comment);
+      }
       await _cachedOperationCache.save(local);
-
       return const Right(null);
     } on Exception {
       return Left(CacheFailure());
@@ -145,13 +164,14 @@ class OperationsRepositoryImpl extends BaseRepository
     final local = OperationFactory.mapToLocal(operation);
 
     if (local is CompletedOperation) {
-      await _completedOperationCache.delete(local);
+      await _completedOperationCache.delete(local.key);
     }
 
     if (local is CachedOperation) {
-      await _cachedOperationCache.delete(local);
+      await _cachedOperationCache.delete(local.key);
     }
 
+    await _commentsRepository.delete(local.key.toString());
     return const Right(null);
   }
 

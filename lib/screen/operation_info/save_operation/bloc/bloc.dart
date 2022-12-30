@@ -4,11 +4,13 @@ import 'package:injectable/injectable.dart';
 import 'package:popper_mobile/core/error/failure.dart';
 import 'package:popper_mobile/domain/models/operation/operation.dart';
 import 'package:popper_mobile/domain/models/operation/operation_type.dart';
+import 'package:popper_mobile/domain/models/operation/operation_with_comment.dart';
 import 'package:popper_mobile/domain/models/operation/scanned_entity.dart';
 import 'package:popper_mobile/domain/repository/operations_repository.dart';
 import 'package:popper_mobile/domain/usecase/operations/create_operation_usecase.dart';
 
 part 'event.dart';
+
 part 'state.dart';
 
 @injectable
@@ -24,23 +26,31 @@ class OperationSaveBloc extends Bloc<OperationSaveEvent, OperationSaveState> {
     on<_Initialize>(_onInitialize);
 
     on<ChangeOperation>(_onChangeOperation);
+    on<ChangeComment>(_onChangeComment);
 
     on<SaveOperation>(_onSaveOperation);
     on<CacheOperation>(_onCacheOperation);
 
-    add(_Initialize());
+    add(const _Initialize());
   }
 
   Future<void> _onInitialize(_Initialize event, Emitter emit) async {
     final entity = (state as FetchInfoState).entity;
     final operation = await _createOperation(entity);
-    emit(SelectTypeState(operation: operation));
+    emit(ModifyOperationState(operation: operation));
   }
 
   Future<void> _onChangeOperation(ChangeOperation event, Emitter emit) async {
     final operation = (state as WithOperationState).operation;
     final newOperation = operation.setType(event.operationType);
-    emit(SelectTypeState(operation: newOperation));
+    emit(ModifyOperationState(operation: newOperation));
+  }
+
+  Future<void> _onChangeComment(ChangeComment event, Emitter emit) async {
+    final operation =
+        (state as WithOperationState).operation as OperationWithComment;
+    final newOperation = operation.setComment(event.comment);
+    emit(ModifyOperationState(operation: newOperation));
   }
 
   Future<void> _onSaveOperation(SaveOperation event, Emitter emit) async {

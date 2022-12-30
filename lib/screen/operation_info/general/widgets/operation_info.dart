@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:popper_mobile/domain/models/operation/operation.dart';
 import 'package:popper_mobile/domain/models/operation/operation_type.dart';
+import 'package:popper_mobile/domain/models/operation/operation_with_comment.dart';
+import 'package:popper_mobile/screen/operation_info/general/widgets/comment_button.dart';
 import 'package:popper_mobile/screen/operation_info/general/widgets/select_operation_field.dart';
 import 'package:popper_mobile/screen/operation_info/general/widgets/value_info_field.dart';
 import 'package:popper_mobile/screen/operation_info/general/widgets/value_info_text.dart';
@@ -15,12 +17,14 @@ class OperationInfo extends StatelessWidget {
     required this.operation,
     required this.isImmutable,
     this.onTypeSelected,
+    this.onCommentEntered,
   })  : assert(isImmutable || onTypeSelected != null),
         super(key: key);
 
   final Operation operation;
   final bool isImmutable;
   final OnTypeSelected? onTypeSelected;
+  final OnCommentEntered? onCommentEntered;
 
   String get currentType =>
       operation.type?.localizedName ?? 'Выберете операцию';
@@ -29,6 +33,7 @@ class OperationInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -60,13 +65,22 @@ class OperationInfo extends StatelessWidget {
         ),
         ValueInfoField(
           title: 'Операция',
-          value: !isImmutable
-              ? SelectOperationButton(
-                  type: currentType,
-                  onTypeSelected: onTypeSelected!,
-                )
-              : ValueInfoText(currentType),
+          value: SelectOperationButton(
+            type: currentType,
+            isImmutable: isImmutable,
+            onTypeSelected: onTypeSelected,
+          ),
         ),
+        if (operation is OperationWithComment) ...[
+          ValueInfoField(
+            title: 'Комментарий',
+            value: CommentButton(
+              comment: (operation as OperationWithComment).comment,
+              isImmutable: isImmutable,
+              onCommentEntered: onCommentEntered,
+            ),
+          ),
+        ],
         ValueInfoField(
           title: 'Дата сканирования',
           value: ValueInfoText(formatter.format(operation.time)),
@@ -77,5 +91,9 @@ class OperationInfo extends StatelessWidget {
         ),
       ],
     );
+    // );
+    // },
+    // ),
+    // );
   }
 }

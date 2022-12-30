@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:popper_mobile/data/models/comment/remote_comment.dart';
 import 'package:popper_mobile/data/models/operation/remote_operation.dart';
 import 'package:popper_mobile/data/models/scanned_entity/remote_batch.dart';
 import 'package:popper_mobile/data/models/scanned_entity/remote_bobbin.dart';
@@ -34,6 +35,9 @@ abstract class ApiService {
   Future<List<RemoteBobbinOperation>> saveBatchOperation(
     @Body() RemoteBatchOperation operation,
   );
+
+  @POST('/comment')
+  Future<void> saveComment(@Body() RemoteComment comment);
 
   @DELETE('/bobbin/{id}')
   Future<void> defectBobbin(@Path('id') int id);

@@ -17,8 +17,8 @@ abstract class WithOperationState implements OperationSaveState {
   bool get isCanSave => operation.type != null;
 }
 
-class SelectTypeState extends WithOperationState {
-  const SelectTypeState({required super.operation});
+class ModifyOperationState extends WithOperationState {
+  const ModifyOperationState({required super.operation});
 }
 
 class SaveProcessState extends WithOperationState {

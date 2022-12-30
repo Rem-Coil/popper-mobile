@@ -1,5 +1,6 @@
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:injectable/injectable.dart';
+import 'package:popper_mobile/data/models/comment/local_comment.dart';
 import 'package:popper_mobile/data/models/operation/cached_operation.dart';
 import 'package:popper_mobile/data/models/operation/completed_operation.dart';
 import 'package:popper_mobile/data/models/operation/local_operation.dart';
@@ -16,7 +17,8 @@ class AppCache {
       ..registerAdapter(CachedOperationAdapter())
       ..registerAdapter(CompletedOperationAdapter())
       ..registerAdapter(LocalOperationTypeAdapter())
-      ..registerAdapter(EntityTypeAdapter());
+      ..registerAdapter(EntityTypeAdapter())
+      ..registerAdapter(LocalCommentAdapter());
   }
 
   static Future<void> clear() async {

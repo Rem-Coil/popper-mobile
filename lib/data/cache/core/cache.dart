@@ -34,9 +34,9 @@ abstract class Cache<K, T extends Cacheable<K>> {
     await box.putAll(pairs);
   }
 
-  Future<void> delete(T item) async {
+  Future<void> delete(K key) async {
     final box = await _box;
-    await box.delete(item.key);
+    await box.delete(key);
   }
 
   Future<void> subscribe(VoidCallback listener) async {

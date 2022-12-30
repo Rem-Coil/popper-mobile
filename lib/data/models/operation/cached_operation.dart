@@ -1,6 +1,5 @@
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/intl.dart';
-import 'package:popper_mobile/data/cache/core/cache.dart';
 import 'package:popper_mobile/data/models/operation/local_operation.dart';
 
 part 'cached_operation.g.dart';
@@ -8,7 +7,7 @@ part 'cached_operation.g.dart';
 final formatter = DateFormat('yyyy-MM-ddTHH:mm:ss');
 
 @HiveType(typeId: 12)
-class CachedOperation extends LocalOperation implements Cacheable<String> {
+class CachedOperation extends LocalOperation<String> {
   const CachedOperation({
     required super.entityType,
     required super.entityId,

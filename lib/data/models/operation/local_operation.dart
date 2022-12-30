@@ -1,4 +1,5 @@
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:popper_mobile/data/cache/core/cache.dart';
 
 part 'local_operation.g.dart';
 
@@ -28,7 +29,7 @@ enum LocalOperationType {
   testing
 }
 
-abstract class LocalOperation {
+abstract class LocalOperation<T> implements Cacheable<T> {
   const LocalOperation({
     required this.entityType,
     required this.entityId,

@@ -6,8 +6,6 @@ import 'package:popper_mobile/screen/operation_info/save_operation/bloc/bloc.dar
 import 'package:popper_mobile/widgets/buttons/simple_button.dart';
 import 'package:popper_mobile/widgets/circular_loader.dart';
 
-enum SampleItem { itemOne, itemTwo, itemThree }
-
 class SelectOperationTypeView extends StatelessWidget {
   const SelectOperationTypeView({super.key, required this.state});
 
@@ -24,15 +22,23 @@ class SelectOperationTypeView extends StatelessWidget {
         padding: const EdgeInsets.all(30),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            OperationInfo(
-              operation: state.operation,
-              isImmutable: state is ChangeOperation,
-              onTypeSelected: (t) {
-                BlocProvider.of<OperationSaveBloc>(context)
-                    .add(ChangeOperation(t));
-              },
+            Expanded(
+              child: SingleChildScrollView(
+                reverse: true,
+                child: OperationInfo(
+                  operation: state.operation,
+                  isImmutable: state is ChangeOperation,
+                  onTypeSelected: (t) {
+                    BlocProvider.of<OperationSaveBloc>(context)
+                        .add(ChangeOperation(t));
+                  },
+                  onCommentEntered: (c) {
+                    BlocProvider.of<OperationSaveBloc>(context)
+                        .add(ChangeComment(c));
+                  },
+                ),
+              ),
             ),
             const SizedBox(height: 16),
             _ActionButton(
@@ -66,7 +72,7 @@ class _ActionButton extends StatelessWidget {
       height: 55,
       color: Colors.green,
       onPressed: isActive
-          ? () => context.read<OperationSaveBloc>().add(SaveOperation())
+          ? () => context.read<OperationSaveBloc>().add(const SaveOperation())
           : null,
       child: isLoad
           ? const CircularLoader(size: 20, strokeWidth: 3)

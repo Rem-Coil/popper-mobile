@@ -63,7 +63,7 @@ class _SaveOperationScreenState extends State<SaveOperationScreen> {
 
     if (isSaveInCache == true) {
       if (!mounted) return;
-      context.read<OperationSaveBloc>().add(CacheOperation());
+      context.read<OperationSaveBloc>().add(const CacheOperation());
     } else {
       context.router.navigate(const HomeRoute());
     }

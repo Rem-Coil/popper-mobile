@@ -19,7 +19,7 @@ class SettingsPage extends StatelessWidget {
     final theme = Theme.of(context);
 
     return LayoutBuilder(
-      builder: (BuildContext context, BoxConstraints viewportConstraints) {
+      builder: (context, viewportConstraints) {
         return SingleChildScrollView(
           child: ConstrainedBox(
             constraints: BoxConstraints(
