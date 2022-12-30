@@ -35,6 +35,9 @@ abstract class ApiService {
     @Body() RemoteBatchOperation operation,
   );
 
+  @DELETE('/bobbin/{id}')
+  Future<void> defectBobbin(@Path('id') int id);
+
 // @PUT('/action')
 // Future<void> updateOperation(
 //     @Header('Authorization') String token, @Body() OperationRemote action);

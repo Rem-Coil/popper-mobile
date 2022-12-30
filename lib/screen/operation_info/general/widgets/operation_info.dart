@@ -3,7 +3,6 @@ import 'package:intl/intl.dart';
 import 'package:popper_mobile/domain/models/operation/operation.dart';
 import 'package:popper_mobile/domain/models/operation/operation_type.dart';
 import 'package:popper_mobile/screen/operation_info/general/widgets/select_operation_field.dart';
-import 'package:popper_mobile/screen/operation_info/general/widgets/user_field.dart';
 import 'package:popper_mobile/screen/operation_info/general/widgets/value_info_field.dart';
 import 'package:popper_mobile/screen/operation_info/general/widgets/value_info_text.dart';
 import 'package:popper_mobile/screen/operation_info/general/widgets/value_info_warning.dart';
@@ -55,7 +54,10 @@ class OperationInfo extends StatelessWidget {
               ? ValueInfoWarning(number)
               : ValueInfoText(number),
         ),
-        const UserField(),
+        ValueInfoField(
+          title: 'Сотрудник',
+          value: ValueInfoText(operation.user.fullName),
+        ),
         ValueInfoField(
           title: 'Операция',
           value: !isImmutable

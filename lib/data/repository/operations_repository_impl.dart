@@ -86,16 +86,18 @@ class OperationsRepositoryImpl extends BaseRepository
       if (remoteOperation is RemoteBobbinOperation) {
         final answer = await api.saveBobbinOperation(remoteOperation);
         final saved = operation.setId(answer.id);
-        await _saveLocally(saved);
+
+        final local = OperationFactory.mapToLocal(saved) as CompletedOperation;
+        await _completedOperationCache.save(local);
       }
 
       if (remoteOperation is RemoteBatchOperation) {
         final remotes = await api.saveBatchOperation(remoteOperation);
         final operations = await _getOperationInfo(remotes);
-
-        for (var o in operations) {
-          await _saveLocally(o);
-        }
+        final local = operations
+            .map((o) => OperationFactory.mapToLocal(o) as CompletedOperation)
+            .toList();
+        await _completedOperationCache.saveAll(local);
       }
 
       await setLastOperationType(operation.type);
@@ -122,11 +124,6 @@ class OperationsRepositoryImpl extends BaseRepository
         entity,
       );
     }).toList();
-  }
-
-  Future<void> _saveLocally(Operation operation) async {
-    final local = OperationFactory.mapToLocal(operation) as CompletedOperation;
-    await _completedOperationCache.save(local);
   }
 
   @override

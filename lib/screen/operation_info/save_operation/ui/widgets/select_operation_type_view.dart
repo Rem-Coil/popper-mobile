@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:popper_mobile/screen/operation_info/general/widgets/actions/ui/operation_app_bar.dart';
 import 'package:popper_mobile/screen/operation_info/general/widgets/operation_info.dart';
 import 'package:popper_mobile/screen/operation_info/save_operation/bloc/bloc.dart';
 import 'package:popper_mobile/widgets/buttons/simple_button.dart';
 import 'package:popper_mobile/widgets/circular_loader.dart';
+
+enum SampleItem { itemOne, itemTwo, itemThree }
 
 class SelectOperationTypeView extends StatelessWidget {
   const SelectOperationTypeView({super.key, required this.state});
@@ -13,19 +16,9 @@ class SelectOperationTypeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Сохранить операцию?'),
-        // TODO - open only if item is bobbin
-        // actions: [
-        //   IconButton(
-        //     onPressed: () {
-        //       context.router
-        //           .push(HistoryRoute(bobbin: widget.entity));
-        //     },
-        //     icon: const Icon(Icons.history),
-        //     splashRadius: 20.0,
-        //   ),
-        // ],
+      appBar: OperationAppBar(
+        title: 'Сохранить операцию?',
+        operation: state.operation,
       ),
       body: Padding(
         padding: const EdgeInsets.all(30),

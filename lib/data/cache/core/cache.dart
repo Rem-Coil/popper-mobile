@@ -28,6 +28,12 @@ abstract class Cache<K, T extends Cacheable<K>> {
     await box.put(item.key, item);
   }
 
+  Future<void> saveAll(List<T> items) async {
+    final box = await _box;
+    final pairs = {for (var i in items) i.key: i};
+    await box.putAll(pairs);
+  }
+
   Future<void> delete(T item) async {
     final box = await _box;
     await box.delete(item.key);

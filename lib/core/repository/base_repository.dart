@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
@@ -11,6 +12,8 @@ abstract class BaseRepository {
 
   @protected
   Failure handleError(DioError e, [MappingRule rules = const {}]) {
+    log(e.error.toString());
+
     if (e.error is SocketException) {
       return NoInternetFailure();
     }

@@ -1,6 +1,10 @@
+import 'dart:developer';
+
 import 'package:dio/dio.dart';
+import 'package:either_dart/either.dart';
 import 'package:injectable/injectable.dart';
 import 'package:popper_mobile/core/repository/base_repository.dart';
+import 'package:popper_mobile/core/utils/typedefs.dart';
 import 'package:popper_mobile/data/api/api_provider.dart';
 import 'package:popper_mobile/data/cache/bobbins_cache.dart';
 import 'package:popper_mobile/data/factories/scanned_entity_factory.dart';
@@ -28,8 +32,22 @@ class BobbinsRepositoryImpl extends BaseRepository
       await _cache.save(local);
 
       return ScannedEntityFactory.mapToBobbin(local);
-    } on DioError {
+    } on DioError catch (e) {
+      log(e.error.toString());
       return Bobbin.unknown(id);
+    }
+  }
+
+  @override
+  FResult<void> defectBobbin(int id) async {
+    // TODO - mark as defected in cache
+    try {
+      final api = _apiProvider.getApiService();
+      await api.defectBobbin(id);
+      return const Right(null);
+    } on DioError catch (e) {
+      final failure = handleError(e);
+      return Left(failure);
     }
   }
 }

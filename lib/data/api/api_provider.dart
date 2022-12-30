@@ -11,9 +11,9 @@ class ApiProvider {
   final String baseUrl;
 
   final _options = BaseOptions(
-    connectTimeout: 500,
-    sendTimeout: 500,
-    receiveTimeout: 1500,
+    connectTimeout: 5000,
+    sendTimeout: 5000,
+    receiveTimeout: 5000,
   );
 
   ApiProvider(@Named('BaseUrl') this.baseUrl);
@@ -25,14 +25,13 @@ class ApiProvider {
     }
 
     if (isLogging) {
-      dio.interceptors.add(_logInterceptor);
+      dio.interceptors.add(_allMessagesInterceptor);
     }
 
     return ApiService(dio, baseUrl: baseUrl);
   }
 
-  // ignore: unused_element
-  LogInterceptor get _logInterceptor {
+  LogInterceptor get _allMessagesInterceptor {
     return LogInterceptor(
       logPrint: _logPrint,
       error: true,
@@ -52,5 +51,5 @@ abstract class ServerAddressModule {
   @Named('BaseUrl')
   @Environment('dev')
   @Environment('prod')
-  String get baseUrlTest => 'http://remcoil.space:8080';
+  String get baseUrlTest => 'https://api.popper.remcoil.space';
 }
