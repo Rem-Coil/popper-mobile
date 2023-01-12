@@ -2,7 +2,7 @@ import 'package:popper_mobile/data/models/user/credentials_json.dart';
 import 'package:popper_mobile/data/models/user/user_json.dart';
 import 'package:popper_mobile/domain/models/user/credentials.dart';
 import 'package:popper_mobile/domain/models/user/role.dart';
-import 'package:popper_mobile/domain/models/user/user.dart';
+import 'package:popper_mobile/domain/models/user/user_identity.dart';
 
 class AuthFactory {
   static CredentialsJson mapCredentials(Credentials credentials) {
@@ -12,7 +12,7 @@ class AuthFactory {
     );
   }
 
-  static UserJson mapUser(User user, String password) {
+  static UserJson mapUser(UserIdentity user, String password) {
     final role = user.role == Role.operator ? 'operator' : 'quality_engineer';
     return UserJson(
       id: user.id,

@@ -1,13 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:popper_mobile/core/utils/typedefs.dart';
-import 'package:popper_mobile/domain/models/bobbin/bobbin.dart';
 import 'package:popper_mobile/domain/models/operation/operation.dart';
 import 'package:popper_mobile/domain/models/operation/operation_type.dart';
 
 abstract class OperationsRepository {
   Future<List<Operation>> getAll();
-
-  FResult<List<Operation>> getByBobbin(Bobbin bobbin);
 
   FResult<void> save(Operation operation);
 

@@ -37,6 +37,7 @@ dependencies:
 
   firebase_crashlytics: ^2.8.2
   firebase_core: ^1.18.0
+  timelines: ^0.1.0
 
 dev_dependencies:
   flutter_test:

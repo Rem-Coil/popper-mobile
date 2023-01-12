@@ -1,4 +1,4 @@
-import 'package:popper_mobile/core/exception/no_such_entity_type.dart';
+import 'package:popper_mobile/core/error/no_such_entity_type.dart';
 import 'package:popper_mobile/domain/models/batch/batch.dart';
 import 'package:popper_mobile/domain/models/bobbin/bobbin.dart';
 import 'package:popper_mobile/domain/models/operation/scanned_entity.dart';

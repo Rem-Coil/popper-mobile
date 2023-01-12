@@ -7,8 +7,10 @@ import 'package:popper_mobile/core/repository/base_repository.dart';
 import 'package:popper_mobile/core/utils/typedefs.dart';
 import 'package:popper_mobile/data/api/api_provider.dart';
 import 'package:popper_mobile/data/cache/bobbins_cache.dart';
+import 'package:popper_mobile/data/factories/history_factory.dart';
 import 'package:popper_mobile/data/factories/scanned_entity_factory.dart';
 import 'package:popper_mobile/domain/models/bobbin/bobbin.dart';
+import 'package:popper_mobile/domain/models/history/bobbin_history.dart';
 import 'package:popper_mobile/domain/repository/bobbins_repository.dart';
 
 @Singleton(as: BobbinsRepository)
@@ -35,6 +37,17 @@ class BobbinsRepositoryImpl extends BaseRepository
     } on DioError catch (e) {
       log(e.error.toString());
       return Bobbin.unknown(id);
+    }
+  }
+
+  @override
+  FResult<BobbinHistory> getHistoryById(int id) async {
+    try {
+      final api = _apiProvider.getApiService();
+      final history = await api.getBobbinHistory(id);
+      return Right(HistoryFactory.mapToHistory(history));
+    } on DioError catch (e) {
+      return Left(handleError(e));
     }
   }
 

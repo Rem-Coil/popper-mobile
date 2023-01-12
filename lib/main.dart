@@ -9,7 +9,7 @@ import 'package:popper_mobile/core/setup/injection.dart';
 import 'package:popper_mobile/core/theme/colors.dart';
 import 'package:popper_mobile/core/theme/fonts.dart';
 import 'package:popper_mobile/data/cache/core/app_cache.dart';
-import 'package:popper_mobile/screen/current_user/bloc/bloc.dart';
+import 'package:popper_mobile/ui/current_user/bloc/bloc.dart';
 
 Future<void> main() async {
   // runZonedGuarded<Future<void>>(() async {

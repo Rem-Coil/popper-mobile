@@ -9,7 +9,7 @@ import 'package:popper_mobile/data/factories/auth_factory.dart';
 import 'package:popper_mobile/data/factories/user_factory.dart';
 import 'package:popper_mobile/data/repository/token_storage.dart';
 import 'package:popper_mobile/domain/models/user/credentials.dart';
-import 'package:popper_mobile/domain/models/user/user.dart';
+import 'package:popper_mobile/domain/models/user/user_identity.dart';
 import 'package:popper_mobile/domain/repository/auth_repository.dart';
 
 @Singleton(as: AuthRepository)
@@ -33,7 +33,7 @@ class AuthRepositoryImpl extends BaseRepository implements AuthRepository {
   }
 
   @override
-  FResult<void> singUp(User user, String password) async {
+  FResult<void> singUp(UserIdentity user, String password) async {
     try {
       final service = _apiProvider.getApiService();
       final userJson = AuthFactory.mapUser(user, password);
@@ -46,7 +46,7 @@ class AuthRepositoryImpl extends BaseRepository implements AuthRepository {
   }
 
   @override
-  Future<User?> getCurrentUserOrNull() async {
+  Future<UserIdentity?> getCurrentUserOrNull() async {
     final token = await _storage.getToken();
     return token != null ? UserFactory.fromString(token.token) : null;
   }

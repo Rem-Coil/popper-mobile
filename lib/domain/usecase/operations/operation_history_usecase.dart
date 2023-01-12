@@ -2,29 +2,26 @@ import 'package:either_dart/either.dart';
 import 'package:injectable/injectable.dart';
 import 'package:popper_mobile/core/error/failure.dart';
 import 'package:popper_mobile/domain/models/bobbin/bobbin.dart';
-import 'package:popper_mobile/domain/models/history/type_history.dart';
-import 'package:popper_mobile/domain/models/operation/operation.dart';
-import 'package:popper_mobile/domain/models/operation/operation_type.dart';
-import 'package:popper_mobile/domain/repository/operations_repository.dart';
+import 'package:popper_mobile/domain/models/history/bobbin_history.dart';
+import 'package:popper_mobile/domain/repository/bobbins_repository.dart';
 
 @singleton
 class BobbinHistoryUsecase {
   const BobbinHistoryUsecase(this._repository);
 
-  final OperationsRepository _repository;
+  final BobbinsRepository _repository;
 
-  Future<Either<Failure, List<TypeHistory>>> call(Bobbin bobbin) async {
-    final operations = await _repository.getByBobbin(bobbin);
-    if (operations.isLeft) return Left(operations.left);
+  Future<Either<Failure, BobbinHistory>> call(Bobbin bobbin) async {
+    final history = await _repository.getHistoryById(bobbin.id);
+    if (history.isLeft) return Left(history.left);
 
-    return Right(_groupByType(operations.right));
-  }
+    final rawHistory = history.right;
+    final operations = rawHistory.operations;
+    operations.sort((o1, o2) => o2.time.compareTo(o1.time));
 
-  List<TypeHistory> _groupByType(List<Operation> operations) {
-    return OperationType.values.map((t) {
-      final groupedOperations = operations.where((o) => o.type == t).toList();
-      groupedOperations.sort((o1, o2) => o1.time.compareTo(o2.time));
-      return TypeHistory(type: t, operations: groupedOperations);
-    }).toList();
+    return Right(BobbinHistory(
+      bobbin: rawHistory.bobbin,
+      operations: operations,
+    ));
   }
 }

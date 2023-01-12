@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:popper_mobile/widgets/circular_loader.dart';
+import 'package:popper_mobile/core/widgets/circular_loader.dart';
 
 extension SnackBars on BuildContext {
   void showLoadingSnackBar({String? message}) {

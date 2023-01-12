@@ -99,11 +99,25 @@ class OperationFactory {
   static Operation mapFromRemoteToOperation(
     User user,
     RemoteOperation operation,
-    ScannedEntity item,
-  ) {
+    ScannedEntity item, [
+    String? comment,
+  ]) {
     final id = operation.id;
     const status = OperationStatus.sync;
     final type = $enumDecode(_typeRemoteRelations, operation.type);
+
+    if (comment != null) {
+      return OperationWithComment(
+        id: id,
+        user: user,
+        item: item,
+        type: type,
+        time: operation.time,
+        status: status,
+        isSuccessful: operation.successful,
+        comment: comment,
+      );
+    }
 
     return Operation(
       id: id,

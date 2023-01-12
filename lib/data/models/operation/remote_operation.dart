@@ -3,6 +3,8 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'remote_operation.g.dart';
 
+part 'remote_operation_info.dart';
+
 enum RemoteOperationType {
   @JsonValue('winding')
   winding,

@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:popper_mobile/data/models/comment/remote_comment.dart';
+import 'package:popper_mobile/data/models/history/remote_bobbin_history.dart';
 import 'package:popper_mobile/data/models/operation/remote_operation.dart';
 import 'package:popper_mobile/data/models/scanned_entity/remote_batch.dart';
 import 'package:popper_mobile/data/models/scanned_entity/remote_bobbin.dart';
@@ -42,14 +43,11 @@ abstract class ApiService {
   @DELETE('/bobbin/{id}')
   Future<void> defectBobbin(@Path('id') int id);
 
+  @GET('/action/bobbin/{id}/full')
+  Future<RemoteBobbinHistory> getBobbinHistory(@Path('id') int id);
+
 // @PUT('/action')
 // Future<void> updateOperation(
 //     @Header('Authorization') String token, @Body() OperationRemote action);
 //
-// @DELETE('/action/{id}')
-// Future<void> deleteOperation(
-//     @Header('Authorization') String token, @Path('id') int id);
-//
-// @GET('/action/full/bobbin/{id}')
-// Future<List<FullOperation>> getBobbinHistory(@Path('id') int id);
 }

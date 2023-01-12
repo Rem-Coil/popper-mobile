@@ -1,13 +1,13 @@
 import 'package:popper_mobile/core/utils/typedefs.dart';
 import 'package:popper_mobile/domain/models/user/credentials.dart';
-import 'package:popper_mobile/domain/models/user/user.dart';
+import 'package:popper_mobile/domain/models/user/user_identity.dart';
 
 abstract class AuthRepository {
   FResult<void> singIn(Credentials credentials);
 
-  FResult<void> singUp(User user, String password);
+  FResult<void> singUp(UserIdentity user, String password);
 
   Future<void> logOut();
 
-  Future<User?> getCurrentUserOrNull();
+  Future<UserIdentity?> getCurrentUserOrNull();
 }

@@ -79,12 +79,6 @@ class OperationsRepositoryImpl extends BaseRepository
   }
 
   @override
-  FResult<List<Operation>> getByBobbin(Bobbin bobbin) {
-    // TODO: implement getByBobbin
-    throw UnimplementedError();
-  }
-
-  @override
   FResult<void> save(Operation operation) async {
     try {
       final api = _apiProvider.getApiService(isSafe: true);
