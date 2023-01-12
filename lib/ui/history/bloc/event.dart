@@ -2,8 +2,8 @@ part of 'bloc.dart';
 
 class HistoryEvent {}
 
-class GetHistory extends HistoryEvent {
-  final Bobbin bobbin;
+class GetHistory implements HistoryEvent {
+  const GetHistory(this.bobbin);
 
-  GetHistory(this.bobbin);
+  final ScannedEntity bobbin;
 }

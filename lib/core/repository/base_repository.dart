@@ -15,7 +15,7 @@ abstract class BaseRepository {
     log(e.error.toString());
 
     if (e.error is SocketException) {
-      return NoInternetFailure();
+      return const NoInternetFailure();
     }
 
     final statusCode = e.response?.statusCode;
@@ -23,15 +23,15 @@ abstract class BaseRepository {
       switch (statusCode) {
         case HttpStatus.internalServerError:
         case HttpStatus.badGateway:
-          return ServerFailure();
+          return const ServerFailure();
         case HttpStatus.unauthorized:
-          return WrongCredentialsFailure();
+          return const WrongCredentialsFailure();
       }
 
       final mapped = rules[statusCode];
       if (mapped != null) return mapped;
     }
 
-    return UnknownFailure();
+    return const UnknownFailure();
   }
 }

@@ -4,15 +4,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:popper_mobile/core/setup/injection.dart';
 import 'package:popper_mobile/core/widgets/center_text_with_image.dart';
 import 'package:popper_mobile/core/widgets/circular_loader.dart';
-import 'package:popper_mobile/domain/models/bobbin/bobbin.dart';
+import 'package:popper_mobile/domain/models/history/batch_history.dart';
 import 'package:popper_mobile/domain/models/history/bobbin_history.dart';
+import 'package:popper_mobile/domain/models/operation/scanned_entity.dart';
 import 'package:popper_mobile/ui/history/bloc/bloc.dart';
 import 'package:popper_mobile/ui/history/ui/widgets/history_timeline.dart';
 
 class HistoryScreen extends StatefulWidget implements AutoRouteWrapper {
-  const HistoryScreen({Key? key, required this.bobbin}) : super(key: key);
+  const HistoryScreen({Key? key, required this.item}) : super(key: key);
 
-  final Bobbin bobbin;
+  final ScannedEntity item;
 
   @override
   State<HistoryScreen> createState() => _HistoryScreenState();
@@ -30,7 +31,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
   @override
   void initState() {
     super.initState();
-    BlocProvider.of<HistoryBloc>(context).add(GetHistory(widget.bobbin));
+    BlocProvider.of<HistoryBloc>(context).add(GetHistory(widget.item));
   }
 
   @override
@@ -56,15 +57,100 @@ class _HistoryScreenState extends State<HistoryScreen> {
             );
           }
 
-          return _HistoryState((state as SuccessHistoryState).history);
+          final history = (state as SuccessHistoryState).history;
+
+          if (history is BobbinHistory) {
+            return _BobbinHistoryView(history);
+          }
+
+          return _BatchHistoryView(history as BatchHistory);
         },
       ),
     );
   }
 }
 
-class _HistoryState extends StatelessWidget {
-  const _HistoryState(this.history);
+class _BatchHistoryView extends StatefulWidget {
+  const _BatchHistoryView(this.history);
+
+  final BatchHistory history;
+
+  @override
+  State<_BatchHistoryView> createState() => _BatchHistoryViewState();
+}
+
+class _BatchHistoryViewState extends State<_BatchHistoryView> {
+  int selected = -1;
+
+  @override
+  Widget build(BuildContext context) {
+    late final Widget body;
+    late final Widget title;
+
+    if (selected != -1) {
+      final bobbinHistory = widget.history.bobbins[selected];
+      title = Row(
+        children: [
+          _TitleView(title: 'Катушка: ${bobbinHistory.number}'),
+          const Spacer(),
+          InkWell(
+            onTap: () => setState(() {
+              selected = -1;
+            }),
+            child: const _TitleView(
+              title: 'Сбросить',
+              textColor: Colors.blue,
+              isSmall: true,
+            ),
+          )
+        ],
+      );
+      body = HistoryTimeLine(operations: bobbinHistory.operations);
+    } else {
+      title = const _TitleView(title: 'Катушка:');
+      body = _SelectBobbinView(
+        bobbins: widget.history.bobbins,
+        onTap: (item) => setState(() {
+          selected = item;
+        }),
+      );
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _TitleView(title: 'Партия: ${widget.history.number}'),
+        const Divider(height: 1.0),
+        title,
+        const Divider(height: 1.0),
+        Expanded(child: body),
+      ],
+    );
+  }
+}
+
+class _SelectBobbinView extends StatelessWidget {
+  const _SelectBobbinView({required this.bobbins, required this.onTap});
+
+  final List<BobbinHistory> bobbins;
+  final Function(int) onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      itemCount: bobbins.length,
+      itemBuilder: (context, i) {
+        return ListTile(
+          onTap: () => onTap(i),
+          title: Text(bobbins[i].number),
+        );
+      },
+    );
+  }
+}
+
+class _BobbinHistoryView extends StatelessWidget {
+  const _BobbinHistoryView(this.history);
 
   final BobbinHistory history;
 
@@ -73,16 +159,36 @@ class _HistoryState extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Text(
-            'Катушка: ${history.bobbin.number}',
-            style: Theme.of(context).textTheme.headlineSmall,
-          ),
-        ),
+        _TitleView(title: 'Катушка: ${history.number}'),
         const Divider(height: 1.0),
         Expanded(child: HistoryTimeLine(operations: history.operations)),
       ],
+    );
+  }
+}
+
+class _TitleView extends StatelessWidget {
+  const _TitleView({
+    required this.title,
+    this.textColor,
+    this.isSmall = false,
+  });
+
+  final String title;
+  final Color? textColor;
+  final bool isSmall;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context).textTheme;
+    final textTheme = isSmall ? theme.subtitle1 : theme.headlineSmall;
+
+    return Padding(
+      padding: const EdgeInsets.all(20.0),
+      child: Text(
+        title,
+        style: textTheme?.copyWith(color: textColor),
+      ),
     );
   }
 }

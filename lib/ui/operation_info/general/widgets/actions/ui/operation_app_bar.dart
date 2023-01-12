@@ -42,15 +42,13 @@ class OperationAppBar extends StatelessWidget implements PreferredSizeWidget {
       title: Text(title),
       backgroundColor: Theme.of(context).backgroundColor,
       actions: [
-        if (operation.item is Bobbin) ...[
-          IconButton(
-            icon: const Icon(Icons.history),
-            splashRadius: 20.0,
-            onPressed: () => context.router.push(
-              HistoryRoute(bobbin: operation.item as Bobbin),
-            ),
-          )
-        ],
+        IconButton(
+          icon: const Icon(Icons.history),
+          splashRadius: 20.0,
+          onPressed: () => context.router.push(
+            HistoryRoute(item: operation.item),
+          ),
+        ),
         if (user.role == Role.qualityEngineer && buttons != null) buttons,
       ],
     );

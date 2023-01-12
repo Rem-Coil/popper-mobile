@@ -14,18 +14,16 @@ class CenterTextWithImage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Container(
-        height: 330,
+        height: 385,
         padding: const EdgeInsets.symmetric(horizontal: 32),
         child: Column(
           children: [
             Image.asset(image),
             Text(
               title,
-              style: const TextStyle(
-                fontSize: 34,
-                fontWeight: FontWeight.bold,
-                // height: 1.2,
-              ),
+              maxLines: 3,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(fontSize: 34),
               textAlign: TextAlign.center,
             ),
           ],

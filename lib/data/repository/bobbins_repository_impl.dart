@@ -1,8 +1,9 @@
 import 'dart:developer';
-
+import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:either_dart/either.dart';
 import 'package:injectable/injectable.dart';
+import 'package:popper_mobile/core/error/failure.dart';
 import 'package:popper_mobile/core/repository/base_repository.dart';
 import 'package:popper_mobile/core/utils/typedefs.dart';
 import 'package:popper_mobile/data/api/api_provider.dart';
@@ -45,9 +46,12 @@ class BobbinsRepositoryImpl extends BaseRepository
     try {
       final api = _apiProvider.getApiService();
       final history = await api.getBobbinHistory(id);
-      return Right(HistoryFactory.mapToHistory(history));
+      return Right(HistoryFactory.mapBobbinHistory(history));
     } on DioError catch (e) {
-      return Left(handleError(e));
+      final failure = handleError(e, {
+        HttpStatus.notFound: const BobbinNotContainOperationsFailure(),
+      });
+      return Left(failure);
     }
   }
 

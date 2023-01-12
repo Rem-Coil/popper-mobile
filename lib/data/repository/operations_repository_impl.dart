@@ -115,7 +115,7 @@ class OperationsRepositoryImpl extends BaseRepository
       return const Right(null);
     } on DioError catch (e) {
       final failure = handleError(e, {
-        HttpStatus.badRequest: ItemNotExistOrNotActiveFailure(),
+        HttpStatus.badRequest: const ItemNotExistOrNotActiveFailure(),
       });
 
       return Left(failure);
@@ -149,7 +149,7 @@ class OperationsRepositoryImpl extends BaseRepository
       await _cachedOperationCache.save(local);
       return const Right(null);
     } on Exception {
-      return Left(CacheFailure());
+      return const Left(CacheFailure());
     }
   }
 

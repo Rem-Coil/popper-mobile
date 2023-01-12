@@ -11,7 +11,7 @@ class LoadHistoryState extends HistoryState {
 class SuccessHistoryState extends HistoryState {
   const SuccessHistoryState(this.history);
 
-  final BobbinHistory history;
+  final History history;
 }
 
 class FailureHistoryState extends HistoryState {

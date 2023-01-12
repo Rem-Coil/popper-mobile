@@ -5,48 +5,60 @@ abstract class Failure {
   String get message;
 }
 
-class NoInternetFailure extends Failure {
+class NoInternetFailure implements Failure {
+  const NoInternetFailure();
+
   @override
   String get message => 'Нет интернета';
 }
 
-class ServerFailure extends Failure {
+class ServerFailure implements Failure {
+  const ServerFailure();
+
   @override
   String get message => 'Ошибка сервера';
 }
 
-class WrongCredentialsFailure extends Failure {
+class WrongCredentialsFailure implements Failure {
+  const WrongCredentialsFailure();
+
   @override
   String get message => 'Неправильные данные пользователя';
 }
 
-class NoSuchBobbinFailure extends Failure {
-  @override
-  String get message => 'Отсканированной катушки не существует';
-}
+class ItemNotExistOrNotActiveFailure implements Failure {
+  const ItemNotExistOrNotActiveFailure();
 
-class NoSuchBatchFailure extends Failure {
-  @override
-  String get message => 'Отсканированной партии не существует';
-}
-
-class OperationAlreadyExistFailure extends Failure {
-  @override
-  String get message => 'Данная опреация уже совершена над катушкой';
-}
-
-class ItemNotExistOrNotActiveFailure extends Failure {
   @override
   String get message =>
       'Операция не может быть сохранена, так как обект не существует или не активен';
 }
 
-class UnknownFailure extends Failure {
+class BobbinNotContainOperationsFailure implements Failure {
+  const BobbinNotContainOperationsFailure();
+
+  @override
+  String get message => 'По данной катушке ещё не выполнено операций';
+}
+
+class BatchNotContainOperationsFailure implements Failure {
+  const BatchNotContainOperationsFailure();
+
+  @override
+  String get message =>
+      'По катушкам из выбранной партии ещё не выполнено операций';
+}
+
+class UnknownFailure implements Failure {
+  const UnknownFailure();
+
   @override
   String get message => 'Неизвестная ошибка';
 }
 
-class CacheFailure extends Failure {
+class CacheFailure implements Failure {
+  const CacheFailure();
+
   @override
   String get message => 'Ошибка кеша';
 }

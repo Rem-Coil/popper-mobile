@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:popper_mobile/core/error/failure.dart';
-import 'package:popper_mobile/domain/models/bobbin/bobbin.dart';
-import 'package:popper_mobile/domain/models/history/bobbin_history.dart';
+import 'package:popper_mobile/domain/models/history/history.dart';
+import 'package:popper_mobile/domain/models/operation/scanned_entity.dart';
 import 'package:popper_mobile/domain/usecase/operations/operation_history_usecase.dart';
 
 part 'event.dart';
