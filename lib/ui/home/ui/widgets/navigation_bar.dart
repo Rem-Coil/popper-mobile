@@ -27,13 +27,6 @@ class NavigationAppBar extends StatelessWidget {
       ));
     }
 
-    buttons.add(TextButton(
-      onPressed: () {
-        throw Exception();
-      },
-      child: const Text('Throw Test Exception'),
-    ));
-
     return Container(
       color: backgroundColor,
       child: BottomAppBar(

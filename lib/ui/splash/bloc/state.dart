@@ -3,8 +3,16 @@ part of 'bloc.dart';
 @immutable
 class SplashState {}
 
-class InitialState extends SplashState {}
+class InitialState implements SplashState {
+  const InitialState();
+}
 
-class NavigateToLogin extends SplashState {}
+class BackgroundTaskState implements SplashState {
+  const BackgroundTaskState(this.task);
 
-class NavigateToHome extends SplashState {}
+  final String task;
+}
+
+class TasksEnd implements SplashState {
+  const TasksEnd();
+}

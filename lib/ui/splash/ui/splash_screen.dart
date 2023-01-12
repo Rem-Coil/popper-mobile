@@ -4,14 +4,24 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:popper_mobile/core/setup/app_router.dart';
+import 'package:popper_mobile/core/setup/injection.dart';
 import 'package:popper_mobile/ui/current_user/bloc/bloc.dart';
 import 'package:popper_mobile/core/widgets/logo.dart';
+import 'package:popper_mobile/ui/splash/bloc/bloc.dart';
 
-class SplashScreen extends StatefulWidget {
+class SplashScreen extends StatefulWidget implements AutoRouteWrapper {
   const SplashScreen({Key? key}) : super(key: key);
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();
+
+  @override
+  Widget wrappedRoute(BuildContext context) {
+    return BlocProvider<SplashBloc>(
+      create: (_) => getIt<SplashBloc>(),
+      child: this,
+    );
+  }
 }
 
 class _SplashScreenState extends State<SplashScreen> {
@@ -32,11 +42,44 @@ class _SplashScreenState extends State<SplashScreen> {
               if (state is UserNotSetState) {
                 _navigateDelayed(context, const LoginRoute());
               } else if (state is WithUserState) {
-                _navigateDelayed(context, const HomeRoute());
+                context.read<SplashBloc>().add(const TrySync());
               }
             });
           },
-          child: const Logo(250),
+          child: BlocConsumer<SplashBloc, SplashState>(
+            listenWhen: (_, state) => state is TasksEnd,
+            listener: (context, state) {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                _navigateDelayed(context, const HomeRoute());
+              });
+            },
+            builder: (context, state) {
+              return Center(
+                child: SizedBox(
+                  height: 150,
+                  width: 250,
+                  child: Column(
+                    children: [
+                      const Logo(),
+                      const SizedBox(height: 24),
+                      if (state is BackgroundTaskState) ...[
+                        Text(
+                          state.task,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: Theme.of(context)
+                              .textTheme
+                              .headline6
+                              ?.copyWith(color: const Color(0xFF71706D)),
+                          textAlign: TextAlign.center,
+                        ),
+                      ]
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
         ),
       ),
     );

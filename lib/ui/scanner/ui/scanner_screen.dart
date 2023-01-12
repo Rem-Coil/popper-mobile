@@ -22,7 +22,10 @@ class _ScannerScreenState extends State<ScannerScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Отсканируйте катушку:')),
+      appBar: AppBar(
+        title: const Text('Отсканируйте катушку:'),
+        backgroundColor: Theme.of(context).backgroundColor,
+      ),
       body: Column(
         children: <Widget>[
           Expanded(

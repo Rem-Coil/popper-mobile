@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 
 class Logo extends StatelessWidget {
-  final double size;
+  const Logo({Key? key, this.width}) : super(key: key);
 
-  const Logo(this.size, {Key? key}) : super(key: key);
+  final double? width;
 
   @override
   Widget build(BuildContext context) {
     return Center(
       child: Image.asset(
         'assets/images/logo.png',
-        width: size,
+        width: width,
         fit: BoxFit.fill,
       ),
     );

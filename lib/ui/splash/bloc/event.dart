@@ -3,4 +3,6 @@ part of 'bloc.dart';
 @immutable
 class SplashEvent {}
 
-class Initialize extends SplashEvent {}
+class TrySync implements SplashEvent {
+  const TrySync();
+}

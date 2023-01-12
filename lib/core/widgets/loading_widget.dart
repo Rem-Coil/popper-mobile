@@ -13,7 +13,7 @@ class LoadingWidget extends StatelessWidget {
       height: 300,
       child: Column(
         children: [
-          const Logo(235),
+          const Logo(width: 235),
           const SizedBox(height: 40),
           const CircularLoader(size: 100, strokeWidth: 5),
           const SizedBox(height: 40),
