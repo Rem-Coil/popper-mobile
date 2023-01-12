@@ -1,5 +1,9 @@
 import 'dart:async';
 
+import 'package:firebase_core/firebase_core.dart';
+import 'package:popper_mobile/core/firebase/firebase_crashlytics.dart';
+
+import 'firebase_options.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,19 +16,19 @@ import 'package:popper_mobile/data/cache/core/app_cache.dart';
 import 'package:popper_mobile/ui/current_user/bloc/bloc.dart';
 
 Future<void> main() async {
-  // runZonedGuarded<Future<void>>(() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await AppCache.init();
   await initializeDateFormatting();
 
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  await crashlyticsInit();
+
   configureDependencies(kDebugMode ? 'dev' : 'prod');
 
-  // await Firebase.initializeApp();
-  // await crashlyticsInit();
-
   runApp(MyApp());
-  // }, (e, s) => FirebaseCrashlytics.instance.recordError(e, s));
 }
 
 class MyApp extends StatelessWidget {

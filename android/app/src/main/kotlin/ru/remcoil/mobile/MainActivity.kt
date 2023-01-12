@@ -1,4 +1,4 @@
-package com.example.popper_mobile
+package ru.remcoil.mobile
 
 import io.flutter.embedding.android.FlutterActivity
 

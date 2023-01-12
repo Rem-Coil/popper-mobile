@@ -27,20 +27,25 @@ class NavigationAppBar extends StatelessWidget {
       ));
     }
 
+    buttons.add(TextButton(
+      onPressed: () {
+        throw Exception();
+      },
+      child: const Text('Throw Test Exception'),
+    ));
+
     return Container(
       color: backgroundColor,
       child: BottomAppBar(
         notchMargin: 10,
         shape: const CircularNotchedRectangle(),
-        // child: SafeArea(
-          child: SizedBox(
-            height: 60,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: buttons,
-              // ),
+        child: SizedBox(
+          height: 60,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: buttons,
             ),
           ),
         ),
