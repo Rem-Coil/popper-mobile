@@ -10,7 +10,7 @@ class GetAllOperationsUsecase {
 
   Future<List<Operation>> getAll() async {
     final operations = await _repository.getAll();
-    operations.sort((a, b) => -a.time.compareTo(b.time));
+    operations.sort((a, b) => b.time.compareTo(a.time));
     return operations;
   }
 }

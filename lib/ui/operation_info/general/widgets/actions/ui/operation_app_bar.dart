@@ -8,6 +8,7 @@ import 'package:popper_mobile/core/utils/context_utils.dart';
 import 'package:popper_mobile/domain/models/bobbin/bobbin.dart';
 import 'package:popper_mobile/domain/models/operation/operation.dart';
 import 'package:popper_mobile/domain/models/user/role.dart';
+import 'package:popper_mobile/domain/models/user/user_identity.dart';
 import 'package:popper_mobile/ui/current_user/bloc/bloc.dart';
 import 'package:popper_mobile/ui/operation_info/general/widgets/actions/bloc/bloc.dart';
 import 'package:popper_mobile/ui/operation_info/general/widgets/actions/ui/actions_button.dart';
@@ -29,14 +30,6 @@ class OperationAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     final userState = context.read<CurrentUserBloc>().state as WithUserState;
-    final user = userState.user;
-
-    final buttons = operation.item is Bobbin
-        ? BlocProvider<DefectingBloc>(
-            create: (_) => getIt<DefectingBloc>(),
-            child: BobbinButtons(bobbin: operation.item as Bobbin),
-          )
-        : null;
 
     return AppBar(
       title: Text(title),
@@ -49,7 +42,13 @@ class OperationAppBar extends StatelessWidget implements PreferredSizeWidget {
             HistoryRoute(item: operation.item),
           ),
         ),
-        if (user.role == Role.qualityEngineer && buttons != null) buttons,
+        BlocProvider<OperationTasksBloc>(
+          create: (_) => getIt<OperationTasksBloc>(),
+          child: BobbinButtons(
+            operation: operation,
+            user: userState.user,
+          ),
+        ),
       ],
     );
   }
@@ -58,10 +57,12 @@ class OperationAppBar extends StatelessWidget implements PreferredSizeWidget {
 class BobbinButtons extends StatefulWidget {
   const BobbinButtons({
     super.key,
-    required this.bobbin,
+    required this.operation,
+    required this.user,
   });
 
-  final Bobbin bobbin;
+  final Operation operation;
+  final UserIdentity user;
 
   @override
   State<BobbinButtons> createState() => _BobbinButtonsState();
@@ -70,26 +71,46 @@ class BobbinButtons extends StatefulWidget {
 class _BobbinButtonsState extends State<BobbinButtons> {
   @override
   Widget build(BuildContext context) {
-    final buttons = [
-      ActionButtonItemInfo(
-        icon: Icons.block,
-        onPressed: () async => _onDefecting(),
-        title: 'Заброковать катушку',
-      ),
-    ];
+    final buttons = <ActionButtonItemInfo>[];
 
-    return BlocListener<DefectingBloc, DefectingState>(
+    if (widget.user.role == Role.qualityEngineer &&
+        widget.operation.item is Bobbin) {
+      buttons.add(
+        ActionButtonItemInfo(
+          icon: Icons.block,
+          onPressed: () async => _onDefectBobbin(),
+          title: 'Заброковать катушку',
+        ),
+      );
+    }
+
+    if (widget.operation.status == OperationStatus.sync ||
+        widget.operation.status == OperationStatus.notSync) {
+      buttons.add(
+        ActionButtonItemInfo(
+          icon: Icons.delete,
+          onPressed: () async => _onDeleteOperation(),
+          title: 'Удалить операцию',
+        ),
+      );
+    }
+
+    if (buttons.isEmpty) {
+      return const SizedBox.shrink();
+    }
+
+    return BlocListener<OperationTasksBloc, OperationTasksState>(
       listener: (context, state) {
-        if (state is DefectingStartState) {
-          context.showLoadingSnackBar(message: 'Отбраковка в процессе');
+        if (state is TaskStartState) {
+          context.showLoadingSnackBar(message: 'Операция в процессе');
         }
 
-        if (state is DefectingFailedState) {
+        if (state is TaskFailedState) {
           context.hideCurrentSnackBar();
           context.showErrorSnackBar(state.failure.message);
         }
 
-        if (state is DefectingEndState) {
+        if (state is TaskEndState) {
           context.hideCurrentSnackBar();
           context.showSuccessSnackBar('Успешно!');
 
@@ -102,7 +123,7 @@ class _BobbinButtonsState extends State<BobbinButtons> {
     );
   }
 
-  Future<void> _onDefecting() async {
+  Future<void> _onDefectBobbin() async {
     final isClear = await showCupertinoDialog<bool>(
       context: context,
       builder: (BuildContext context) {
@@ -115,7 +136,27 @@ class _BobbinButtonsState extends State<BobbinButtons> {
     );
 
     if (isClear == true && mounted) {
-      context.read<DefectingBloc>().add(StartDefectingEvent(widget.bobbin.id));
+      final bobbin = widget.operation.item as Bobbin;
+      context.read<OperationTasksBloc>().add(DefectBobbinEvent(bobbin.id));
+    }
+  }
+
+  Future<void> _onDeleteOperation() async {
+    final isClear = await showCupertinoDialog<bool>(
+      context: context,
+      builder: (BuildContext context) {
+        return const DecisionDialog(
+          title: 'Удалить данную операцию?',
+          acceptActionTitle: 'Да',
+          cancelActionTitle: 'Нет',
+        );
+      },
+    );
+
+    if (isClear == true && mounted) {
+      context
+          .read<OperationTasksBloc>()
+          .add(DeleteOperationEvent(widget.operation));
     }
   }
 }

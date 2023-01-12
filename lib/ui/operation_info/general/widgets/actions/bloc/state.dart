@@ -1,22 +1,22 @@
 part of 'bloc.dart';
 
 @immutable
-abstract class DefectingState {}
+abstract class OperationTasksState {}
 
-class DefectingInitialState implements DefectingState {
-  const DefectingInitialState();
+class InitialState implements OperationTasksState {
+  const InitialState();
 }
 
-class DefectingStartState implements DefectingState {
-  const DefectingStartState();
+class TaskStartState implements OperationTasksState {
+  const TaskStartState();
 }
 
-class DefectingFailedState implements DefectingState {
-  const DefectingFailedState(this.failure);
+class TaskFailedState implements OperationTasksState {
+  const TaskFailedState(this.failure);
 
   final Failure failure;
 }
 
-class DefectingEndState implements DefectingState {
-  const DefectingEndState();
+class TaskEndState implements OperationTasksState {
+  const TaskEndState();
 }

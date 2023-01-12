@@ -155,6 +155,24 @@ class OperationsRepositoryImpl extends BaseRepository
 
   @override
   FResult<void> delete(Operation operation) async {
+    if (operation.status == OperationStatus.sync) {
+      final res = await _commentsRepository.delete(operation.id);
+      if (res.isLeft) return res;
+
+      try {
+        final api = _apiProvider.getApiService(isSafe: true);
+        await api.deleteOperation(operation.id);
+      } on DioError catch (e) {
+        return Left(handleError(e));
+      }
+    }
+
+    deleteFromCache(operation);
+    return const Right(null);
+  }
+
+  @override
+  FResult<void> deleteFromCache(Operation operation) async {
     final local = OperationFactory.mapToLocal(operation);
 
     if (local is CompletedOperation) {
@@ -165,7 +183,7 @@ class OperationsRepositoryImpl extends BaseRepository
       await _cachedOperationCache.delete(local.key);
     }
 
-    await _commentsRepository.delete(local.key.toString());
+    await _commentsRepository.deleteFromCache(local.key.toString());
     return const Right(null);
   }
 
@@ -180,7 +198,7 @@ class OperationsRepositoryImpl extends BaseRepository
       if (result.isLeft) {
         return Left(result.left);
       } else {
-        await delete(operation);
+        await deleteFromCache(operation);
       }
     }
 

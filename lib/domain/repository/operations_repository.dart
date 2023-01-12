@@ -14,6 +14,8 @@ abstract class OperationsRepository {
 
   FResult<void> delete(Operation operation);
 
+  FResult<void> deleteFromCache(Operation operation);
+
   Future<void> subscribe(VoidCallback listener);
 
   Future<void> unsubscribe(VoidCallback listener);

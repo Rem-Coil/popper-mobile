@@ -1,10 +1,16 @@
 part of 'bloc.dart';
 
 @immutable
-abstract class DefectingEvent {}
+abstract class OperationTasksEvent {}
 
-class StartDefectingEvent implements DefectingEvent {
-  const StartDefectingEvent(this.id);
+class DefectBobbinEvent implements OperationTasksEvent {
+  const DefectBobbinEvent(this.id);
 
   final int id;
+}
+
+class DeleteOperationEvent implements OperationTasksEvent {
+  const DeleteOperationEvent(this.operation);
+
+  final Operation operation;
 }

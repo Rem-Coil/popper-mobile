@@ -38,8 +38,14 @@ abstract class ApiService {
     @Body() RemoteBatchOperation operation,
   );
 
+  @DELETE('/action/{id}')
+  Future<void> deleteOperation(@Path('id') int id);
+
   @POST('/comment')
   Future<void> saveComment(@Body() RemoteComment comment);
+
+  @DELETE('/comment/{id}')
+  Future<void> deleteComment(@Path('id') int id);
 
   @DELETE('/bobbin/{id}')
   Future<void> defectBobbin(@Path('id') int id);
