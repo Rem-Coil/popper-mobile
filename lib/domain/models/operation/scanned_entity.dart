@@ -6,4 +6,6 @@ abstract class ScannedEntity {
   String get type;
 
   bool get isLoaded;
+
+  bool get isActive;
 }

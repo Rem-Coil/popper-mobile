@@ -3,11 +3,12 @@ import 'package:intl/intl.dart';
 import 'package:popper_mobile/domain/models/operation/operation.dart';
 import 'package:popper_mobile/domain/models/operation/operation_type.dart';
 import 'package:popper_mobile/domain/models/operation/operation_with_comment.dart';
+import 'package:popper_mobile/ui/operation_info/general/widgets/fields/bobbin_defected_warning.dart';
 import 'package:popper_mobile/ui/operation_info/general/widgets/fields/comment_button.dart';
+import 'package:popper_mobile/ui/operation_info/general/widgets/fields/entity_info_not_loaded.dart';
 import 'package:popper_mobile/ui/operation_info/general/widgets/fields/select_operation_field.dart';
 import 'package:popper_mobile/ui/operation_info/general/widgets/fields/value_info_field.dart';
 import 'package:popper_mobile/ui/operation_info/general/widgets/fields/value_info_text.dart';
-import 'package:popper_mobile/ui/operation_info/general/widgets/fields/value_info_warning.dart';
 
 final formatter = DateFormat('d MMM yyyy, HH:mm', 'ru_RU');
 
@@ -33,6 +34,15 @@ class OperationInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    late final Widget itemNumber;
+
+    if (!operation.item.isActive) {
+      itemNumber = BobbinDefectedWarning(number);
+    } else if (!operation.item.isLoaded) {
+      itemNumber = EntityInfoNotLoadedWarning(number);
+    } else {
+      itemNumber = ValueInfoText(number);
+    }
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -55,9 +65,7 @@ class OperationInfo extends StatelessWidget {
         ),
         ValueInfoField(
           title: 'Номер',
-          value: !operation.item.isLoaded
-              ? ValueInfoWarning(number)
-              : ValueInfoText(number),
+          value: itemNumber,
         ),
         ValueInfoField(
           title: 'Сотрудник',
@@ -91,9 +99,5 @@ class OperationInfo extends StatelessWidget {
         ),
       ],
     );
-    // );
-    // },
-    // ),
-    // );
   }
 }

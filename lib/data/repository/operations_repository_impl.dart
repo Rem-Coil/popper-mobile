@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:ui';
 
 import 'package:dio/dio.dart';
 import 'package:either_dart/either.dart';
@@ -220,17 +219,5 @@ class OperationsRepositoryImpl extends BaseRepository
     final prefs = await SharedPreferences.getInstance();
     final action = actionType.name;
     prefs.setString(_operationTypeKey, action);
-  }
-
-  @override
-  Future<void> subscribe(VoidCallback listener) async {
-    _completedOperationCache.subscribe(listener);
-    _cachedOperationCache.subscribe(listener);
-  }
-
-  @override
-  Future<void> unsubscribe(VoidCallback listener) async {
-    _completedOperationCache.unsubscribe(listener);
-    _cachedOperationCache.unsubscribe(listener);
   }
 }

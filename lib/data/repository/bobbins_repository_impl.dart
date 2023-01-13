@@ -23,21 +23,29 @@ class BobbinsRepositoryImpl extends BaseRepository
   final BobbinsCache _cache;
 
   @override
-  Future<Bobbin> getBobbinInfo(int id) async {
-    final local = await _cache.getByKey(id);
-    if (local != null) return ScannedEntityFactory.mapToBobbin(local);
+  Future<Bobbin> getBobbinInfo(int id, {bool isHard = false}) async {
+    final isCached = await _cache.contains(id);
 
+    if (isHard || !isCached) {
+      await _updateBobbinInfo(id);
+    }
+
+    final local = await _cache.getByKey(id);
+    if (local == null) {
+      return Bobbin.unknown(id);
+    }
+    return ScannedEntityFactory.mapToBobbin(local);
+  }
+
+  Future<void> _updateBobbinInfo(int id) async {
     try {
       final service = _apiProvider.getApiService();
       final remote = await service.getBobbinInfo(id);
 
       final local = ScannedEntityFactory.mapToLocalBobbin(remote);
       await _cache.save(local);
-
-      return ScannedEntityFactory.mapToBobbin(local);
     } on DioError catch (e) {
       log(e.error.toString());
-      return Bobbin.unknown(id);
     }
   }
 
@@ -56,11 +64,11 @@ class BobbinsRepositoryImpl extends BaseRepository
   }
 
   @override
-  FResult<void> defectBobbin(int id) async {
-    // TODO - mark as defected in cache
+  FResult<void> defectBobbin(Bobbin bobbin) async {
     try {
       final api = _apiProvider.getApiService();
-      await api.defectBobbin(id);
+      await api.defectBobbin(bobbin.id);
+      await _updateBobbinInfo(bobbin.id);
       return const Right(null);
     } on DioError catch (e) {
       final failure = handleError(e);

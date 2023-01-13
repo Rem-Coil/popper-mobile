@@ -3,16 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:popper_mobile/core/widgets/dialogs/warning_dialog.dart';
 
 class WidgetWithWarning extends StatelessWidget {
-  final Widget child;
-  final String warningTitle;
-  final String warningMessage;
-
   const WidgetWithWarning({
     Key? key,
     required this.child,
     required this.warningTitle,
     required this.warningMessage,
   }) : super(key: key);
+
+  final Widget child;
+  final String warningTitle;
+  final String? warningMessage;
 
   @override
   Widget build(BuildContext context) {

@@ -51,7 +51,7 @@ class ScannedEntitiesRepositoryImpl extends BaseRepository
   @override
   Future<ScannedEntity> getEntityInfo(ScannedEntity entity) {
     if (entity is Bobbin) {
-      return bobbinsRepository.getBobbinInfo(entity.id);
+      return bobbinsRepository.getBobbinInfo(entity.id, isHard: true);
     }
 
     if (entity is Batch) {

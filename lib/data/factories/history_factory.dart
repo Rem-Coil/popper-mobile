@@ -9,7 +9,12 @@ import 'package:popper_mobile/domain/models/user/user.dart';
 
 class HistoryFactory {
   static BobbinHistory mapBobbinHistory(RemoteBobbinHistory history) {
-    final bobbin = Bobbin(id: history.id, batchId: -1, number: history.number);
+    final bobbin = Bobbin(
+      id: history.id,
+      batchId: -1,
+      number: history.number,
+      isActive: true,
+    );
 
     final operations = history.operations.map((o) {
       final user = User(

@@ -14,7 +14,7 @@ abstract class WithOperationState implements OperationSaveState {
 
   final Operation operation;
 
-  bool get isCanSave => operation.type != null;
+  bool get isCanSave => operation.type != null && operation.item.isActive;
 }
 
 class ModifyOperationState extends WithOperationState {

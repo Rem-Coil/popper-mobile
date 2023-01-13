@@ -28,6 +28,7 @@ class ScannedEntityFactory {
         id: entity.id,
         batchId: entity.batchId,
         number: entity.rawNumber,
+        active: entity.isActive,
       );
     }
 
@@ -47,6 +48,7 @@ class ScannedEntityFactory {
       id: bobbin.id,
       batchId: bobbin.batchId,
       number: bobbin.number,
+      active: bobbin.active,
     );
   }
 
@@ -63,6 +65,7 @@ class ScannedEntityFactory {
       id: bobbin.id,
       batchId: bobbin.batchId,
       number: bobbin.number,
+      isActive: bobbin.active,
     );
   }
 

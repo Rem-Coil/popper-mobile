@@ -9,10 +9,11 @@ class Bobbin implements ScannedEntity {
   const Bobbin({
     required this.id,
     required this.batchId,
+    required this.isActive,
     required String number,
   }) : rawNumber = number;
 
-  const Bobbin.unknown(this.id)
+  const Bobbin.unknown(this.id, [this.isActive = true])
       : batchId = _defaultBatch,
         rawNumber = _defaultNumber;
 
@@ -20,6 +21,8 @@ class Bobbin implements ScannedEntity {
   final int id;
   final int batchId;
   final String rawNumber;
+  @override
+  final bool isActive;
 
   @override
   String get number => !isLoaded ? 'Катшука: $id' : rawNumber;

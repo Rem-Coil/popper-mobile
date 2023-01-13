@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 abstract class Cacheable<T> {
@@ -23,6 +22,11 @@ abstract class Cache<K, T extends Cacheable<K>> {
     return box.get(key);
   }
 
+  Future<bool> contains(K key) async {
+    final box = await _box;
+    return box.containsKey(key);
+  }
+
   Future<void> save(T item) async {
     final box = await _box;
     await box.put(item.key, item);
@@ -37,18 +41,6 @@ abstract class Cache<K, T extends Cacheable<K>> {
   Future<void> delete(K key) async {
     final box = await _box;
     await box.delete(key);
-  }
-
-  Future<void> subscribe(VoidCallback listener) async {
-    final box = await _box;
-    final listenable = box.listenable();
-    listenable.addListener(listener);
-  }
-
-  Future<void> unsubscribe(VoidCallback listener) async {
-    final box = await _box;
-    final listenable = box.listenable();
-    listenable.removeListener(listener);
   }
 
   Future<void> dispose() async {

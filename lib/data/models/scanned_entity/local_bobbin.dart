@@ -9,10 +9,13 @@ class LocalBobbin extends LocalScannedEntity {
     required super.id,
     required this.batchId,
     required this.number,
+    required this.active,
   });
 
   @HiveField(10)
   final int batchId;
   @HiveField(11)
   final String number;
+  @HiveField(12, defaultValue: true)
+  final bool active;
 }

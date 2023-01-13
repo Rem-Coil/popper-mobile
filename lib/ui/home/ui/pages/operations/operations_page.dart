@@ -24,7 +24,7 @@ class _OperationsPageState extends State<OperationsPage> {
   @override
   void initState() {
     super.initState();
-    context.read<OperationsBloc>().add(const InitialEvent());
+    context.read<OperationsBloc>().add(const UpdateEvent());
   }
 
   @override

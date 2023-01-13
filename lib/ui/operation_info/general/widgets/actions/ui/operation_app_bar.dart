@@ -137,7 +137,7 @@ class _BobbinButtonsState extends State<BobbinButtons> {
 
     if (isClear == true && mounted) {
       final bobbin = widget.operation.item as Bobbin;
-      context.read<OperationTasksBloc>().add(DefectBobbinEvent(bobbin.id));
+      context.read<OperationTasksBloc>().add(DefectBobbinEvent(bobbin));
     }
   }
 

@@ -3,16 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:popper_mobile/ui/operation_info/general/widgets/fields/value_info_text.dart';
 import 'package:popper_mobile/core/widgets/widget_with_warning.dart';
 
-class ValueInfoWarning extends StatelessWidget {
-  final String text;
+class EntityInfoNotLoadedWarning extends StatelessWidget {
+  const EntityInfoNotLoadedWarning(this.text, {Key? key}) : super(key: key);
 
-  const ValueInfoWarning(this.text, {Key? key}) : super(key: key);
+  final String text;
 
   @override
   Widget build(BuildContext context) {
     return WidgetWithWarning(
-      warningTitle: 'Данные о катушке не были загружены',
-      warningMessage: 'Произошла ошибка загрзки информации о катушке. '
+      warningTitle: 'Данные не были загружены',
+      warningMessage: 'Произошла ошибка загрзки подробной информации. '
           'Проверьте подключение к интернету или повторите позже',
       child: ValueInfoText(text),
     );

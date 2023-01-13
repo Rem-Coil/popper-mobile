@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:popper_mobile/core/error/failure.dart';
+import 'package:popper_mobile/domain/models/bobbin/bobbin.dart';
 import 'package:popper_mobile/domain/models/operation/operation.dart';
 import 'package:popper_mobile/domain/repository/bobbins_repository.dart';
 import 'package:popper_mobile/domain/repository/operations_repository.dart';
@@ -27,7 +28,7 @@ class OperationTasksBloc
     Emitter emit,
   ) async {
     emit(const TaskStartState());
-    final result = await _bobbinsRepository.defectBobbin(event.id);
+    final result = await _bobbinsRepository.defectBobbin(event.bobbin);
     emit(result.fold(
       (f) => TaskFailedState(f),
       (_) => const TaskEndState(),

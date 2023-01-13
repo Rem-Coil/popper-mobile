@@ -29,4 +29,7 @@ class Batch implements ScannedEntity {
 
   @override
   String get type => 'Партия';
+
+  @override
+  bool get isActive => true;
 }

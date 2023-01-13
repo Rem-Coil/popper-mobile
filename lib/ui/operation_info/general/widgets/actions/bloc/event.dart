@@ -4,9 +4,9 @@ part of 'bloc.dart';
 abstract class OperationTasksEvent {}
 
 class DefectBobbinEvent implements OperationTasksEvent {
-  const DefectBobbinEvent(this.id);
+  const DefectBobbinEvent(this.bobbin);
 
-  final int id;
+  final Bobbin bobbin;
 }
 
 class DeleteOperationEvent implements OperationTasksEvent {
