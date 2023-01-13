@@ -90,9 +90,23 @@ class _BatchHistoryViewState extends State<_BatchHistoryView> {
     if (selected != -1) {
       final bobbinHistory = widget.history.bobbins[selected];
       title = Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _TitleView(title: 'Катушка: ${bobbinHistory.number}'),
-          const Spacer(),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const _TitleView(
+                  title: 'Катушка:',
+                  padding: EdgeInsets.fromLTRB(20, 16, 20, 4),
+                ),
+                _TitleView(
+                  title: bobbinHistory.number,
+                  padding: const EdgeInsets.fromLTRB(20, 4, 20, 16),
+                ),
+              ],
+            ),
+          ),
           InkWell(
             onTap: () => setState(() {
               selected = -1;
@@ -172,11 +186,13 @@ class _TitleView extends StatelessWidget {
     required this.title,
     this.textColor,
     this.isSmall = false,
+    this.padding = const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
   });
 
   final String title;
   final Color? textColor;
   final bool isSmall;
+  final EdgeInsetsGeometry padding;
 
   @override
   Widget build(BuildContext context) {
@@ -184,9 +200,11 @@ class _TitleView extends StatelessWidget {
     final textTheme = isSmall ? theme.subtitle1 : theme.headlineSmall;
 
     return Padding(
-      padding: const EdgeInsets.all(20.0),
+      padding: padding,
       child: Text(
         title,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
         style: textTheme?.copyWith(color: textColor),
       ),
     );
