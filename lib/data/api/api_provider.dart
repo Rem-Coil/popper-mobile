@@ -8,15 +8,11 @@ import 'package:popper_mobile/data/api/token_interceptor.dart';
 
 @singleton
 class ApiProvider {
+  ApiProvider(@Named('BaseUrl') this.baseUrl);
+
   final String baseUrl;
 
-  final _options = BaseOptions(
-    connectTimeout: 5000,
-    sendTimeout: 5000,
-    receiveTimeout: 5000,
-  );
-
-  ApiProvider(@Named('BaseUrl') this.baseUrl);
+  final _options = BaseOptions();
 
   ApiService getApiService({bool isSafe = false, bool isLogging = false}) {
     final dio = Dio(_options);
