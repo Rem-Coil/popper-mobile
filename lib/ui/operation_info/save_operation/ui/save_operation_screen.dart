@@ -48,7 +48,7 @@ class _SaveOperationScreenState extends State<SaveOperationScreen> {
 
         if (state is FailedState) {
           return ResultView(
-            message: state.failure.message,
+            message: state.failure.toString(),
             isSuccess: false,
           );
         }

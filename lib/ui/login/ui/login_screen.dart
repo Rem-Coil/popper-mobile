@@ -53,7 +53,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 }
 
                 if (state.errorMessage != null) {
-                  context.showErrorSnackBar(state.errorMessage!.message);
+                  context.showErrorSnackBar(state.errorMessage!.toString());
                 }
               },
               builder: (context, state) {

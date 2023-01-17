@@ -62,7 +62,7 @@ class _SyncButtonState extends State<SyncButton> {
 
         if (state is SynchronizationFailedState) {
           context.hideCurrentSnackBar();
-          context.showErrorSnackBar(state.failure.message);
+          context.showErrorSnackBar(state.failure.toString());
         }
 
         if (state is SynchronizationEndState) {

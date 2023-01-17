@@ -113,7 +113,7 @@ class OperationsRepositoryImpl extends BaseRepository
       await setLastOperationType(operation.type);
       return const Right(null);
     } on DioError catch (e) {
-      final failure = handleError(e, {
+      final failure = await handleError(e, {
         HttpStatus.badRequest: const ItemNotExistOrNotActiveFailure(),
       });
 
@@ -162,7 +162,7 @@ class OperationsRepositoryImpl extends BaseRepository
         final api = _apiProvider.getApiService(isSafe: true);
         await api.deleteOperation(operation.id);
       } on DioError catch (e) {
-        return Left(handleError(e));
+        return Left(await handleError(e));
       }
     }
 

@@ -28,7 +28,7 @@ class AuthRepositoryImpl extends BaseRepository implements AuthRepository {
       await _storage.saveToken(token);
       return const Right(null);
     } on DioError catch (e) {
-      return Left(handleError(e));
+      return Left(await handleError(e));
     }
   }
 
@@ -41,7 +41,7 @@ class AuthRepositoryImpl extends BaseRepository implements AuthRepository {
       await _storage.saveToken(token);
       return const Right(null);
     } on DioError catch (e) {
-      return Left(handleError(e));
+      return Left(await handleError(e));
     }
   }
 

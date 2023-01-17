@@ -48,7 +48,7 @@ class BobbinsRepositoryImpl extends BaseRepository
       final history = await api.getBatchHistory(id);
       return Right(HistoryFactory.mapBatchHistory(history));
     } on DioError catch (e) {
-      final failure = handleError(e, {
+      final failure = await handleError(e, {
         HttpStatus.notFound: const BatchNotContainOperationsFailure(),
       });
       return Left(failure);

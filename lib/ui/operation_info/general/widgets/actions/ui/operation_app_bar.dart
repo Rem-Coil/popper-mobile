@@ -107,7 +107,7 @@ class _BobbinButtonsState extends State<BobbinButtons> {
 
         if (state is TaskFailedState) {
           context.hideCurrentSnackBar();
-          context.showErrorSnackBar(state.failure.message);
+          context.showErrorSnackBar(state.failure.toString());
         }
 
         if (state is TaskEndState) {

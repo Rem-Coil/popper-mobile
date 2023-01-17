@@ -54,7 +54,7 @@ class CommentsRepository extends BaseRepository {
       log(e.error.toString());
       await FirebaseCrashlytics.instance.recordError(e.error, e.stackTrace,
           reason: 'Error on deleting comment with id = $operationId');
-      return Left(handleError(e));
+      return Left(await handleError(e));
     }
   }
 
