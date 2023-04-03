@@ -56,7 +56,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               }
 
               if (state is RegistrationFailed) {
-                context.showErrorSnackBar(state.failure.message);
+                context.showErrorSnackBar(state.failure.toString());
               }
             },
             builder: (context, state) {

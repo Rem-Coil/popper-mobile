@@ -56,7 +56,7 @@ class BobbinsRepositoryImpl extends BaseRepository
       final history = await api.getBobbinHistory(id);
       return Right(HistoryFactory.mapBobbinHistory(history));
     } on DioError catch (e) {
-      final failure = handleError(e, {
+      final failure = await handleError(e, {
         HttpStatus.notFound: const BobbinNotContainOperationsFailure(),
       });
       return Left(failure);
@@ -71,7 +71,7 @@ class BobbinsRepositoryImpl extends BaseRepository
       await _updateBobbinInfo(bobbin.id);
       return const Right(null);
     } on DioError catch (e) {
-      final failure = handleError(e);
+      final failure = await handleError(e);
       return Left(failure);
     }
   }

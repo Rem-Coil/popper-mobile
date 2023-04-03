@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:popper_mobile/core/widgets/circular_loader.dart';
 
@@ -33,11 +34,12 @@ extension SnackBars on BuildContext {
     );
   }
 
-  void showErrorSnackBar(String message, {int seconds = 1}) {
+  void showErrorSnackBar(String message, {int seconds = 2}) {
     ScaffoldMessenger.of(this).showSnackBar(
       SnackBar(
         backgroundColor: Colors.red,
-        duration: Duration(seconds: seconds),
+        duration:
+            kDebugMode ? const Duration(days: 1) : Duration(seconds: seconds),
         content: Text(
           message,
           style: const TextStyle(fontSize: 16),

@@ -46,7 +46,7 @@ class HomeScreen extends StatelessWidget implements AutoRouteWrapper {
           floatingActionButton: FloatingActionButton(
             onPressed: () {
               // TODO: не забыть убрать перед коммитом в релиз
-              // final scanned = ScannedEntityFactory.create('bobbin:201');
+              // final scanned = ScannedEntityFactory.create('bobbin:670');
               // context.router.push(SaveOperationRoute(entity: scanned));
               context.router.push(const ScannerRoute());
             },

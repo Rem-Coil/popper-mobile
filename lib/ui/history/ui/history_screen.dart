@@ -53,7 +53,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
           if (state is FailureHistoryState) {
             return CenterTextWithImage(
               image: 'assets/images/load_exception.png',
-              title: state.failure.message,
+              title: state.failure.toString(),
             );
           }
 

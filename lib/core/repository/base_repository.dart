@@ -2,20 +2,25 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:popper_mobile/core/error/failure.dart';
 
 typedef MappingRule = Map<int, Failure>;
 
+// TODO - refactor recording errors
 abstract class BaseRepository {
   const BaseRepository();
 
   @protected
-  Failure handleError(DioError e, [MappingRule rules = const {}]) {
+  Future<Failure> handleError(
+    DioError e, [
+    MappingRule rules = const {},
+  ]) async {
     log(e.error.toString());
 
     if (e.error is SocketException) {
-      return const NoInternetFailure();
+      return NoInternetFailure(e);
     }
 
     final statusCode = e.response?.statusCode;
@@ -23,15 +28,25 @@ abstract class BaseRepository {
       switch (statusCode) {
         case HttpStatus.internalServerError:
         case HttpStatus.badGateway:
-          return const ServerFailure();
+          await FirebaseCrashlytics.instance.recordError(
+            e.error,
+            e.stackTrace,
+            reason: 'Server Error',
+          );
+          return ServerFailure(e);
         case HttpStatus.unauthorized:
-          return const WrongCredentialsFailure();
+          return WrongCredentialsFailure(e);
       }
 
       final mapped = rules[statusCode];
       if (mapped != null) return mapped;
     }
 
-    return const UnknownFailure();
+    await FirebaseCrashlytics.instance.recordError(
+      e.error,
+      e.stackTrace,
+      reason: 'UnknownFailure',
+    );
+    return UnknownFailure(e);
   }
 }
