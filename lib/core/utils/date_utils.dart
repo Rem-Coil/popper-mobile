@@ -1,14 +1,17 @@
 import 'package:intl/intl.dart';
 
-class FormattedDateTime {
-  final DateFormat allTimeFormatter = DateFormat('d MMMM HH:mm');
-  final DateFormat timeFormatter = DateFormat('HH:mm');
+final DateFormat allTimeFormatter = DateFormat('d MMMM HH:mm', 'ru_RU');
+final DateFormat timeFormatter = DateFormat('HH:mm', 'ru_RU');
 
-  final DateTime date;
+extension DateTimeUtils on DateTime {
+  bool get isToday {
+    final now = DateTime.now();
+    final todayNight = DateTime(now.year, now.month, now.day);
 
-  FormattedDateTime(this.date);
+    return isAfter(todayNight);
+  }
 
-  String get formattedDate => _prefix + _dateFormat.format(date);
+  String get formatted => _prefix + _dateFormat.format(this);
 
   String get _prefix {
     final daysBetween = _daysBetweenNow;
@@ -32,7 +35,7 @@ class FormattedDateTime {
 
   int get _daysBetweenNow {
     final today = DateTime.now();
-    final beginDay = DateTime(date.year, date.month, date.day);
+    final beginDay = DateTime(year, month, day);
     return today.difference(beginDay).inDays;
   }
 }

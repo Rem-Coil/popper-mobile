@@ -1,18 +1,13 @@
-import 'package:dartz/dartz.dart';
-import 'package:popper_mobile/core/error/failure.dart';
-import 'package:popper_mobile/models/auth/token.dart';
-import 'package:popper_mobile/models/auth/user.dart';
-import 'package:popper_mobile/models/auth/user_credentials.dart';
-import 'package:popper_mobile/models/auth/user_remote.dart';
+import 'package:popper_mobile/core/utils/typedefs.dart';
+import 'package:popper_mobile/domain/models/user/credentials.dart';
+import 'package:popper_mobile/domain/models/user/user_identity.dart';
 
 abstract class AuthRepository {
-  Future<Either<Failure, User>> singIn(UserCredentials credentials);
+  FResult<void> singIn(Credentials credentials);
 
-  Future<Either<Failure, User>> singUp(UserRemote remote);
+  FResult<void> singUp(UserIdentity user, String password);
 
   Future<void> logOut();
 
-  Future<User?> getCurrentUser();
-
-  Future<void> saveToken(Token token);
+  Future<UserIdentity?> getCurrentUserOrNull();
 }

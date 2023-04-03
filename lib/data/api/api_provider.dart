@@ -2,26 +2,40 @@ import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
+import 'package:popper_mobile/core/setup/injection.dart';
 import 'package:popper_mobile/data/api/api_service.dart';
+import 'package:popper_mobile/data/api/token_interceptor.dart';
 
 @singleton
 class ApiProvider {
-  final String baseUrl;
-  final Dio _dio = Dio();
-
   ApiProvider(@Named('BaseUrl') this.baseUrl);
 
-  ApiService getApiService() {
-    // _dio.interceptors.add(_logInterceptor);
-    return ApiService(_dio, baseUrl: baseUrl);
+  final String baseUrl;
+
+  final _options = BaseOptions();
+
+  ApiService getApiService({bool isSafe = false, bool isLogging = false}) {
+    final dio = Dio(_options);
+    if (isSafe) {
+      dio.interceptors.add(getIt<TokenInterceptor>());
+    }
+
+    if (isLogging) {
+      dio.interceptors.add(_allMessagesInterceptor);
+    }
+
+    return ApiService(dio, baseUrl: baseUrl);
   }
 
-  LogInterceptor get _logInterceptor {
+  LogInterceptor get _allMessagesInterceptor {
     return LogInterceptor(
       logPrint: _logPrint,
-      request: false,
-      requestHeader: false,
-      responseBody: false,
+      error: true,
+      requestBody: true,
+      responseHeader: true,
+      request: true,
+      requestHeader: true,
+      responseBody: true,
     );
   }
 
@@ -32,9 +46,6 @@ class ApiProvider {
 abstract class ServerAddressModule {
   @Named('BaseUrl')
   @Environment('dev')
-  String get baseUrlTest => 'https://popper-service.herokuapp.com';
-
-  @Named('BaseUrl')
   @Environment('prod')
-  String get baseUrlProd => 'https://webpanel.remcoil.space';
+  String get baseUrlTest => 'https://api.popper.remcoil.space';
 }

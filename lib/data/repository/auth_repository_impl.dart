@@ -1,92 +1,61 @@
-import 'dart:io';
-
-import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
-import 'package:hive/hive.dart';
+import 'package:either_dart/either.dart';
 import 'package:injectable/injectable.dart';
-import 'package:popper_mobile/core/error/failure.dart';
+import 'package:popper_mobile/core/repository/base_repository.dart';
+import 'package:popper_mobile/core/utils/typedefs.dart';
 import 'package:popper_mobile/data/api/api_provider.dart';
+import 'package:popper_mobile/data/cache/core/app_cache.dart';
+import 'package:popper_mobile/data/factories/auth_factory.dart';
+import 'package:popper_mobile/data/factories/user_factory.dart';
+import 'package:popper_mobile/data/repository/token_storage.dart';
+import 'package:popper_mobile/domain/models/user/credentials.dart';
+import 'package:popper_mobile/domain/models/user/user_identity.dart';
 import 'package:popper_mobile/domain/repository/auth_repository.dart';
-import 'package:popper_mobile/models/auth/token.dart';
-import 'package:popper_mobile/models/auth/user.dart';
-import 'package:popper_mobile/models/auth/user_credentials.dart';
-import 'package:popper_mobile/models/auth/user_remote.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 @Singleton(as: AuthRepository)
-class AuthRepositoryImpl implements AuthRepository {
-  static const token_key = 'token';
-  final ApiProvider _apiProvider;
+class AuthRepositoryImpl extends BaseRepository implements AuthRepository {
+  const AuthRepositoryImpl(this._apiProvider, this._storage);
 
-  AuthRepositoryImpl(this._apiProvider);
+  final ApiProvider _apiProvider;
+  final TokenStorage _storage;
 
   @override
-  Future<Either<Failure, User>> singIn(UserCredentials credentials) async {
+  FResult<void> singIn(Credentials credentials) async {
     try {
       final service = _apiProvider.getApiService();
-      final token = await service.singIn(credentials);
-      await saveToken(token);
-      final user = User.fromToken(token.token);
-      return Right(user);
+      final json = AuthFactory.mapCredentials(credentials);
+      final token = await service.singIn(json);
+      await _storage.saveToken(token);
+      return const Right(null);
     } on DioError catch (e) {
-      if (e.error is SocketException) {
-        return Left(NoInternetFailure());
-      }
-
-      switch (e.response?.statusCode) {
-        case HttpStatus.internalServerError:
-        case HttpStatus.badGateway:
-          return Left(ServerFailure());
-        case HttpStatus.unauthorized:
-          return Left(WrongCredentialsFailure());
-      }
-
-      return Left(UnknownFailure());
+      return Left(await handleError(e));
     }
   }
 
   @override
-  Future<Either<Failure, User>> singUp(UserRemote user) async {
+  FResult<void> singUp(UserIdentity user, String password) async {
     try {
       final service = _apiProvider.getApiService();
-      final token = await service.singUp(user);
-      await saveToken(token);
-      final savedUser = User.fromToken(token.token);
-      return Right(savedUser);
+      final userJson = AuthFactory.mapUser(user, password);
+      final token = await service.singUp(userJson);
+      await _storage.saveToken(token);
+      return const Right(null);
     } on DioError catch (e) {
-      if (e.error is SocketException) {
-        return Left(NoInternetFailure());
-      }
-
-      switch (e.response?.statusCode) {
-        case HttpStatus.internalServerError:
-        case HttpStatus.badGateway:
-          return Left(ServerFailure());
-        case HttpStatus.unauthorized:
-          return Left(WrongCredentialsFailure());
-      }
-
-      return Left(UnknownFailure());
+      return Left(await handleError(e));
     }
+  }
+
+  @override
+  Future<UserIdentity?> getCurrentUserOrNull() async {
+    final token = await _storage.getToken();
+    return token != null ? UserFactory.fromString(token.token) : null;
   }
 
   @override
   Future<void> logOut() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.clear();
-    await Hive.deleteFromDisk();
-  }
-
-  @override
-  Future<User?> getCurrentUser() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final token = prefs.getString(token_key);
-    return token != null ? User.fromToken(token) : null;
-  }
-
-  @override
-  Future<void> saveToken(Token token) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString(token_key, token.token);
+    await Future.wait([
+      _storage.clear(),
+      AppCache.clear(),
+    ]);
   }
 }

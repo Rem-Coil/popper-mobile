@@ -1,7 +1,11 @@
-import 'package:dartz/dartz.dart';
-import 'package:popper_mobile/core/error/failure.dart';
-import 'package:popper_mobile/models/bobbin/bobbin.dart';
+import 'package:popper_mobile/core/utils/typedefs.dart';
+import 'package:popper_mobile/domain/models/bobbin/bobbin.dart';
+import 'package:popper_mobile/domain/models/history/bobbin_history.dart';
 
 abstract class BobbinsRepository {
-  Future<Either<Failure, Bobbin>> getBobbinInfo(int id);
+  Future<Bobbin> getBobbinInfo(int id, {bool isHard = false});
+
+  FResult<BobbinHistory> getHistoryById(int id);
+
+  FResult<void> defectBobbin(Bobbin bobbin);
 }
