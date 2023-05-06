@@ -8,6 +8,7 @@ import 'package:popper_mobile/ui/home/ui/pages/operations/bloc/bloc.dart';
 import 'package:popper_mobile/ui/home/ui/pages/settings/bloc/bloc.dart';
 import 'package:popper_mobile/ui/home/ui/widgets/navigation_bar.dart';
 
+@RoutePage()
 class HomeScreen extends StatelessWidget implements AutoRouteWrapper {
   const HomeScreen({super.key});
 

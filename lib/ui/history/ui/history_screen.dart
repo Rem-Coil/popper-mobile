@@ -10,6 +10,7 @@ import 'package:popper_mobile/domain/models/operation/scanned_entity.dart';
 import 'package:popper_mobile/ui/history/bloc/bloc.dart';
 import 'package:popper_mobile/ui/history/ui/widgets/history_timeline.dart';
 
+@RoutePage()
 class HistoryScreen extends StatefulWidget implements AutoRouteWrapper {
   const HistoryScreen({Key? key, required this.item}) : super(key: key);
 

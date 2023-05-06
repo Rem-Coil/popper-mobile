@@ -11,6 +11,7 @@ import 'package:popper_mobile/core/widgets/buttons/loading_button.dart';
 import 'package:popper_mobile/core/widgets/field.dart';
 import 'package:popper_mobile/core/widgets/logo.dart';
 
+@RoutePage()
 class RegistrationScreen extends StatefulWidget implements AutoRouteWrapper {
   const RegistrationScreen({Key? key}) : super(key: key);
 

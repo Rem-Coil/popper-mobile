@@ -10,6 +10,7 @@ import 'package:popper_mobile/core/widgets/buttons/loading_button.dart';
 import 'package:popper_mobile/core/widgets/field.dart';
 import 'package:popper_mobile/core/widgets/logo.dart';
 
+@RoutePage()
 class LoginScreen extends StatefulWidget implements AutoRouteWrapper {
   const LoginScreen({Key? key}) : super(key: key);
 

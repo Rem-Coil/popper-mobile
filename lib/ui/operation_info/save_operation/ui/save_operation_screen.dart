@@ -10,6 +10,7 @@ import 'package:popper_mobile/ui/operation_info/save_operation/bloc/bloc.dart';
 import 'package:popper_mobile/ui/operation_info/save_operation/ui/widgets/select_operation_type_view.dart';
 import 'package:popper_mobile/core/widgets/dialogs/decision_dialog.dart';
 
+@RoutePage()
 class SaveOperationScreen extends StatefulWidget implements AutoRouteWrapper {
   const SaveOperationScreen({Key? key, required this.entity}) : super(key: key);
 

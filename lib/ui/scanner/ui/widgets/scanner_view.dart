@@ -15,9 +15,8 @@ class ScannerView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(children: [
       MobileScanner(
-        allowDuplicates: false,
         controller: controller,
-        onDetect: (b, _) => onCode(context, b),
+        onDetect: (b) => onCode(context, b),
       ),
       Padding(
         padding: EdgeInsets.zero,
@@ -35,8 +34,9 @@ class ScannerView extends StatelessWidget {
     ]);
   }
 
-  void onCode(BuildContext context, Barcode barcode) {
+  void onCode(BuildContext context, BarcodeCapture capture) {
     try {
+      final barcode = capture.barcodes.first;
       final entity = ScannedEntityFactory.create(barcode.rawValue);
       context.router.replace(SaveOperationRoute(entity: entity));
     } catch (_) {
