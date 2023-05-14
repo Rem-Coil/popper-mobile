@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:auto_route/auto_route.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:popper_mobile/core/firebase/firebase_crashlytics.dart';
 import 'firebase_options.dart';
@@ -11,7 +12,7 @@ import 'package:popper_mobile/core/setup/app_router.dart';
 import 'package:popper_mobile/core/setup/injection.dart';
 import 'package:popper_mobile/core/theme/colors.dart';
 import 'package:popper_mobile/core/theme/fonts.dart';
-import 'package:popper_mobile/data/cache/core/app_cache.dart';
+import 'package:popper_mobile/core/data/app_cache.dart';
 import 'package:popper_mobile/ui/current_user/bloc/bloc.dart';
 
 Future<void> main() async {
@@ -46,8 +47,9 @@ class MyApp extends StatelessWidget {
           primarySwatch: primarySwatch,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        routerDelegate: _appRouter.delegate(),
-        routeInformationParser: _appRouter.defaultRouteParser(),
+        routerConfig: _appRouter.config(
+          navigatorObservers: () => [AutoRouteObserver()],
+        ),
       ),
     );
   }

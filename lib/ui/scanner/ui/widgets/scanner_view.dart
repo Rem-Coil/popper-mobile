@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:popper_mobile/core/setup/app_router.dart';
 import 'package:popper_mobile/core/utils/context_utils.dart';
-import 'package:popper_mobile/domain/factories/scanned_entity_factory.dart';
+import 'package:popper_mobile/domain/models/product/product_code_data.dart';
 import 'package:popper_mobile/ui/scanner/ui/widgets/scanner_overlay_shape.dart';
 
 class ScannerView extends StatelessWidget {
@@ -37,8 +37,8 @@ class ScannerView extends StatelessWidget {
   void onCode(BuildContext context, BarcodeCapture capture) {
     try {
       final barcode = capture.barcodes.first;
-      final entity = ScannedEntityFactory.create(barcode.rawValue);
-      context.router.replace(SaveOperationRoute(entity: entity));
+      final codeData = ProductCodeData.fromCode(barcode.rawValue);
+      context.router.replace(SaveOperationRoute(codeData: codeData));
     } catch (_) {
       context.showErrorSnackBar(
         'Ошибка сканирования катушки, попробуйте позже',

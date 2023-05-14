@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 
 class CircularLoader extends StatelessWidget {
-  final double? size;
-  final double? strokeWidth;
-  final Color? color;
-
   const CircularLoader({
     Key? key,
     this.size,
     this.strokeWidth,
     this.color,
   }) : super(key: key);
+
+  final double? size;
+  final double? strokeWidth;
+  final Color? color;
 
   @override
   Widget build(BuildContext context) {

@@ -70,7 +70,7 @@ class _SplashScreenState extends State<SplashScreen> {
                           overflow: TextOverflow.ellipsis,
                           style: Theme.of(context)
                               .textTheme
-                              .headline6
+                              .titleLarge
                               ?.copyWith(color: const Color(0xFF71706D)),
                           textAlign: TextAlign.center,
                         ),

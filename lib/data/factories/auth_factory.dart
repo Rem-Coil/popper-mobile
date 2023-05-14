@@ -18,7 +18,6 @@ class AuthFactory {
       id: user.id,
       firstName: user.firstName,
       secondName: user.secondName,
-      surname: user.surname,
       phone: user.phone,
       password: password,
       role: role,

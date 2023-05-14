@@ -20,7 +20,7 @@ class ProfileView extends StatelessWidget {
           const SizedBox(width: 16),
           Expanded(
             child: Text(
-              '${user.secondName} ${user.firstName} ${user.surname}',
+              '${user.secondName} ${user.firstName}',
               style: Theme.of(context).textTheme.headlineSmall,
             ),
           ),

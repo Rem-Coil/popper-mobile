@@ -7,16 +7,10 @@ class _Initialize implements OperationSaveEvent {
   const _Initialize();
 }
 
-class ChangeOperation implements OperationSaveEvent {
-  const ChangeOperation(this.operationType);
+class ModifyOperationEvent implements OperationSaveEvent {
+  const ModifyOperationEvent(this.event);
 
-  final OperationType? operationType;
-}
-
-class ChangeComment implements OperationSaveEvent {
-  const ChangeComment(this.comment);
-
-  final String? comment;
+  final ModifyEvent event;
 }
 
 class SaveOperation implements OperationSaveEvent {

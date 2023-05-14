@@ -42,7 +42,6 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
     return UserIdentity(
       id: -1,
       firstName: event.firstName,
-      surname: event.surname,
       secondName: event.secondName,
       phone: event.phone,
       role: role,

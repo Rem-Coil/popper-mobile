@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:popper_mobile/core/error/failure.dart';
-import 'package:popper_mobile/domain/repository/operations_repository.dart';
+import 'package:popper_mobile/domain/usecase/synchronization/synchronization_usecase.dart';
 
 part 'event.dart';
 
@@ -12,22 +12,19 @@ part 'state.dart';
 class SynchronizationBloc
     extends Bloc<SynchronizationEvent, SynchronizationState> {
   SynchronizationBloc(
-    this._repository,
+    this._synchronization,
   ) : super(const SynchronizationInitialState()) {
     on<StartSynchronizationEvent>(_onStartSynchronization);
   }
 
-  final OperationsRepository _repository;
+  final SynchronizationUseCase _synchronization;
 
   Future<void> _onStartSynchronization(
     StartSynchronizationEvent event,
     Emitter emit,
   ) async {
     emit(const SynchronizationStartState());
-    final result = await _repository.syncOperations();
-    emit(result.fold(
-      (f) => SynchronizationFailedState(f),
-      (_) => const SynchronizationEndState(),
-    ));
+    await _synchronization();
+    emit(const SynchronizationEndState());
   }
 }

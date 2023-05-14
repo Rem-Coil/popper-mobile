@@ -7,18 +7,18 @@ const _tokenKey = 'token';
 @singleton
 class TokenStorage {
   Future<void> saveToken(Token token) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final prefs = await SharedPreferences.getInstance();
     await prefs.setString(_tokenKey, token.token);
   }
 
   Future<Token?> getToken() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString(_tokenKey);
     return token != null ? Token(token: token) : null;
   }
 
   Future<void> clear() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.clear();
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.clear();
   }
 }

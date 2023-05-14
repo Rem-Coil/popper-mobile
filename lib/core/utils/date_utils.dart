@@ -1,7 +1,11 @@
 import 'package:intl/intl.dart';
 
-final DateFormat allTimeFormatter = DateFormat('d MMMM HH:mm', 'ru_RU');
-final DateFormat timeFormatter = DateFormat('HH:mm', 'ru_RU');
+abstract class Formatters {
+  static final allTime = DateFormat('d MMMM HH:mm', 'ru_RU');
+  static final time = DateFormat('HH:mm', 'ru_RU');
+  static final operation = DateFormat('yyyy-MM-ddTHH:mm:ss');
+}
+
 
 extension DateTimeUtils on DateTime {
   bool get isToday {
@@ -28,9 +32,9 @@ extension DateTimeUtils on DateTime {
 
   DateFormat get _dateFormat {
     if (_daysBetweenNow > 3) {
-      return allTimeFormatter;
+      return Formatters.allTime;
     }
-    return timeFormatter;
+    return Formatters.time;
   }
 
   int get _daysBetweenNow {

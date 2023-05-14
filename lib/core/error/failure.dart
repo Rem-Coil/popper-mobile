@@ -14,6 +14,13 @@ abstract class Failure {
   }
 }
 
+class UnknownFailure extends Failure {
+  const UnknownFailure([super.exception]);
+
+  @override
+  String get message => 'Неизвестная ошибка';
+}
+
 class NoInternetFailure extends Failure {
   const NoInternetFailure([super.exception]);
 
@@ -35,12 +42,26 @@ class WrongCredentialsFailure extends Failure {
   String get message => 'Неправильные данные пользователя';
 }
 
-class ItemNotExistOrNotActiveFailure extends Failure {
-  const ItemNotExistOrNotActiveFailure([super.exception]);
+class UserNotLoginFailure extends Failure {
+  const UserNotLoginFailure([super.exception]);
+
+  @override
+  String get message => 'Пользователь не вошел в приложение';
+}
+
+class NoSuchUserFailure extends Failure {
+  const NoSuchUserFailure([super.exception]);
+
+  @override
+  String get message => 'Нет пользователя с таким идентификатором';
+}
+
+class ProductNotExistOrNotActiveFailure extends Failure {
+  const ProductNotExistOrNotActiveFailure([super.exception]);
 
   @override
   String get message =>
-      'Операция не может быть сохранена, так как обект не существует или не активен';
+      'Операция не может быть сохранена, так как объект не существует или не активен';
 }
 
 class BobbinNotContainOperationsFailure extends Failure {
@@ -58,13 +79,6 @@ class BatchNotContainOperationsFailure extends Failure {
       'По катушкам из выбранной партии ещё не выполнено операций';
 }
 
-class UnknownFailure extends Failure {
-  const UnknownFailure([super.exception]);
-
-  @override
-  String get message => 'Неизвестная ошибка';
-}
-
 class CacheFailure extends Failure {
   const CacheFailure([super.exception]);
 
@@ -72,7 +86,7 @@ class CacheFailure extends Failure {
   String get message => 'Ошибка кеша';
 }
 
-extension Test on Failure {
+extension NetworkFailureExtension on Failure {
   bool get isNetworkFailure =>
       this is NoInternetFailure || this is ServerFailure;
 }

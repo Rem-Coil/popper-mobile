@@ -1,10 +1,10 @@
 import 'package:dio/dio.dart';
-import 'package:popper_mobile/data/models/comment/remote_comment.dart';
-import 'package:popper_mobile/data/models/history/remote_batch_history.dart';
-import 'package:popper_mobile/data/models/history/remote_bobbin_history.dart';
+import 'package:popper_mobile/data/models/batch/remote_batch.dart';
+import 'package:popper_mobile/data/models/kit/remote_kit.dart';
 import 'package:popper_mobile/data/models/operation/remote_operation.dart';
-import 'package:popper_mobile/data/models/scanned_entity/remote_batch.dart';
-import 'package:popper_mobile/data/models/scanned_entity/remote_bobbin.dart';
+import 'package:popper_mobile/data/models/operation/remote_operation_body.dart';
+import 'package:popper_mobile/data/models/product/remote_product.dart';
+import 'package:popper_mobile/data/models/specification/remote_specification.dart';
 import 'package:popper_mobile/data/models/user/credentials_json.dart';
 import 'package:popper_mobile/data/models/user/token.dart';
 import 'package:popper_mobile/data/models/user/user_json.dart';
@@ -16,43 +16,40 @@ part 'api_service.g.dart';
 abstract class ApiService {
   factory ApiService(Dio dio, {String baseUrl}) = _ApiService;
 
-  @POST('/operator/sign_in')
+  @POST('/v2/employee/sign_in')
   Future<Token> singIn(@Body() CredentialsJson credentials);
 
-  @POST('/operator/sign_up')
+  @POST('/v2/employee/sign_up')
   Future<Token> singUp(@Body() UserJson user);
 
-  @GET('/bobbin/{id}')
-  Future<RemoteBobbin> getBobbinInfo(@Path('id') int id);
+  @GET('/v2/product/{id}')
+  Future<RemoteProduct> getProductInfo(@Path('id') int id);
 
-  @GET('/batch/{id}')
-  Future<RemoteBatch> getBatchInfo(@Path('id') int id);
+  @GET('/v2/specification')
+  Future<List<RemoteSpecification>> getAllSpecifications();
 
-  @POST('/action')
-  Future<RemoteBobbinOperation> saveBobbinOperation(
-    @Body() RemoteBobbinOperation operation,
+  @GET('/v2/kit/{id}')
+  Future<RemoteKit> getKitById(@Path('id') int id);
+
+  @GET('/v2/batch/{id}')
+  Future<RemoteBatch> getBatchById(@Path('id') int id);
+
+  @POST('/v2/action')
+  Future<RemoteOperatorOperation> saveOperatorOperation(
+    @Body() RemoteOperatorOperationBody operation,
   );
 
-  @POST('/action/batch')
-  Future<List<RemoteBobbinOperation>> saveBatchOperation(
-    @Body() RemoteBatchOperation operation,
+  @DELETE('/v2/action/{id}')
+  Future<void> deleteOperatorOperation(@Path('id') int id);
+
+  @POST('/v2/control_action')
+  Future<RemoteCheckOperation> saveCheckOperation(
+    @Body() RemoteCheckOperationBody operation,
   );
 
-  @DELETE('/action/{id}')
-  Future<void> deleteOperation(@Path('id') int id);
+  @DELETE('/v2/control_action/{id}')
+  Future<void> deleteCheckOperation(@Path('id') int id);
 
-  @POST('/comment')
-  Future<void> saveComment(@Body() RemoteComment comment);
-
-  @DELETE('/comment/{id}')
-  Future<void> deleteComment(@Path('id') int id);
-
-  @DELETE('/bobbin/{id}')
-  Future<void> defectBobbin(@Path('id') int id);
-
-  @GET('/action/bobbin/{id}/full')
-  Future<RemoteBobbinHistory> getBobbinHistory(@Path('id') int id);
-
-  @GET('/action/batch/{id}/full')
-  Future<RemoteBatchHistory> getBatchHistory(@Path('id') int id);
+  @PATCH('/v2/product/{id}/deactivate')
+  Future<void> deactivateProduct(@Path('id') int id);
 }
