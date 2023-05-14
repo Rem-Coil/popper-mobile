@@ -7,7 +7,9 @@ import 'package:popper_mobile/core/data/base_repository.dart';
 import 'package:popper_mobile/core/utils/typedefs.dart';
 import 'package:popper_mobile/data/cache/products_cache.dart';
 import 'package:popper_mobile/data/factories/product_factory.dart';
+import 'package:popper_mobile/domain/models/product/product_code_data.dart';
 import 'package:popper_mobile/domain/models/product/product_info.dart';
+import 'package:popper_mobile/domain/models/specification/specification.dart';
 import 'package:popper_mobile/domain/repository/products_repository.dart';
 
 @Singleton(as: ProductsRepository)
@@ -24,6 +26,20 @@ class ProductsRepositoryImpl extends BaseRepository
     final local = await _cache.getByKey(id);
 
     if (local == null) return ProductInfo.unknown(id);
+    return await _factory.mapToInfo(local);
+  }
+
+  @override
+  Future<ProductInfo> getInfoByCode(ProductCodeData code) async {
+    await _updateBobbinInfo(code.id);
+    final local = await _cache.getByKey(code.id);
+
+    if (local == null) {
+      return ProductInfo.unknown(
+        code.id,
+        specification: Specification.unknown(id: code.specificationId),
+      );
+    }
     return await _factory.mapToInfo(local);
   }
 

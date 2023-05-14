@@ -97,7 +97,7 @@ class _ProductNumber extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (!product.isActive) {
-      return BobbinDefectedWarning(number);
+      return ProductDefectedWarning(number);
     }
 
     if (!product.isLoaded) {

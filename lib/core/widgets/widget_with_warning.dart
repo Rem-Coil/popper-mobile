@@ -7,7 +7,7 @@ class WidgetWithWarning extends StatelessWidget {
     Key? key,
     required this.child,
     required this.warningTitle,
-    required this.warningMessage,
+    this.warningMessage,
   }) : super(key: key);
 
   final Widget child;

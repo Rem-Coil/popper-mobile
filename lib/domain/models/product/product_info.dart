@@ -9,12 +9,13 @@ class ProductInfo {
     required this.batchNumber,
     required this.productNumber,
     required this.specification,
-    this.isActive = true,
+    required this.isActive,
   });
 
-  const ProductInfo.unknown(this.id)
-      : isActive = true,
-        specification = null,
+  const ProductInfo.unknown(
+    this.id, {
+    this.specification,
+  })  : isActive = true,
         kitNumber = null,
         batchNumber = null,
         productNumber = null;

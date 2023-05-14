@@ -21,7 +21,7 @@ class CreateOperationUseCase {
   final OperationTypesRepository _operationsTypesRepository;
 
   Future<Operation> call(ProductCodeData code) async {
-    final product = await _productsRepository.getInfo(code.id);
+    final product = await _productsRepository.getInfoByCode(code);
     final user = await _authRepository.getCurrentUser();
     final time = DateTime.now();
 

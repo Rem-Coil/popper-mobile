@@ -10,7 +10,7 @@ abstract class Failure {
 
   @override
   String toString() {
-    return kDebugMode ? '$message: $exception' : message;
+    return kDebugMode && exception != null ? '$message: $exception' : message;
   }
 }
 
@@ -64,19 +64,18 @@ class ProductNotExistOrNotActiveFailure extends Failure {
       'Операция не может быть сохранена, так как объект не существует или не активен';
 }
 
+class OperationAlreadyExistFailure extends Failure {
+  const OperationAlreadyExistFailure([super.exception]);
+
+  @override
+  String get message => 'Операция уже сохранена';
+}
+
 class BobbinNotContainOperationsFailure extends Failure {
   const BobbinNotContainOperationsFailure([super.exception]);
 
   @override
   String get message => 'По данной катушке ещё не выполнено операций';
-}
-
-class BatchNotContainOperationsFailure extends Failure {
-  const BatchNotContainOperationsFailure([super.exception]);
-
-  @override
-  String get message =>
-      'По катушкам из выбранной партии ещё не выполнено операций';
 }
 
 class CacheFailure extends Failure {

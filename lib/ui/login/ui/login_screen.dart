@@ -49,7 +49,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   context.read<CurrentUserBloc>().add(const LoadUserEvent());
 
                   Future.delayed(const Duration(seconds: 1), () {
-                    context.router.replace(const HomeRoute());
+                    context.router.replace(const SplashRoute());
                   });
                 }
 

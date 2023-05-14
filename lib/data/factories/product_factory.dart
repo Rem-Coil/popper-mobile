@@ -23,6 +23,7 @@ class ProductFactory {
       batchNumber: product.batchNumber,
       productNumber: product.productNumber,
       specification: spec,
+      isActive: product.isActive,
     );
   }
 

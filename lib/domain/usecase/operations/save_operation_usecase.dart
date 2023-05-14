@@ -26,13 +26,16 @@ class SaveOperationUsecase {
     }
 
     if (operation is OperatorOperation) {
-      await _operatorOperationsRepository.save(operation);
-      final specId = operation.product.specification!.id;
-      final type = operation.type!;
-      await _typesRepository.setLastType(specId, type);
-      return const Right(null);
+      final saveResult = await _operatorOperationsRepository.save(operation);
+      return saveResult.map((_) async => await _updateLastType(operation));
     }
 
     return const Left(UnknownFailure());
+  }
+
+  Future<void> _updateLastType(Operation operation) async {
+    final specId = operation.product.specification!.id;
+    final type = operation.type!;
+    await _typesRepository.setLastType(specId, type);
   }
 }

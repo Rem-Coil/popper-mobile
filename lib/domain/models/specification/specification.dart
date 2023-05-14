@@ -7,6 +7,10 @@ class Specification {
     required this.productType,
   });
 
+  const Specification.unknown({
+    required this.id,
+  }) : productType = 'Неизвестно';
+
   final int id;
   final String productType;
 }

@@ -51,7 +51,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 context.read<CurrentUserBloc>().add(const LoadUserEvent());
 
                 Future.delayed(const Duration(seconds: 1), () {
-                  context.router.replaceAll([const HomeRoute()]);
+                  context.router.replaceAll([const SplashRoute()]);
                 });
               }
 

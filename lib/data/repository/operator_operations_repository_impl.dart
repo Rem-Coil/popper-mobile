@@ -55,7 +55,7 @@ class CheckOperationsRepositoryImpl extends BaseRepository
     if (operation.status == OperationStatus.sync) {
       try {
         final api = apiProvider.getApiService();
-        await api.deleteCheckOperation(operation.id);
+        await api.deleteOperatorOperation(operation.id);
       } on DioError catch (e) {
         return Left(await handleError(e));
       }
@@ -96,6 +96,7 @@ class CheckOperationsRepositoryImpl extends BaseRepository
     } on DioError catch (e) {
       final failure = await handleError(e, {
         HttpStatus.badRequest: const ProductNotExistOrNotActiveFailure(),
+        HttpStatus.conflict: const OperationAlreadyExistFailure(),
       });
 
       return Left(failure);

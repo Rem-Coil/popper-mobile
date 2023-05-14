@@ -48,7 +48,7 @@ class HomeScreen extends StatelessWidget implements AutoRouteWrapper {
           floatingActionButton: FloatingActionButton(
             onPressed: () {
               // TODO: не забыть убрать перед коммитом в релиз
-              final codeData = ProductCodeData.fromCode('s:34;p:1939;');
+              final codeData = ProductCodeData.fromCode('s:34;p:1942;');
               context.router.push(SaveOperationRoute(codeData: codeData));
               // context.router.push(const ScannerRoute());
             },

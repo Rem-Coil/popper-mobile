@@ -48,6 +48,7 @@ class CheckOperationsRepositoryImpl extends BaseRepository
     } on DioError catch (e) {
       final failure = await handleError(e, {
         HttpStatus.badRequest: const ProductNotExistOrNotActiveFailure(),
+        HttpStatus.conflict: const OperationAlreadyExistFailure(),
       });
 
       return Left(failure);
