@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:popper_mobile/core/setup/app_router.dart';
 import 'package:popper_mobile/core/setup/injection.dart';
-import 'package:popper_mobile/domain/models/product/product_code_data.dart';
 import 'package:popper_mobile/ui/home/bloc/bloc.dart';
 import 'package:popper_mobile/ui/home/ui/pages/operations/bloc/bloc.dart';
 import 'package:popper_mobile/ui/home/ui/pages/settings/bloc/bloc.dart';
@@ -48,9 +47,9 @@ class HomeScreen extends StatelessWidget implements AutoRouteWrapper {
           floatingActionButton: FloatingActionButton(
             onPressed: () {
               // TODO: не забыть убрать перед коммитом в релиз
-              final codeData = ProductCodeData.fromCode('s:34;p:1942;');
-              context.router.push(SaveOperationRoute(codeData: codeData));
-              // context.router.push(const ScannerRoute());
+              // final codeData = ProductCodeData.fromCode('s:34;p:1942;');
+              // context.router.push(SaveOperationRoute(codeData: codeData));
+              context.router.push(const ScannerRoute());
             },
             child: const Icon(Icons.add),
           ),

@@ -2,7 +2,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'user_json.g.dart';
 
-@JsonSerializable(createFactory: false)
+@JsonSerializable()
 class UserJson {
   const UserJson({
     required this.id,
@@ -24,6 +24,9 @@ class UserJson {
   final String password;
   @JsonKey(name: 'active')
   final bool isActive;
+
+  factory UserJson.fromJson(Map<String, dynamic> json) =>
+      _$UserJsonFromJson(json);
 
   Map<String, dynamic> toJson() => _$UserJsonToJson(this);
 }

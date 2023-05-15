@@ -4,6 +4,7 @@ import 'package:popper_mobile/data/models/operation/local_operation.dart';
 import 'package:popper_mobile/data/models/operation/remote_operation.dart';
 import 'package:popper_mobile/data/models/operation/remote_operation_body.dart';
 import 'package:popper_mobile/domain/models/operation/check_operation.dart';
+import 'package:popper_mobile/domain/models/operation/operation.dart';
 import 'package:popper_mobile/domain/models/user/user.dart';
 
 @singleton
@@ -55,6 +56,23 @@ class CheckOperationFactory extends OperationFactory<CheckOperation> {
         comment: local.comment,
         isSuccessful: local.isSuccessful,
         checkType: _mapToCheck(local.checkType),
+      ),
+    );
+  }
+
+  Future<CheckOperation> mapRemoteToOperation(RemoteCheckOperation remote) {
+    return mapRemoteWithConstruct(
+      remote,
+      (user, product, type) => CheckOperation(
+        id: remote.id,
+        user: user ?? const User.unknown(),
+        product: product,
+        type: type,
+        time: remote.time,
+        status: OperationStatus.sync,
+        comment: remote.comment,
+        isSuccessful: remote.isSuccessful,
+        checkType: _mapToCheck(remote.checkType),
       ),
     );
   }

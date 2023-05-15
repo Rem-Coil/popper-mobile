@@ -22,6 +22,9 @@ abstract class ApiService {
   @POST('/v2/employee/sign_up')
   Future<Token> singUp(@Body() UserJson user);
 
+  @GET('/v2/employee?active_only=true')
+  Future<List<UserJson>> getAllUsers();
+
   @GET('/v2/product/{id}')
   Future<RemoteProduct> getProductInfo(@Path('id') int id);
 
@@ -34,6 +37,11 @@ abstract class ApiService {
   @GET('/v2/batch/{id}')
   Future<RemoteBatch> getBatchById(@Path('id') int id);
 
+  @GET('/v2/action/product/{id}')
+  Future<List<RemoteOperatorOperation>> getOperatorOperationsByProduct(
+    @Path('id') int id,
+  );
+
   @POST('/v2/action')
   Future<RemoteOperatorOperation> saveOperatorOperation(
     @Body() RemoteOperatorOperationBody operation,
@@ -41,6 +49,9 @@ abstract class ApiService {
 
   @DELETE('/v2/action/{id}')
   Future<void> deleteOperatorOperation(@Path('id') int id);
+
+  @GET('/v2/control_action')
+  Future<List<RemoteCheckOperation>> getAllCheckOperation();
 
   @POST('/v2/control_action')
   Future<RemoteCheckOperation> saveCheckOperation(

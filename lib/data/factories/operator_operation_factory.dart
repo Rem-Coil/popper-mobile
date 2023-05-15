@@ -3,6 +3,7 @@ import 'package:popper_mobile/data/factories/operation_factory.dart';
 import 'package:popper_mobile/data/models/operation/local_operation.dart';
 import 'package:popper_mobile/data/models/operation/remote_operation.dart';
 import 'package:popper_mobile/data/models/operation/remote_operation_body.dart';
+import 'package:popper_mobile/domain/models/operation/operation.dart';
 import 'package:popper_mobile/domain/models/operation/operator_operation.dart';
 import 'package:popper_mobile/domain/models/user/user.dart';
 
@@ -53,11 +54,29 @@ class OperatorOperationFactory extends OperationFactory<OperatorOperation> {
     );
   }
 
+  Future<OperatorOperation> mapRemoteToOperation(
+    RemoteOperatorOperation remote,
+  ) {
+    return mapRemoteWithConstruct(
+      remote,
+      (user, product, type) => OperatorOperation(
+        id: remote.id,
+        user: user ?? const User.unknown(),
+        product: product,
+        type: type,
+        time: remote.time,
+        status: OperationStatus.sync,
+        isRepair: remote.isRepair,
+      ),
+    );
+  }
+
   RemoteOperatorOperationBody mapToBody(OperatorOperation operation) {
     return RemoteOperatorOperationBody(
       operationId: operation.type!.id,
       productId: operation.product.id,
-      time: operation.time, isRepair: operation.isRepair,
+      time: operation.time,
+      isRepair: operation.isRepair,
     );
   }
 

@@ -4,7 +4,9 @@ import 'package:popper_mobile/domain/models/operation/operation.dart';
 import 'package:popper_mobile/domain/models/operation/operator_operation.dart';
 
 abstract class OperationsRepository<T extends Operation> {
-  Future<List<T>> getAll();
+  Future<List<T>> getAllSaved();
+
+  FResult<List<T>> getByProduct(int productId);
 
   FResult<void> save(T operation);
 

@@ -19,8 +19,8 @@ class GetAllOperationsUsecase {
   Future<List<Operation>> call() async {
     final user = await _authRepository.getCurrentUser();
     final operations = user.role == Role.operator
-        ? await _operatorOperationsRepository.getAll()
-        : await _checkOperationsRepository.getAll();
+        ? await _operatorOperationsRepository.getAllSaved()
+        : await _checkOperationsRepository.getAllSaved();
 
     operations.sort((a, b) => b.time.compareTo(a.time));
     return operations;

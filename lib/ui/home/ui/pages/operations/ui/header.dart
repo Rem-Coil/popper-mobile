@@ -12,7 +12,7 @@ class Header extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return SliverAppBar(
-      backgroundColor: theme.backgroundColor,
+      backgroundColor: theme.colorScheme.background,
       expandedHeight: 80,
       floating: true,
       pinned: false,

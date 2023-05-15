@@ -24,7 +24,7 @@ class _ExitButtonState extends State<ExitButton> {
           'Выйти',
           style: Theme.of(context)
               .textTheme
-              .subtitle1
+              .titleMedium
               ?.copyWith(color: Colors.blue),
         ),
       ),

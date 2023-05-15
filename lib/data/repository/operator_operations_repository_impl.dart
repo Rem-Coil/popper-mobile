@@ -27,9 +27,27 @@ class CheckOperationsRepositoryImpl extends BaseRepository
   final OperatorOperationFactory _factory;
 
   @override
-  Future<List<OperatorOperation>> getAll() async {
+  Future<List<OperatorOperation>> getAllSaved() async {
     final operations = await _cache.getAll();
     return Future.wait(operations.map(_factory.mapToOperation));
+  }
+
+  @override
+  FResult<List<OperatorOperation>> getByProduct(int productId) async {
+    try {
+      final service = apiProvider.getApiService();
+      final operations =
+          await service.getOperatorOperationsByProduct(productId);
+
+      final operationsByProduct = await Future.wait(
+        operations.map(_factory.mapRemoteToOperation),
+      );
+
+      return Right(operationsByProduct);
+    } on DioError catch (e) {
+      final failure = await handleError(e);
+      return Left(failure);
+    }
   }
 
   @override

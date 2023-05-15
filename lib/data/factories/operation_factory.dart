@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:popper_mobile/data/models/operation/local_operation.dart';
+import 'package:popper_mobile/data/models/operation/remote_operation.dart';
 import 'package:popper_mobile/data/repository/users_repository.dart';
 import 'package:popper_mobile/domain/models/operation/operation.dart';
 import 'package:popper_mobile/domain/models/operation/operation_type.dart';
@@ -31,6 +32,23 @@ abstract class OperationFactory<T extends Operation> {
 
     final typeRes =
         await _operationTypesRepository.getTypeById(local.operationId);
+    final type = typeRes.fold((_) => null, (t) => t);
+
+    return construct(user, product, type);
+  }
+
+  @protected
+  Future<T> mapRemoteWithConstruct(
+    RemoteOperation remote,
+    T Function(User? user, ProductInfo product, OperationType? type) construct,
+  ) async {
+    final userRes = await _usersRepository.getById(remote.userId);
+    final user = userRes.fold((_) => null, (u) => u);
+
+    final product = await _productsRepository.getInfo(remote.productId);
+
+    final typeRes =
+        await _operationTypesRepository.getTypeById(remote.operationId);
     final type = typeRes.fold((_) => null, (t) => t);
 
     return construct(user, product, type);

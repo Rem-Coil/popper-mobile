@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:either_dart/either.dart';
 import 'package:injectable/injectable.dart';
 import 'package:popper_mobile/core/data/base_repository.dart';
@@ -12,10 +13,27 @@ class UsersRepository extends BaseRepository {
 
   final AuthRepository _authRepository;
 
-  /// Throws NoSuchUserFailure if the ID of the requested user differs from the current
   FResult<User> getById(int id) async {
     final user = await _authRepository.getCurrentUserOrNull();
-    if (user == null || user.id != id) return const Left(NoSuchUserFailure());
+    if (user == null || user.id != id) return _fetchUserInfo(id);
     return Right(user);
+  }
+
+  FResult<User> _fetchUserInfo(int id) async {
+    try {
+      final service = apiProvider.getApiService();
+      final users = await service.getAllUsers();
+      final userById = users.where((u) => u.id == id).map((u) {
+        return User(id: u.id, firstName: u.firstName, secondName: u.secondName);
+      }).toList();
+
+      if (userById.length > 1 || userById.isEmpty) {
+        return const Left(NoSuchUserFailure());
+      }
+      return Right(userById.first);
+    } on DioError catch (e) {
+      final failure = await handleError(e);
+      return Left(failure);
+    }
   }
 }
