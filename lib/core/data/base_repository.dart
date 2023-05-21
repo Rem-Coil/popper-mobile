@@ -2,7 +2,6 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:popper_mobile/core/error/failure.dart';
 import 'package:popper_mobile/data/api/api_provider.dart';
@@ -31,11 +30,6 @@ abstract class BaseRepository {
       switch (statusCode) {
         case HttpStatus.internalServerError:
         case HttpStatus.badGateway:
-          await FirebaseCrashlytics.instance.recordError(
-            e.error,
-            e.stackTrace,
-            reason: 'Server Error',
-          );
           return ServerFailure(e);
         case HttpStatus.unauthorized:
           return WrongCredentialsFailure(e);
@@ -45,11 +39,6 @@ abstract class BaseRepository {
       if (mapped != null) return mapped;
     }
 
-    await FirebaseCrashlytics.instance.recordError(
-      e.error,
-      e.stackTrace,
-      reason: 'UnknownFailure',
-    );
     return UnknownFailure(e);
   }
 }

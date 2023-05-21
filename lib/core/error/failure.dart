@@ -53,7 +53,7 @@ class NoSuchUserFailure extends Failure {
   const NoSuchUserFailure([super.exception]);
 
   @override
-  String get message => 'Нет пользователя с таким идентификатором';
+  String get message => 'Нет пользователя с таким номером телефона';
 }
 
 class ProductNotExistOrNotActiveFailure extends Failure {

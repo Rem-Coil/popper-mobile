@@ -40,9 +40,7 @@ class ScannerView extends StatelessWidget {
       final codeData = ProductCodeData.fromCode(barcode.rawValue);
       context.router.replace(SaveOperationRoute(codeData: codeData));
     } catch (_) {
-      context.showErrorSnackBar(
-        'Ошибка сканирования катушки, попробуйте позже',
-      );
+      context.showErrorSnackBar('Неверный формат QR кода');
     }
   }
 }

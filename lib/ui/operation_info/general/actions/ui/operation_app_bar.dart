@@ -79,7 +79,7 @@ class _BobbinButtonsState extends State<BobbinButtons> {
         ActionButtonItemInfo(
           icon: Icons.block,
           onPressed: () async => _onDefectBobbin(),
-          title: 'Забраковать катушку',
+          title: 'Забраковать изделие',
         ),
       );
     }
@@ -128,7 +128,7 @@ class _BobbinButtonsState extends State<BobbinButtons> {
       context: context,
       builder: (BuildContext context) {
         return const DecisionDialog(
-          title: 'Пометить катушку как отбракованную?',
+          title: 'Пометить изделие как отбракованное?',
           acceptActionTitle: 'Да',
           cancelActionTitle: 'Нет',
         );

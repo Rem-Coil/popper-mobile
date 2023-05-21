@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:either_dart/either.dart';
 import 'package:injectable/injectable.dart';
@@ -27,7 +29,10 @@ class AuthRepositoryImpl extends BaseRepository implements AuthRepository {
       await _storage.saveToken(token);
       return const Right(null);
     } on DioError catch (e) {
-      return Left(await handleError(e));
+      return Left(await handleError(e, {
+        HttpStatus.badRequest: const WrongCredentialsFailure(),
+        HttpStatus.notFound: const NoSuchUserFailure(),
+      }));
     }
   }
 

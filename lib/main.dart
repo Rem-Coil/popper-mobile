@@ -1,9 +1,6 @@
 import 'dart:async';
 
 import 'package:auto_route/auto_route.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:popper_mobile/core/firebase/firebase_crashlytics.dart';
-import 'firebase_options.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,12 +17,6 @@ Future<void> main() async {
 
   await AppCache.init();
   await initializeDateFormatting();
-
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-  await crashlyticsInit();
-
   configureDependencies(kDebugMode ? 'dev' : 'prod');
 
   runApp(MyApp());
@@ -41,6 +32,7 @@ class MyApp extends StatelessWidget {
     return BlocProvider<CurrentUserBloc>(
       create: (_) => getIt<CurrentUserBloc>(),
       child: MaterialApp.router(
+        debugShowCheckedModeBanner: false,
         title: 'Rem&Coil',
         theme: ThemeData(
           textTheme: fonts(context),
