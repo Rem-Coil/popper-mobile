@@ -32,7 +32,7 @@ class _SelectOperationTypeButtonState extends State<SelectOperationTypeButton> {
     context.read<LoadTypesBloc>().add(LoadTypesEvent(widget.specification.id));
   }
 
-  String get _label => widget.selected?.name ?? 'Выберете операцию';
+  String get _label => widget.selected?.name ?? 'Выберите операцию';
 
   @override
   Widget build(BuildContext context) {

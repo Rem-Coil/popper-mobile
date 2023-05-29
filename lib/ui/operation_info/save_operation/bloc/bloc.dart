@@ -1,4 +1,3 @@
-import 'package:either_dart/either.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
@@ -12,7 +11,6 @@ import 'package:popper_mobile/domain/usecase/operations/modify_operation_usecase
 import 'package:popper_mobile/domain/usecase/operations/save_operation_usecase.dart';
 
 part 'event.dart';
-
 part 'state.dart';
 
 @injectable
@@ -46,13 +44,12 @@ class OperationSaveBloc extends Bloc<OperationSaveEvent, OperationSaveState> {
   }
 
   Future<void> _onChangeOperation(
-      ModifyOperationEvent event, Emitter emit) async {
+    ModifyOperationEvent event,
+    Emitter emit,
+  ) async {
     final operation = (state as WithOperationState).operation;
-    final modifyingResult = await _modifyOperation(operation, event.event);
-    if (modifyingResult.isRight) {
-      final newOperation = (modifyingResult as Right).value;
-      emit(ModifyOperationState(operation: newOperation));
-    }
+    final modifiedOperation = _modifyOperation(operation, event.event);
+    emit(ModifyOperationState(operation: modifiedOperation));
   }
 
   Future<void> _onSaveOperation(SaveOperation event, Emitter emit) async {

@@ -16,51 +16,51 @@ part 'api_service.g.dart';
 abstract class ApiService {
   factory ApiService(Dio dio, {String baseUrl}) = _ApiService;
 
-  @POST('/v2/employee/sign_in')
+  @POST('/employee/sign_in')
   Future<Token> singIn(@Body() CredentialsJson credentials);
 
-  @POST('/v2/employee/sign_up')
+  @POST('/employee/sign_up')
   Future<Token> singUp(@Body() UserJson user);
 
-  @GET('/v2/employee?active_only=true')
+  @GET('/employee?active_only=true')
   Future<List<UserJson>> getAllUsers();
 
-  @GET('/v2/product/{id}')
+  @GET('/product/{id}')
   Future<RemoteProduct> getProductInfo(@Path('id') int id);
 
-  @GET('/v2/specification')
+  @GET('/specification')
   Future<List<RemoteSpecification>> getAllSpecifications();
 
-  @GET('/v2/kit/{id}')
+  @GET('/kit/{id}')
   Future<RemoteKit> getKitById(@Path('id') int id);
 
-  @GET('/v2/batch/{id}')
+  @GET('/batch/{id}')
   Future<RemoteBatch> getBatchById(@Path('id') int id);
 
-  @GET('/v2/action/product/{id}')
+  @GET('/action/product/{id}')
   Future<List<RemoteOperatorOperation>> getOperatorOperationsByProduct(
     @Path('id') int id,
   );
 
-  @POST('/v2/action')
+  @POST('/action')
   Future<RemoteOperatorOperation> saveOperatorOperation(
     @Body() RemoteOperatorOperationBody operation,
   );
 
-  @DELETE('/v2/action/{id}')
+  @DELETE('/action/{id}')
   Future<void> deleteOperatorOperation(@Path('id') int id);
 
-  @GET('/v2/control_action')
+  @GET('/control_action')
   Future<List<RemoteCheckOperation>> getAllCheckOperation();
 
-  @POST('/v2/control_action')
+  @POST('/control_action')
   Future<RemoteCheckOperation> saveCheckOperation(
     @Body() RemoteCheckOperationBody operation,
   );
 
-  @DELETE('/v2/control_action/{id}')
+  @DELETE('/control_action/{id}')
   Future<void> deleteCheckOperation(@Path('id') int id);
 
-  @PATCH('/v2/product/{id}/deactivate')
+  @PATCH('/product/{id}/deactivate')
   Future<void> deactivateProduct(@Path('id') int id);
 }

@@ -22,7 +22,7 @@ class OperationTypeField extends StatelessWidget {
   final bool isImmutable;
   final Specification? specification;
 
-  String get _label => selected?.name ?? 'Выберете операцию';
+  String get _label => selected?.name ?? 'Выберите операцию';
 
   @override
   Widget build(BuildContext context) {
