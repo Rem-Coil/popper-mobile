@@ -25,7 +25,7 @@ class Header extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Text(
-                'Выполнено за сегодня',
+                'Выполнено сегодня',
                 style: theme.textTheme.titleSmall?.copyWith(
                   color: Colors.white54,
                 ),

@@ -34,7 +34,7 @@ class SettingsPage extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Настроки',
+                          Text('Настройки',
                               style: theme.textTheme.headlineSmall.bold),
                           const SizedBox(height: 12),
                           const ProfileView(),

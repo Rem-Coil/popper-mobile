@@ -110,7 +110,7 @@ class CheckOperationsRepositoryImpl extends BaseRepository
   FResult<void> delete(CheckOperation operation) async {
     if (operation.status == OperationStatus.sync) {
       try {
-        final api = apiProvider.getApiService();
+        final api = apiProvider.getApiService(isSafe: true);
         await api.deleteCheckOperation(operation.id);
       } on DioError catch (e) {
         return Left(await handleError(e));
