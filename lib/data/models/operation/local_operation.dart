@@ -1,51 +1,87 @@
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:popper_mobile/data/cache/core/cache.dart';
+import 'package:popper_mobile/core/data/cache.dart';
+import 'package:popper_mobile/core/utils/date_utils.dart';
 
 part 'local_operation.g.dart';
 
-@HiveType(typeId: 2)
-enum EntityType {
+@HiveType(typeId: 16)
+enum LocalOperationStatus {
   @HiveField(0)
-  batch,
+  draft,
   @HiveField(1)
-  bobbin,
-}
-
-@HiveType(typeId: 1)
-enum LocalOperationType {
-  @HiveField(0)
-  winding,
-  @HiveField(1)
-  output,
+  sync,
   @HiveField(2)
-  isolation,
-  @HiveField(3)
-  molding,
-  @HiveField(4)
-  crimping,
-  @HiveField(5)
-  quality,
-  @HiveField(6)
-  testing
+  notSync,
 }
 
-abstract class LocalOperation<T> implements Cacheable<T> {
+const defaultOperationId = -1;
+
+abstract class LocalOperation implements Cacheable<String> {
   const LocalOperation({
-    required this.entityType,
-    required this.entityId,
-    required this.type,
+    required this.id,
+    required this.operationId,
+    required this.userId,
+    required this.productId,
     required this.time,
-    required this.isSuccessful,
+    required this.status,
   });
 
   @HiveField(0)
-  final EntityType entityType;
+  final int id;
   @HiveField(1)
-  final int entityId;
+  final int operationId;
   @HiveField(2)
-  final LocalOperationType type;
+  final int userId;
   @HiveField(3)
-  final DateTime time;
+  final int productId;
   @HiveField(4)
+  final DateTime time;
+  @HiveField(5)
+  final LocalOperationStatus status;
+
+  @override
+  String get key {
+    if (status == LocalOperationStatus.sync) return '$id';
+
+    final timeFormatted = Formatters.operation.format(time);
+    return '$productId-$operationId-$timeFormatted';
+  }
+}
+
+@HiveType(typeId: 17)
+class LocalOperatorOperation extends LocalOperation {
+  const LocalOperatorOperation({
+    required super.id,
+    required super.operationId,
+    required super.userId,
+    required super.productId,
+    required super.time,
+    required super.status,
+    required this.isRepair,
+  });
+
+  @HiveField(10)
+  final bool isRepair;
+}
+
+@HiveType(typeId: 18)
+class LocalCheckOperation extends LocalOperation {
+  const LocalCheckOperation({
+    required super.id,
+    required super.operationId,
+    required super.userId,
+    required super.productId,
+    required super.time,
+    required super.status,
+    required this.isSuccessful,
+    required this.checkType,
+    required this.comment,
+  });
+
+  @HiveField(11)
   final bool isSuccessful;
+  @HiveField(12)
+  final String checkType;
+  @HiveField(13)
+  final String? comment;
 }

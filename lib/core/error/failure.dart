@@ -10,8 +10,15 @@ abstract class Failure {
 
   @override
   String toString() {
-    return kDebugMode ? '$message: $exception' : message;
+    return kDebugMode && exception != null ? '$message: $exception' : message;
   }
+}
+
+class UnknownFailure extends Failure {
+  const UnknownFailure([super.exception]);
+
+  @override
+  String get message => 'Неизвестная ошибка';
 }
 
 class NoInternetFailure extends Failure {
@@ -35,12 +42,41 @@ class WrongCredentialsFailure extends Failure {
   String get message => 'Неправильные данные пользователя';
 }
 
-class ItemNotExistOrNotActiveFailure extends Failure {
-  const ItemNotExistOrNotActiveFailure([super.exception]);
+class UserNotLoginFailure extends Failure {
+  const UserNotLoginFailure([super.exception]);
+
+  @override
+  String get message => 'Пользователь не вошел в приложение';
+}
+
+class NoSuchUserFailure extends Failure {
+  const NoSuchUserFailure([super.exception]);
+
+  @override
+  String get message => 'Нет пользователя с таким номером телефона';
+}
+
+class UserAlreadyExistFailure extends Failure {
+  const UserAlreadyExistFailure([super.exception]);
 
   @override
   String get message =>
-      'Операция не может быть сохранена, так как обект не существует или не активен';
+      'Пользователь с таким номером телефона уже зарегистрирован';
+}
+
+class ProductNotExistOrNotActiveFailure extends Failure {
+  const ProductNotExistOrNotActiveFailure([super.exception]);
+
+  @override
+  String get message =>
+      'Операция не может быть сохранена, так как объект не существует или не активен';
+}
+
+class OperationAlreadyExistFailure extends Failure {
+  const OperationAlreadyExistFailure([super.exception]);
+
+  @override
+  String get message => 'Операция уже сохранена';
 }
 
 class BobbinNotContainOperationsFailure extends Failure {
@@ -50,21 +86,6 @@ class BobbinNotContainOperationsFailure extends Failure {
   String get message => 'По данной катушке ещё не выполнено операций';
 }
 
-class BatchNotContainOperationsFailure extends Failure {
-  const BatchNotContainOperationsFailure([super.exception]);
-
-  @override
-  String get message =>
-      'По катушкам из выбранной партии ещё не выполнено операций';
-}
-
-class UnknownFailure extends Failure {
-  const UnknownFailure([super.exception]);
-
-  @override
-  String get message => 'Неизвестная ошибка';
-}
-
 class CacheFailure extends Failure {
   const CacheFailure([super.exception]);
 
@@ -72,7 +93,15 @@ class CacheFailure extends Failure {
   String get message => 'Ошибка кеша';
 }
 
-extension Test on Failure {
+class SynchronizationWithErrorFailure extends Failure {
+  const SynchronizationWithErrorFailure([super.exception]);
+
+  @override
+  String get message =>
+      'Некоторые операции не были удалены, проверьте их вручную';
+}
+
+extension NetworkFailureExtension on Failure {
   bool get isNetworkFailure =>
       this is NoInternetFailure || this is ServerFailure;
 }

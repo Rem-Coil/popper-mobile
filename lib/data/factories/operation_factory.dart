@@ -1,176 +1,80 @@
-import 'package:json_annotation/json_annotation.dart';
-import 'package:popper_mobile/data/factories/scanned_entity_factory.dart';
-import 'package:popper_mobile/data/models/operation/cached_operation.dart';
-import 'package:popper_mobile/data/models/operation/completed_operation.dart';
+import 'package:flutter/foundation.dart';
 import 'package:popper_mobile/data/models/operation/local_operation.dart';
 import 'package:popper_mobile/data/models/operation/remote_operation.dart';
+import 'package:popper_mobile/data/repository/users_repository.dart';
 import 'package:popper_mobile/domain/models/operation/operation.dart';
 import 'package:popper_mobile/domain/models/operation/operation_type.dart';
-import 'package:popper_mobile/domain/models/operation/operation_with_comment.dart';
-import 'package:popper_mobile/domain/models/operation/scanned_entity.dart';
+import 'package:popper_mobile/domain/models/product/product_info.dart';
 import 'package:popper_mobile/domain/models/user/user.dart';
+import 'package:popper_mobile/domain/repository/operations_types_repository.dart';
+import 'package:popper_mobile/domain/repository/products_repository.dart';
 
-const _typeLocalRelations = {
-  OperationType.winding: LocalOperationType.winding,
-  OperationType.output: LocalOperationType.output,
-  OperationType.isolation: LocalOperationType.isolation,
-  OperationType.molding: LocalOperationType.molding,
-  OperationType.crimping: LocalOperationType.crimping,
-  OperationType.quality: LocalOperationType.quality,
-  OperationType.testing: LocalOperationType.testing,
-};
+abstract class OperationFactory<T extends Operation> {
+  const OperationFactory(
+    this._usersRepository,
+    this._productsRepository,
+    this._operationTypesRepository,
+  );
 
-const _typeRemoteRelations = {
-  OperationType.winding: RemoteOperationType.winding,
-  OperationType.output: RemoteOperationType.output,
-  OperationType.isolation: RemoteOperationType.isolation,
-  OperationType.molding: RemoteOperationType.molding,
-  OperationType.crimping: RemoteOperationType.crimping,
-  OperationType.quality: RemoteOperationType.quality,
-  OperationType.testing: RemoteOperationType.testing,
-};
+  final UsersRepository _usersRepository;
+  final ProductsRepository _productsRepository;
+  final OperationTypesRepository _operationTypesRepository;
 
-class OperationFactory {
-  static LocalOperation mapToLocal(Operation operation) {
-    final entityType = ScannedEntityFactory.mapToType(operation.item);
-    final entityId = operation.item.id;
-    final type = _typeLocalRelations[operation.type!];
+  @protected
+  Future<T> mapWithConstruct(
+    LocalOperation local,
+    T Function(User? user, ProductInfo product, OperationType? type) construct,
+  ) async {
+    final userRes = await _usersRepository.getById(local.userId);
+    final user = userRes.fold((_) => null, (u) => u);
 
-    if (type == null) {
-      throw Exception('Error: OperationType must not be null');
-    }
+    final product = await _productsRepository.getInfo(local.productId);
 
-    if (operation.status == OperationStatus.sync) {
-      return CompletedOperation(
-        id: operation.id,
-        entityType: entityType,
-        entityId: entityId,
-        type: type,
-        time: operation.time,
-        isSuccessful: operation.isSuccessful,
-      );
-    }
+    final typeRes =
+        await _operationTypesRepository.getTypeById(local.operationId);
+    final type = typeRes.fold((_) => null, (t) => t);
 
-    if (operation.status == OperationStatus.notSync) {
-      return CachedOperation(
-        entityType: entityType,
-        entityId: entityId,
-        type: type,
-        time: operation.time,
-        isSuccessful: operation.isSuccessful,
-      );
-    }
-
-    throw Exception('Error: This status not support');
+    return construct(user, product, type);
   }
 
-  static RemoteOperation mapToRemote(Operation operation) {
-    final entityType = ScannedEntityFactory.mapToType(operation.item);
-    final entityId = operation.item.id;
-    final type = _typeRemoteRelations[operation.type!];
+  @protected
+  Future<T> mapRemoteWithConstruct(
+    RemoteOperation remote,
+    T Function(User? user, ProductInfo product, OperationType? type) construct,
+  ) async {
+    final userRes = await _usersRepository.getById(remote.userId);
+    final user = userRes.fold((_) => null, (u) => u);
 
-    if (type == null) {
-      throw Exception('Error: OperationType must not be null');
-    }
+    final product = await _productsRepository.getInfo(remote.productId);
 
-    if (entityType == EntityType.batch) {
-      return RemoteBatchOperation(
-        id: operation.id,
-        batchId: entityId,
-        type: type,
-        time: operation.time,
-        successful: operation.isSuccessful,
-      );
-    }
+    final typeRes =
+        await _operationTypesRepository.getTypeById(remote.operationId);
+    final type = typeRes.fold((_) => null, (t) => t);
 
-    if (entityType == EntityType.bobbin) {
-      return RemoteBobbinOperation(
-        id: operation.id,
-        bobbinId: entityId,
-        type: type,
-        time: operation.time,
-        successful: operation.isSuccessful,
-      );
-    }
-
-    throw Exception('Error: This entity type not support');
+    return construct(user, product, type);
   }
 
-  static Operation mapFromRemoteToOperation(
-    User user,
-    RemoteOperation operation,
-    ScannedEntity item, [
-    String? comment,
-  ]) {
-    final id = operation.id;
-    const status = OperationStatus.sync;
-    final type = $enumDecode(_typeRemoteRelations, operation.type);
-
-    if (comment != null) {
-      return OperationWithComment(
-        id: id,
-        user: user,
-        item: item,
-        type: type,
-        time: operation.time,
-        status: status,
-        isSuccessful: operation.successful,
-        comment: comment,
-      );
+  @protected
+  LocalOperationStatus mapOperationStatus(OperationStatus status) {
+    switch (status) {
+      case OperationStatus.draft:
+        return LocalOperationStatus.draft;
+      case OperationStatus.sync:
+        return LocalOperationStatus.sync;
+      case OperationStatus.notSync:
+        return LocalOperationStatus.notSync;
     }
-
-    return Operation(
-      id: id,
-      status: status,
-      user: user,
-      item: item,
-      type: type,
-      isSuccessful: operation.successful,
-      time: operation.time,
-    );
   }
 
-  static Operation mapToOperation(
-    User user,
-    LocalOperation operation,
-    ScannedEntity item,
-    String? comment,
-  ) {
-    late final int id;
-    late final OperationStatus status;
-    final type = $enumDecode(_typeLocalRelations, operation.type);
-
-    if (operation is CompletedOperation) {
-      id = operation.id;
-      status = OperationStatus.sync;
+  @protected
+  OperationStatus mapLocalOperationStatus(LocalOperationStatus status) {
+    switch (status) {
+      case LocalOperationStatus.draft:
+        return OperationStatus.draft;
+      case LocalOperationStatus.sync:
+        return OperationStatus.sync;
+      case LocalOperationStatus.notSync:
+        return OperationStatus.notSync;
     }
-
-    if (operation is CachedOperation) {
-      id = -1;
-      status = OperationStatus.notSync;
-    }
-
-    if (comment != null) {
-      return OperationWithComment(
-        id: id,
-        user: user,
-        item: item,
-        type: type,
-        time: operation.time,
-        status: status,
-        isSuccessful: operation.isSuccessful,
-        comment: comment,
-      );
-    }
-
-    return Operation(
-      id: id,
-      status: status,
-      user: user,
-      item: item,
-      type: type,
-      isSuccessful: operation.isSuccessful,
-      time: operation.time,
-    );
   }
 }

@@ -3,24 +3,26 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:popper_mobile/core/setup/app_router.dart';
 import 'package:popper_mobile/core/setup/injection.dart';
-import 'package:popper_mobile/domain/models/operation/scanned_entity.dart';
-import 'package:popper_mobile/ui/operation_info/general/widgets/views/info_loading_view.dart';
-import 'package:popper_mobile/ui/operation_info/general/widgets/views/result_view.dart';
+import 'package:popper_mobile/domain/models/product/product_code_data.dart';
+import 'package:popper_mobile/ui/operation_info/general/views/info_loading_view.dart';
+import 'package:popper_mobile/ui/operation_info/general/views/result_view.dart';
 import 'package:popper_mobile/ui/operation_info/save_operation/bloc/bloc.dart';
 import 'package:popper_mobile/ui/operation_info/save_operation/ui/widgets/select_operation_type_view.dart';
 import 'package:popper_mobile/core/widgets/dialogs/decision_dialog.dart';
 
+@RoutePage()
 class SaveOperationScreen extends StatefulWidget implements AutoRouteWrapper {
-  const SaveOperationScreen({Key? key, required this.entity}) : super(key: key);
+  const SaveOperationScreen({Key? key, required this.codeData})
+      : super(key: key);
 
-  final ScannedEntity entity;
+  final ProductCodeData codeData;
 
   @override
   Widget wrappedRoute(BuildContext context) {
     return MultiBlocProvider(
       providers: [
         BlocProvider<OperationSaveBloc>(
-          create: (_) => getIt.get<OperationSaveBloc>(param1: entity),
+          create: (_) => getIt.get<OperationSaveBloc>(param1: codeData),
         ),
       ],
       child: this,
@@ -61,8 +63,8 @@ class _SaveOperationScreenState extends State<SaveOperationScreen> {
   Future<void> _showCacheDialog() async {
     final isSaveInCache = await _showSaveDialog();
 
+    if (!mounted) return;
     if (isSaveInCache == true) {
-      if (!mounted) return;
       context.read<OperationSaveBloc>().add(const CacheOperation());
     } else {
       context.router.navigate(const HomeRoute());

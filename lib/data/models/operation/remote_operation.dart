@@ -1,83 +1,69 @@
-import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:popper_mobile/core/utils/date_utils.dart';
 
 part 'remote_operation.g.dart';
-
-part 'remote_operation_info.dart';
-
-enum RemoteOperationType {
-  @JsonValue('winding')
-  winding,
-  @JsonValue('output')
-  output,
-  @JsonValue('isolation')
-  isolation,
-  @JsonValue('molding')
-  molding,
-  @JsonValue('crimping')
-  crimping,
-  @JsonValue('quality')
-  quality,
-  @JsonValue('testing')
-  testing
-}
-
-final formatter = DateFormat('yyyy-MM-ddTHH:mm:ss');
 
 class RemoteOperation {
   const RemoteOperation({
     required this.id,
-    required this.type,
+    required this.operationId,
     required this.time,
-    required this.successful,
+    required this.userId,
+    required this.productId,
   });
 
   final int id;
-  @JsonKey(name: 'action_type', required: false)
-  final RemoteOperationType type;
-  @JsonKey(name: 'done_time', fromJson: _dateFromJson, toJson: _dateToJson)
+  @JsonKey(name: 'operation_type')
+  final int operationId;
+  @JsonKey(name: 'employee_id')
+  final int userId;
+  @JsonKey(name: 'product_id')
+  final int productId;
+  @JsonKey(name: 'done_time', fromJson: _dateFromJson)
   final DateTime time;
-  final bool successful;
 
-  static DateTime _dateFromJson(String date) => formatter.parse(date);
-
-  static String _dateToJson(DateTime time) => formatter.format(time);
+  static DateTime _dateFromJson(String date) =>
+      Formatters.operation.parse(date);
 }
 
-@JsonSerializable()
-class RemoteBatchOperation extends RemoteOperation {
-  const RemoteBatchOperation({
+@JsonSerializable(createToJson: false)
+class RemoteOperatorOperation extends RemoteOperation {
+  const RemoteOperatorOperation({
     required super.id,
-    required this.batchId,
-    required super.type,
+    required super.operationId,
+    required super.userId,
+    required super.productId,
     required super.time,
-    required super.successful,
+    required this.isRepair,
   });
 
-  @JsonKey(name: 'batch_id')
-  final int batchId;
+  @JsonKey(name: 'repair')
+  final bool isRepair;
 
-  factory RemoteBatchOperation.fromJson(Map<String, dynamic> json) =>
-      _$RemoteBatchOperationFromJson(json);
-
-  Map<String, dynamic> toJson() => _$RemoteBatchOperationToJson(this);
+  factory RemoteOperatorOperation.fromJson(Map<String, dynamic> json) =>
+      _$RemoteOperatorOperationFromJson(json);
 }
 
-@JsonSerializable()
-class RemoteBobbinOperation extends RemoteOperation {
-  const RemoteBobbinOperation({
+@JsonSerializable(createToJson: false)
+class RemoteCheckOperation extends RemoteOperation {
+  const RemoteCheckOperation({
     required super.id,
-    required this.bobbinId,
-    required super.type,
+    required super.operationId,
+    required super.userId,
+    required super.productId,
     required super.time,
-    required super.successful,
+    required this.isSuccessful,
+    required this.checkType,
+    required this.comment,
   });
 
-  @JsonKey(name: 'bobbin_id')
-  final int bobbinId;
+  @JsonKey(name: 'successful')
+  final bool isSuccessful;
+  @JsonKey(name: 'control_type')
+  final String checkType;
+  @JsonKey(name: 'comment')
+  final String? comment;
 
-  factory RemoteBobbinOperation.fromJson(Map<String, dynamic> json) =>
-      _$RemoteBobbinOperationFromJson(json);
-
-  Map<String, dynamic> toJson() => _$RemoteBobbinOperationToJson(this);
+  factory RemoteCheckOperation.fromJson(Map<String, dynamic> json) =>
+      _$RemoteCheckOperationFromJson(json);
 }

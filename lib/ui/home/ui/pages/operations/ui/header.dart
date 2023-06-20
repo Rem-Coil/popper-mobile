@@ -12,7 +12,7 @@ class Header extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return SliverAppBar(
-      backgroundColor: theme.backgroundColor,
+      backgroundColor: theme.colorScheme.background,
       expandedHeight: 80,
       floating: true,
       pinned: false,
@@ -25,7 +25,7 @@ class Header extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Text(
-                'Выполнено за сегодня',
+                'Выполнено сегодня',
                 style: theme.textTheme.titleSmall?.copyWith(
                   color: Colors.white54,
                 ),

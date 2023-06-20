@@ -12,7 +12,7 @@ part 'state.dart';
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final AuthRepository _repository;
 
-  LoginBloc(this._repository) : super(LoginState.initial()) {
+  LoginBloc(this._repository) : super(const LoginState.initial()) {
     on<OnDataEntered>(onDataEntered);
   }
 
@@ -20,12 +20,12 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     OnDataEntered event,
     Emitter emit,
   ) async {
-    emit(LoginState.load());
+    emit(const LoginState.load());
     final serverAnswer = await _repository.singIn(event.credentials);
 
     emit(serverAnswer.fold(
       (failure) => LoginState.error(failure),
-      (_) => LoginState.authorized(),
+      (_) => const LoginState.authorized(),
     ));
   }
 }

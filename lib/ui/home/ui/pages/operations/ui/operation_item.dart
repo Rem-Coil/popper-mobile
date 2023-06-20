@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:popper_mobile/core/utils/date_utils.dart';
 import 'package:popper_mobile/core/utils/typedefs.dart';
 import 'package:popper_mobile/domain/models/operation/operation.dart';
-import 'package:popper_mobile/domain/models/operation/operation_type.dart';
 import 'package:popper_mobile/core/widgets/circle_view.dart';
 
 class OperationItem extends StatelessWidget {
@@ -15,7 +14,7 @@ class OperationItem extends StatelessWidget {
   final Operation operation;
   final OperationCallback? onTap;
 
-  String get typeName => operation.type?.localizedName ?? 'Unknown';
+  String get typeName => operation.type?.name ?? 'Unknown';
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +29,8 @@ class OperationItem extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  operation.item.type.toLowerCase(),
+                  operation.product.specification?.productType.toLowerCase() ??
+                      'Неизвестно',
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
                 Text(
@@ -40,7 +40,7 @@ class OperationItem extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 4),
-            _TitleView(title: operation.item.number),
+            _TitleView(title: operation.product.number),
             const SizedBox(height: 8),
             Text(
               typeName,
@@ -70,7 +70,7 @@ class _TitleView extends StatelessWidget {
         Expanded(
           child: Text(
             title,
-            style: Theme.of(context).textTheme.subtitle1,
+            style: Theme.of(context).textTheme.titleMedium,
           ),
         ),
         const SizedBox(width: 16),
@@ -93,7 +93,7 @@ class _NotSyncView extends StatelessWidget {
         const CircleView(size: 8),
         const SizedBox(width: 8),
         Text(
-          'не синхронизированно',
+          'не синхронизировано',
           style: Theme.of(context).textTheme.bodySmall,
         ),
       ],

@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:popper_mobile/core/utils/context_utils.dart';
-import 'package:popper_mobile/data/cache/core/app_cache.dart';
+import 'package:popper_mobile/core/data/app_cache.dart';
 import 'package:popper_mobile/ui/home/ui/pages/settings/bloc/bloc.dart';
 import 'package:popper_mobile/ui/home/ui/pages/settings/widgets/settings_button.dart';
 import 'package:popper_mobile/core/widgets/dialogs/decision_dialog.dart';
@@ -62,7 +62,7 @@ class _SyncButtonState extends State<SyncButton> {
 
         if (state is SynchronizationFailedState) {
           context.hideCurrentSnackBar();
-          context.showErrorSnackBar(state.failure.toString());
+          context.showWarningSnackBar(state.failure.toString());
         }
 
         if (state is SynchronizationEndState) {

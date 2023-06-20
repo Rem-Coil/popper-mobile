@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:popper_mobile/domain/models/operation/check_operation.dart';
 import 'package:popper_mobile/domain/models/operation/operation.dart';
+import 'package:popper_mobile/domain/models/operation/operator_operation.dart';
 import 'package:popper_mobile/ui/history/ui/widgets/history_operation_widget.dart';
 import 'package:timelines/timelines.dart';
 
@@ -34,32 +36,56 @@ class HistoryTimeLine extends StatelessWidget {
               connectionDirection: ConnectionDirection.before,
               itemCount: operations.length,
               contentsBuilder: (_, i) => HistoryOperationWidget(operations[i]),
-              indicatorBuilder: (_, i) {
-                late final IconData icon;
-                late final Color color;
-
-                if (operations[i].isSuccessful) {
-                  icon = Icons.check;
-                  color = const Color(0xff66c97f);
-                } else {
-                  icon = Icons.close;
-                  color = Colors.redAccent;
-                }
-
-                return DotIndicator(
-                  color: color,
-                  child: Icon(icon, color: Colors.white, size: 12.0),
-                );
-              },
+              indicatorBuilder: (_, i) => _OperationIndicator(operations[i]),
               connectorBuilder: (_, i, ___) => SolidLineConnector(
-                color: operations[i - 1].isSuccessful
-                    ? const Color(0xff66c97f)
-                    : Colors.redAccent,
+                color: operations[i - 1].color,
               ),
             ),
           ),
         ),
       ),
     );
+  }
+}
+
+class _OperationIndicator extends StatelessWidget {
+  const _OperationIndicator(
+    this.operation, {
+    Key? key,
+  }) : super(key: key);
+
+  final Operation operation;
+
+  @override
+  Widget build(BuildContext context) {
+    late final IconData? icon;
+
+    if (operation is OperatorOperation) {
+      icon = null;
+    } else {
+      final checkOperation = operation as CheckOperation;
+      icon = checkOperation.isSuccessful ? Icons.check : Icons.close;
+    }
+
+    return DotIndicator(
+      color: operation.color,
+      child: icon == null ? null : Icon(icon, color: Colors.white, size: 12.0),
+    );
+  }
+}
+
+extension OperationColor on Operation {
+  Color get color {
+    if (this is OperatorOperation) {
+      final operatorOperation = this as OperatorOperation;
+      return operatorOperation.isRepair
+          ? Colors.orangeAccent
+          : const Color(0xff66c97f);
+    }
+
+    final checkOperation = this as CheckOperation;
+    return checkOperation.isSuccessful
+        ? const Color(0xff66c97f)
+        : Colors.redAccent;
   }
 }

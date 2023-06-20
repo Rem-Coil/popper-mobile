@@ -2,31 +2,29 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:popper_mobile/core/error/failure.dart';
+import 'package:popper_mobile/domain/models/operation/modify_event.dart';
 import 'package:popper_mobile/domain/models/operation/operation.dart';
-import 'package:popper_mobile/domain/models/operation/operation_type.dart';
-import 'package:popper_mobile/domain/models/operation/operation_with_comment.dart';
-import 'package:popper_mobile/domain/models/operation/scanned_entity.dart';
-import 'package:popper_mobile/domain/repository/operations_repository.dart';
+import 'package:popper_mobile/domain/models/product/product_code_data.dart';
+import 'package:popper_mobile/domain/usecase/operations/cache_operation_usecase.dart';
 import 'package:popper_mobile/domain/usecase/operations/create_operation_usecase.dart';
+import 'package:popper_mobile/domain/usecase/operations/modify_operation_usecase.dart';
+import 'package:popper_mobile/domain/usecase/operations/save_operation_usecase.dart';
 
 part 'event.dart';
-
 part 'state.dart';
 
 @injectable
 class OperationSaveBloc extends Bloc<OperationSaveEvent, OperationSaveState> {
-  final CreateOperationUseCase _createOperation;
-  final OperationsRepository _operationsRepository;
-
   OperationSaveBloc(
-    @factoryParam ScannedEntity? e,
+    @factoryParam ProductCodeData? e,
     this._createOperation,
-    this._operationsRepository,
+    this._saveOperation,
+    this._cacheOperation,
+    this._modifyOperation,
   ) : super(FetchInfoState(e!)) {
     on<_Initialize>(_onInitialize);
 
-    on<ChangeOperation>(_onChangeOperation);
-    on<ChangeComment>(_onChangeComment);
+    on<ModifyOperationEvent>(_onChangeOperation);
 
     on<SaveOperation>(_onSaveOperation);
     on<CacheOperation>(_onCacheOperation);
@@ -34,30 +32,31 @@ class OperationSaveBloc extends Bloc<OperationSaveEvent, OperationSaveState> {
     add(const _Initialize());
   }
 
+  final CreateOperationUseCase _createOperation;
+  final SaveOperationUsecase _saveOperation;
+  final CacheOperationUsecase _cacheOperation;
+  final ModifyOperationUsecase _modifyOperation;
+
   Future<void> _onInitialize(_Initialize event, Emitter emit) async {
-    final entity = (state as FetchInfoState).entity;
+    final entity = (state as FetchInfoState).productCodeData;
     final operation = await _createOperation(entity);
     emit(ModifyOperationState(operation: operation));
   }
 
-  Future<void> _onChangeOperation(ChangeOperation event, Emitter emit) async {
+  Future<void> _onChangeOperation(
+    ModifyOperationEvent event,
+    Emitter emit,
+  ) async {
     final operation = (state as WithOperationState).operation;
-    final newOperation = operation.setType(event.operationType);
-    emit(ModifyOperationState(operation: newOperation));
-  }
-
-  Future<void> _onChangeComment(ChangeComment event, Emitter emit) async {
-    final operation =
-        (state as WithOperationState).operation as OperationWithComment;
-    final newOperation = operation.setComment(event.comment);
-    emit(ModifyOperationState(operation: newOperation));
+    final modifiedOperation = _modifyOperation(operation, event.event);
+    emit(ModifyOperationState(operation: modifiedOperation));
   }
 
   Future<void> _onSaveOperation(SaveOperation event, Emitter emit) async {
     final operation = (state as WithOperationState).operation;
     emit(SaveProcessState(operation: operation));
 
-    final result = await _operationsRepository.save(operation);
+    final result = await _saveOperation(operation);
 
     emit(result.fold(
       (f) => f.isNetworkFailure
@@ -71,7 +70,7 @@ class OperationSaveBloc extends Bloc<OperationSaveEvent, OperationSaveState> {
     final operation = (state as WithOperationState).operation;
     emit(CacheProcessState(operation: operation));
 
-    final result = await _operationsRepository.cache(operation);
+    final result = await _cacheOperation(operation);
 
     emit(result.fold(
       (f) => FailedState(f),

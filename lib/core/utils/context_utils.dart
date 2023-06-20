@@ -48,6 +48,19 @@ extension SnackBars on BuildContext {
     );
   }
 
+  void showWarningSnackBar(String message, {int seconds = 3}) {
+    ScaffoldMessenger.of(this).showSnackBar(
+      SnackBar(
+        backgroundColor: Colors.orange,
+        duration: Duration(seconds: seconds),
+        content: Text(
+          message,
+          style: const TextStyle(fontSize: 16),
+        ),
+      ),
+    );
+  }
+
   void hideCurrentSnackBar() =>
       ScaffoldMessenger.of(this).hideCurrentSnackBar();
 }

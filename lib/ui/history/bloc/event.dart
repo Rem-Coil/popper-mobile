@@ -3,7 +3,7 @@ part of 'bloc.dart';
 class HistoryEvent {}
 
 class GetHistory implements HistoryEvent {
-  const GetHistory(this.bobbin);
+  const GetHistory(this.product);
 
-  final ScannedEntity bobbin;
+  final ProductInfo product;
 }

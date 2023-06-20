@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:popper_mobile/ui/operation_info/general/widgets/actions/ui/operation_app_bar.dart';
-import 'package:popper_mobile/ui/operation_info/general/widgets/views/operation_info.dart';
+import 'package:popper_mobile/ui/operation_info/general/actions/ui/operation_app_bar.dart';
+import 'package:popper_mobile/ui/operation_info/general/views/operation_info.dart';
 import 'package:popper_mobile/ui/operation_info/save_operation/bloc/bloc.dart';
 import 'package:popper_mobile/core/widgets/buttons/simple_button.dart';
 import 'package:popper_mobile/core/widgets/circular_loader.dart';
@@ -26,18 +26,7 @@ class SelectOperationTypeView extends StatelessWidget {
             Expanded(
               child: SingleChildScrollView(
                 reverse: true,
-                child: OperationInfo(
-                  operation: state.operation,
-                  isImmutable: state is ChangeOperation,
-                  onTypeSelected: (t) {
-                    BlocProvider.of<OperationSaveBloc>(context)
-                        .add(ChangeOperation(t));
-                  },
-                  onCommentEntered: (c) {
-                    BlocProvider.of<OperationSaveBloc>(context)
-                        .add(ChangeComment(c));
-                  },
-                ),
+                child: OperationInfo.changeable(state.operation),
               ),
             ),
             const SizedBox(height: 16),

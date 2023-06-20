@@ -7,6 +7,7 @@ import 'package:popper_mobile/domain/models/user/user_identity.dart';
 import 'package:popper_mobile/domain/repository/auth_repository.dart';
 
 part 'event.dart';
+
 part 'state.dart';
 
 @injectable
@@ -42,10 +43,24 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
     return UserIdentity(
       id: -1,
       firstName: event.firstName,
-      surname: event.surname,
       secondName: event.secondName,
       phone: event.phone,
       role: role,
     );
+  }
+}
+
+@injectable
+class CheckCodeBloc extends Bloc<CheckCodeEvent, CheckCodeState> {
+  CheckCodeBloc() : super(const CodeNotCheckState()) {
+    on<ValidateCodeEvent>(onValidateCode);
+  }
+
+  void onValidateCode(ValidateCodeEvent event, Emitter emit) {
+    if (event.code != '7738') {
+      emit(const CodeWrongState());
+    } else {
+      emit(const CodeCorrectState());
+    }
   }
 }

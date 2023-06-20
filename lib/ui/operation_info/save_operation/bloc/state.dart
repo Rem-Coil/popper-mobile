@@ -4,9 +4,9 @@ part of 'bloc.dart';
 abstract class OperationSaveState {}
 
 class FetchInfoState implements OperationSaveState {
-  const FetchInfoState(this.entity);
+  const FetchInfoState(this.productCodeData);
 
-  final ScannedEntity entity;
+  final ProductCodeData productCodeData;
 }
 
 abstract class WithOperationState implements OperationSaveState {
@@ -14,7 +14,7 @@ abstract class WithOperationState implements OperationSaveState {
 
   final Operation operation;
 
-  bool get isCanSave => operation.type != null && operation.item.isActive;
+  bool get isCanSave => operation.type != null && operation.product.isActive;
 }
 
 class ModifyOperationState extends WithOperationState {

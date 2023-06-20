@@ -7,8 +7,8 @@ import 'package:popper_mobile/domain/models/user/user_identity.dart';
 
 class UserFactory {
   static const _roleKeys = {
-    Role.operator: 'operator',
-    Role.qualityEngineer: 'quality_engineer',
+    Role.operator: 'OPERATOR',
+    Role.qualityEngineer: 'QUALITY_ENGINEER',
   };
 
   static User fromToken(Token model) {
@@ -20,8 +20,7 @@ class UserFactory {
     return UserIdentity(
       id: jwtData['id'],
       firstName: jwtData['first_name'],
-      surname: jwtData['surname'],
-      secondName: jwtData['second_name'],
+      secondName: jwtData['last_name'],
       phone: jwtData['phone'],
       role: $enumDecode(_roleKeys, jwtData['role']),
     );
