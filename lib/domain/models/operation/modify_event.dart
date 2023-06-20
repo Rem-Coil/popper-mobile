@@ -17,8 +17,7 @@ class ChangeCommentEvent extends ModifyEvent<String?> {
   @override
   Operation updateOperation(Operation operation) {
     if (operation is! CheckOperation) return operation;
-    final nullableValue = value?.isEmpty != false ? null : value;
-    return operation.copy(comment: nullableValue);
+    return operation.copy(comment: value);
   }
 }
 

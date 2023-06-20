@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:popper_mobile/domain/models/operation/modify_event.dart';
 import 'package:popper_mobile/ui/operation_info/general/fields/value_info_text.dart';
@@ -19,17 +20,23 @@ class RepairButton extends StatefulWidget {
 }
 
 class _RepairButtonState extends State<RepairButton> {
-  String get _label => widget.isRepair ? 'Ремонт' : 'Обычная операция';
+  Widget get _label {
+    if (widget.isRepair) {
+      return const ValueInfoText('Ремонт', color: Colors.orange);
+    }
+
+    return const ValueInfoText('Обычная операция', color: Colors.green);
+  }
 
   @override
   Widget build(BuildContext context) {
     if (widget.isImmutable) {
-      return ValueInfoText(_label);
+      return _label;
     }
 
     return GestureDetector(
       onTap: _setRepair,
-      child: ValueInfoText(_label),
+      child: _label,
     );
   }
 
@@ -53,15 +60,15 @@ class _RepairDialog extends StatelessWidget {
     return CupertinoActionSheet(
       actions: [
         CupertinoActionSheetAction(
-          child: const Text('Ремонт'),
-          onPressed: () {
-            Navigator.pop(context, true);
-          },
-        ),
-        CupertinoActionSheetAction(
           child: const Text('Обычная операция'),
           onPressed: () {
             Navigator.pop(context, false);
+          },
+        ),
+        CupertinoActionSheetAction(
+          child: const Text('Ремонт'),
+          onPressed: () {
+            Navigator.pop(context, true);
           },
         ),
       ],

@@ -24,7 +24,10 @@ class SynchronizationBloc
     Emitter emit,
   ) async {
     emit(const SynchronizationStartState());
-    await _synchronization();
-    emit(const SynchronizationEndState());
+    final result = await _synchronization();
+    emit(result.fold(
+      (f) => SynchronizationFailedState(f),
+      (_) => const SynchronizationEndState(),
+    ));
   }
 }

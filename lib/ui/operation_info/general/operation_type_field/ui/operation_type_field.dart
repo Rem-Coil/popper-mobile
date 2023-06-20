@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:popper_mobile/core/setup/injection.dart';
 import 'package:popper_mobile/core/widgets/widget_with_warning.dart';
@@ -22,12 +22,18 @@ class OperationTypeField extends StatelessWidget {
   final bool isImmutable;
   final Specification? specification;
 
-  String get _label => selected?.name ?? 'Выберите операцию';
+  Widget get _label {
+    if (selected == null) {
+      return const WidgetWithWarning(child: ValueInfoText('Не выбрана'));
+    }
+
+    return ValueInfoText(selected!.name);
+  }
 
   @override
   Widget build(BuildContext context) {
     if (isImmutable) {
-      return ValueInfoText(_label);
+      return _label;
     }
 
     if (specification == null) {
@@ -40,7 +46,7 @@ class OperationTypeField extends StatelessWidget {
     return BlocProvider(
       create: (_) => getIt<LoadTypesBloc>(),
       child: SelectOperationTypeButton(
-        selected: selected,
+        label: _label,
         onTypeSelected: (t) async {
           final event = ChangeOperationTypeEvent(t);
           context.read<OperationSaveBloc>().add(ModifyOperationEvent(event));

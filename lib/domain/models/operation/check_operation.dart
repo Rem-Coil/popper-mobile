@@ -44,6 +44,14 @@ class CheckOperation extends Operation {
     bool? isSuccessful,
     CheckType? checkType,
   }) {
+    late final String? nullableComment;
+
+    if (comment != null) {
+      nullableComment = comment.isEmpty ? null : comment;
+    } else {
+      nullableComment = this.comment;
+    }
+
     return CheckOperation(
       id: id ?? this.id,
       user: user,
@@ -51,7 +59,7 @@ class CheckOperation extends Operation {
       type: type ?? this.type,
       time: time,
       status: status ?? this.status,
-      comment: comment ?? this.comment,
+      comment: nullableComment,
       isSuccessful: isSuccessful ?? this.isSuccessful,
       checkType: checkType ?? this.checkType,
     );

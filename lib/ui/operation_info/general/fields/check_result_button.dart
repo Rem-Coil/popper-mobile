@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:popper_mobile/domain/models/operation/modify_event.dart';
 import 'package:popper_mobile/ui/operation_info/general/fields/value_info_text.dart';
@@ -19,17 +20,23 @@ class CheckResultButton extends StatefulWidget {
 }
 
 class _CheckResultButtonState extends State<CheckResultButton> {
-  String get _label => widget.isSuccessful ? 'Успешно' : 'Неуспешно';
+  Widget get _label {
+    if (widget.isSuccessful) {
+      return const ValueInfoText('Успешно', color: Colors.green);
+    }
+
+    return const ValueInfoText('Неуспешно', color: Colors.red);
+  }
 
   @override
   Widget build(BuildContext context) {
     if (widget.isImmutable) {
-      return ValueInfoText(_label);
+      return _label;
     }
 
     return GestureDetector(
       onTap: _changeCheckResult,
-      child: ValueInfoText(_label),
+      child: _label,
     );
   }
 

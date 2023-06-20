@@ -1,4 +1,6 @@
+import 'package:either_dart/either.dart';
 import 'package:injectable/injectable.dart';
+import 'package:popper_mobile/core/utils/typedefs.dart';
 import 'package:popper_mobile/domain/repository/operations_repository.dart';
 import 'package:popper_mobile/domain/repository/operations_types_repository.dart';
 
@@ -14,11 +16,18 @@ class SynchronizationUseCase {
   final CheckOperationsRepository _checkOperationsRepository;
   final OperatorOperationsRepository _operatorOperationsRepository;
 
-  Future<void> call() async {
-    await Future.wait([
+  FResult<void> call() async {
+    final results = await Future.wait([
       _specificationsRepository.syncTypes(),
       _checkOperationsRepository.syncOperations(),
       _operatorOperationsRepository.syncOperations(),
     ]);
+
+    final checkResult = results[1] as Result<void>;
+    final operatorResult = results[2] as Result<void>;
+
+    if (checkResult.isLeft) return Left(checkResult.left);
+    if (operatorResult.isLeft) return Left(operatorResult.left);
+    return const Right(null);
   }
 }

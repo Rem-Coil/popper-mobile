@@ -4,19 +4,18 @@ import 'package:popper_mobile/core/utils/context_utils.dart';
 import 'package:popper_mobile/core/widgets/circular_loader.dart';
 import 'package:popper_mobile/domain/models/operation/operation_type.dart';
 import 'package:popper_mobile/domain/models/specification/specification.dart';
-import 'package:popper_mobile/ui/operation_info/general/fields/value_info_text.dart';
 import 'package:popper_mobile/ui/operation_info/general/operation_type_field/bloc/bloc.dart';
 import 'package:popper_mobile/ui/operation_info/general/operation_type_field/ui/select_operation_dialog.dart';
 
 class SelectOperationTypeButton extends StatefulWidget {
   const SelectOperationTypeButton({
     Key? key,
-    required this.selected,
+    required this.label,
     required this.onTypeSelected,
     required this.specification,
   }) : super(key: key);
 
-  final OperationType? selected;
+  final Widget label;
   final OnTypeSelected onTypeSelected;
   final Specification specification;
 
@@ -32,8 +31,6 @@ class _SelectOperationTypeButtonState extends State<SelectOperationTypeButton> {
     context.read<LoadTypesBloc>().add(LoadTypesEvent(widget.specification.id));
   }
 
-  String get _label => widget.selected?.name ?? 'Выберите операцию';
-
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<LoadTypesBloc, LoadTypesState>(
@@ -43,11 +40,10 @@ class _SelectOperationTypeButtonState extends State<SelectOperationTypeButton> {
         }
       },
       builder: (context, state) {
-        final labelWidget = ValueInfoText(_label);
         if (state is! TypesLoadedState) {
           return Row(
             children: [
-              labelWidget,
+              widget.label,
               const CircularLoader(),
             ],
           );
@@ -61,7 +57,7 @@ class _SelectOperationTypeButtonState extends State<SelectOperationTypeButton> {
             );
             widget.onTypeSelected(type);
           },
-          child: labelWidget,
+          child: widget.label,
         );
       },
     );

@@ -25,10 +25,20 @@ class _CommentDialogState extends State<CommentDialog> {
       title: const Text('Введите комментарий'),
       content: SizedBox(
         height: 150,
+        width: double.infinity,
         child: TextField(
           controller: _controller,
           maxLines: null,
           expands: true,
+          autofocus: true,
+          textAlignVertical: TextAlignVertical.top,
+          decoration: InputDecoration(
+            hintText: 'Текст комментария',
+            contentPadding: const EdgeInsets.all(12),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12.0),
+            ),
+          ),
         ),
       ),
       actions: <Widget>[

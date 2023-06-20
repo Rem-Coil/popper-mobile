@@ -89,21 +89,27 @@ class CheckOperationsRepositoryImpl extends BaseRepository
   @override
   FResult<void> syncOperations() async {
     final operations = await _cache.getAll();
-    final notSynced =
+    final notSync =
         operations.where((o) => o.status == LocalOperationStatus.notSync);
 
-    for (var o in notSynced) {
-      final operation = _factory.mapLocalToBody(o);
-      final result = await _save(operation);
+    var isContainsError = false;
+    for (var o in notSync) {
+      final remote = _factory.mapLocalToBody(o);
+      final r = await _save(remote);
 
-      if (result.isLeft) {
-        return Left(result.left);
-      } else {
+      if (r.isRight) {
         await _cache.delete(o.key);
+      } else {
+        final error = r.left;
+        if (error is! NoInternetFailure) {
+          isContainsError = true;
+        }
       }
     }
 
-    return const Right(null);
+    return isContainsError
+        ? const Left(SynchronizationWithErrorFailure())
+        : const Right(null);
   }
 
   @override

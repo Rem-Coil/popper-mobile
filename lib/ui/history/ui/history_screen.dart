@@ -46,7 +46,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
         builder: (context, state) {
           if (state is LoadHistoryState) {
             return const Center(
-              child: CircularLoader(size: 100, strokeWidth: 5),
+              child: CircularLoader(size: 50, strokeWidth: 5),
             );
           }
 

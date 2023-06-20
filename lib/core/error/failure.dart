@@ -60,7 +60,8 @@ class UserAlreadyExistFailure extends Failure {
   const UserAlreadyExistFailure([super.exception]);
 
   @override
-  String get message => 'Пользователь с таким номером телефона уже зарегистрирован';
+  String get message =>
+      'Пользователь с таким номером телефона уже зарегистрирован';
 }
 
 class ProductNotExistOrNotActiveFailure extends Failure {
@@ -90,6 +91,14 @@ class CacheFailure extends Failure {
 
   @override
   String get message => 'Ошибка кеша';
+}
+
+class SynchronizationWithErrorFailure extends Failure {
+  const SynchronizationWithErrorFailure([super.exception]);
+
+  @override
+  String get message =>
+      'Некоторые операции не были удалены, проверьте их вручную';
 }
 
 extension NetworkFailureExtension on Failure {
