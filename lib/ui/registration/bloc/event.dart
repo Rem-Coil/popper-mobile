@@ -22,3 +22,12 @@ class ChangeUserRole extends RegistrationEvent {
 
   ChangeUserRole(this.role);
 }
+
+@immutable
+abstract class CheckCodeEvent {}
+
+class ValidateCodeEvent implements CheckCodeEvent {
+  final String code;
+
+  const ValidateCodeEvent(this.code);
+}

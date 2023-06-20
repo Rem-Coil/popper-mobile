@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 class CommentDialog extends StatefulWidget {
-  const CommentDialog({super.key, required this.initial});
-
   final String? initial;
+
+  const CommentDialog({super.key, required this.initial});
 
   @override
   State<CommentDialog> createState() => _CommentDialogState();

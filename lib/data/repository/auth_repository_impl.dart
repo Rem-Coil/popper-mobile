@@ -45,7 +45,9 @@ class AuthRepositoryImpl extends BaseRepository implements AuthRepository {
       await _storage.saveToken(token);
       return const Right(null);
     } on DioError catch (e) {
-      return Left(await handleError(e));
+      return Left(await handleError(e, {
+        HttpStatus.conflict: const UserAlreadyExistFailure(),
+      }));
     }
   }
 

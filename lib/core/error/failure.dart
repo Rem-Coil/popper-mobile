@@ -56,6 +56,13 @@ class NoSuchUserFailure extends Failure {
   String get message => 'Нет пользователя с таким номером телефона';
 }
 
+class UserAlreadyExistFailure extends Failure {
+  const UserAlreadyExistFailure([super.exception]);
+
+  @override
+  String get message => 'Пользователь с таким номером телефона уже зарегистрирован';
+}
+
 class ProductNotExistOrNotActiveFailure extends Failure {
   const ProductNotExistOrNotActiveFailure([super.exception]);
 

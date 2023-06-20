@@ -20,3 +20,18 @@ class RegistrationFailed extends RegistrationState {
 class RegistrationSuccessful extends RegistrationState {
   RegistrationSuccessful(RegistrationState state) : super(state.role);
 }
+
+@immutable
+abstract class CheckCodeState {}
+
+class CodeNotCheckState implements CheckCodeState {
+  const CodeNotCheckState();
+}
+
+class CodeCorrectState implements CheckCodeState {
+  const CodeCorrectState();
+}
+
+class CodeWrongState implements CheckCodeState {
+  const CodeWrongState();
+}

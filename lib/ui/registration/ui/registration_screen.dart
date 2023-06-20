@@ -1,9 +1,12 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:otp_text_field/otp_field.dart';
+import 'package:otp_text_field/style.dart';
 import 'package:popper_mobile/core/setup/injection.dart';
 import 'package:popper_mobile/core/setup/app_router.dart';
 import 'package:popper_mobile/core/utils/context_utils.dart';
+import 'package:popper_mobile/domain/models/user/role.dart';
 import 'package:popper_mobile/ui/current_user/bloc/bloc.dart';
 import 'package:popper_mobile/ui/registration/bloc/bloc.dart';
 import 'package:popper_mobile/ui/registration/ui/widgets/select_role_button.dart';
@@ -20,8 +23,11 @@ class RegistrationScreen extends StatefulWidget implements AutoRouteWrapper {
 
   @override
   Widget wrappedRoute(BuildContext context) {
-    return BlocProvider<RegistrationBloc>(
-      create: (_) => getIt<RegistrationBloc>(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (_) => getIt<RegistrationBloc>()),
+        BlocProvider(create: (_) => getIt<CheckCodeBloc>()),
+      ],
       child: this,
     );
   }
@@ -142,18 +148,15 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         ),
                       ),
                       const SizedBox(height: 48),
-                      Center(
-                        child: LoadingButton(
-                          width: 270,
-                          isLoad: state is TryRegister,
-                          text: 'Зарегистрироваться',
-                          onPressed: () {
-                            FocusScope.of(context).unfocus();
-                            if (isValidFields) {
-                              checkUserData(context);
-                            }
-                          },
-                        ),
+                      _RegistrationButton(
+                        role: state.role,
+                        isLoad: state is TryRegister,
+                        onCanRegistered: () {
+                          FocusScope.of(context).unfocus();
+                          if (isValidFields) {
+                            checkUserData(context);
+                          }
+                        },
                       ),
                       Center(
                         child: TextButton(
@@ -190,5 +193,92 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     phoneController.dispose();
     passwordController.dispose();
     super.dispose();
+  }
+}
+
+class _RegistrationButton extends StatefulWidget {
+  final bool isLoad;
+  final VoidCallback onCanRegistered;
+  final Role role;
+
+  const _RegistrationButton({
+    required this.isLoad,
+    required this.onCanRegistered,
+    required this.role,
+  });
+
+  @override
+  State<_RegistrationButton> createState() => _RegistrationButtonState();
+}
+
+class _RegistrationButtonState extends State<_RegistrationButton> {
+  @override
+  Widget build(BuildContext context) {
+    return BlocConsumer<CheckCodeBloc, CheckCodeState>(
+      listener: (context, state) {
+        if (state is CodeWrongState) {
+          context.showErrorSnackBar('Неверный код регистрации');
+          return;
+        }
+
+        widget.onCanRegistered();
+      },
+      listenWhen: (old, state) {
+        return old is! CodeCorrectState && state is CodeCorrectState ||
+            state is CodeWrongState;
+      },
+      builder: (context, state) {
+        return Center(
+          child: LoadingButton(
+            width: 270,
+            isLoad: widget.isLoad,
+            text: 'Зарегистрироваться',
+            onPressed: () async {
+              if (widget.role != Role.qualityEngineer ||
+                  state is CodeCorrectState) {
+                widget.onCanRegistered();
+                return;
+              }
+
+              checkCode();
+            },
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> checkCode() async {
+    final pin = await showDialog<String>(
+      context: context,
+      builder: (context) => const _CodeDialog(),
+    );
+
+    if (pin != null && mounted) {
+      context.read<CheckCodeBloc>().add(ValidateCodeEvent(pin));
+    }
+  }
+}
+
+class _CodeDialog extends StatelessWidget {
+  const _CodeDialog();
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: const Text('Введите код'),
+      content: OTPTextField(
+        length: 4,
+        fieldWidth: 30,
+        obscureText: true,
+        style: const TextStyle(fontSize: 17),
+        textFieldAlignment: MainAxisAlignment.spaceAround,
+        fieldStyle: FieldStyle.underline,
+        onChanged: (_) {},
+        onCompleted: (pin) {
+          Navigator.pop(context, pin);
+        },
+      ),
+    );
   }
 }
