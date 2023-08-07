@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:popper_mobile/core/theme/fonts.dart';
 import 'package:popper_mobile/core/utils/date_utils.dart';
-import 'package:popper_mobile/domain/models/operation/operation_type.dart';
+import 'package:popper_mobile/domain/models/operation/check_operation.dart';
 import 'package:popper_mobile/domain/models/operation/operation.dart';
-import 'package:popper_mobile/domain/models/operation/operation_with_comment.dart';
 
 class HistoryOperationWidget extends StatelessWidget {
   const HistoryOperationWidget(
@@ -15,8 +14,8 @@ class HistoryOperationWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final comment = operation is OperationWithComment
-        ? (operation as OperationWithComment).comment
+    final comment = operation is CheckOperation
+        ? (operation as CheckOperation).comment
         : null;
 
     return Padding(
@@ -30,7 +29,7 @@ class HistoryOperationWidget extends StatelessWidget {
             children: [
               Text(
                 operation.user.fullName,
-                style: Theme.of(context).textTheme.subtitle1,
+                style: Theme.of(context).textTheme.titleMedium,
               ),
               const Spacer(),
               Text(
@@ -41,7 +40,7 @@ class HistoryOperationWidget extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           Text(
-            operation.type?.localizedName ?? 'Unknown',
+            operation.type?.name ?? 'Unknown',
             style: Theme.of(context).textTheme.bodySmall,
           ),
           if (comment != null) ...[

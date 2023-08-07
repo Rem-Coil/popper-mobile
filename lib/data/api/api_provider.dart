@@ -47,5 +47,5 @@ abstract class ServerAddressModule {
   @Named('BaseUrl')
   @Environment('dev')
   @Environment('prod')
-  String get baseUrlTest => 'https://api.popper.remcoil.space';
+  String get baseUrlTest => 'https://api.remcoil.webtm.ru';
 }

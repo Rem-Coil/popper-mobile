@@ -8,6 +8,7 @@ import 'package:popper_mobile/ui/home/ui/pages/operations/bloc/bloc.dart';
 import 'package:popper_mobile/ui/home/ui/pages/settings/bloc/bloc.dart';
 import 'package:popper_mobile/ui/home/ui/widgets/navigation_bar.dart';
 
+@RoutePage()
 class HomeScreen extends StatelessWidget implements AutoRouteWrapper {
   const HomeScreen({super.key});
 
@@ -34,7 +35,7 @@ class HomeScreen extends StatelessWidget implements AutoRouteWrapper {
       builder: (context, state) {
         return Scaffold(
           body: Container(
-            color: theme.backgroundColor,
+            color: theme.colorScheme.background,
             child: SafeArea(
               child: Container(
                 color: state.page.color ?? theme.scaffoldBackgroundColor,
@@ -46,8 +47,8 @@ class HomeScreen extends StatelessWidget implements AutoRouteWrapper {
           floatingActionButton: FloatingActionButton(
             onPressed: () {
               // TODO: не забыть убрать перед коммитом в релиз
-              // final scanned = ScannedEntityFactory.create('bobbin:670');
-              // context.router.push(SaveOperationRoute(entity: scanned));
+              // final codeData = ProductCodeData.fromCode('s:34;p:1939;');
+              // context.router.push(SaveOperationRoute(codeData: codeData));
               context.router.push(const ScannerRoute());
             },
             child: const Icon(Icons.add),

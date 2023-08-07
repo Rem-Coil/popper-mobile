@@ -13,12 +13,11 @@ class AuthFactory {
   }
 
   static UserJson mapUser(UserIdentity user, String password) {
-    final role = user.role == Role.operator ? 'operator' : 'quality_engineer';
+    final role = user.role == Role.operator ? 'OPERATOR' : 'QUALITY_ENGINEER';
     return UserJson(
       id: user.id,
       firstName: user.firstName,
       secondName: user.secondName,
-      surname: user.surname,
       phone: user.phone,
       password: password,
       role: role,

@@ -8,12 +8,11 @@ class LoginState {
 
   const LoginState._(this.isAuthenticated, this.isLoad, this.errorMessage);
 
-  factory LoginState.initial() => const LoginState._(false, false, null);
+  const LoginState.initial() : this._(false, false, null);
 
-  factory LoginState.load() => const LoginState._(false, true, null);
+  const LoginState.load() : this._(false, true, null);
 
-  factory LoginState.authorized() => const LoginState._(true, false, null);
+  const LoginState.authorized() : this._(true, false, null);
 
-  factory LoginState.error(Failure failure) =>
-      LoginState._(false, false, failure);
+  const LoginState.error(Failure failure) : this._(false, false, failure);
 }

@@ -10,6 +10,7 @@ import 'package:popper_mobile/core/widgets/buttons/loading_button.dart';
 import 'package:popper_mobile/core/widgets/field.dart';
 import 'package:popper_mobile/core/widgets/logo.dart';
 
+@RoutePage()
 class LoginScreen extends StatefulWidget implements AutoRouteWrapper {
   const LoginScreen({Key? key}) : super(key: key);
 
@@ -48,7 +49,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   context.read<CurrentUserBloc>().add(const LoadUserEvent());
 
                   Future.delayed(const Duration(seconds: 1), () {
-                    context.router.replace(const HomeRoute());
+                    context.router.replace(const SplashRoute());
                   });
                 }
 

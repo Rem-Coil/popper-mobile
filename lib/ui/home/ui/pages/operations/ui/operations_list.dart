@@ -20,7 +20,7 @@ class OperationsList extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(left: 8, right: 8, top: 16),
       child: RefreshIndicator(
-        color: Theme.of(context).backgroundColor,
+        color: Theme.of(context).colorScheme.background,
         onRefresh: () async {
           context.read<OperationsBloc>().add(const UpdateEvent());
         },

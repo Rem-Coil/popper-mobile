@@ -1,8 +1,10 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:popper_mobile/ui/scanner/ui/widgets/icon_button_with_dual_state.dart';
 import 'package:popper_mobile/ui/scanner/ui/widgets/scanner_view.dart';
 
+@RoutePage()
 class ScannerScreen extends StatefulWidget {
   const ScannerScreen({Key? key}) : super(key: key);
 
@@ -16,15 +18,17 @@ class _ScannerScreenState extends State<ScannerScreen> {
   @override
   void initState() {
     super.initState();
-    cameraController = MobileScannerController();
+    cameraController = MobileScannerController(
+      detectionSpeed: DetectionSpeed.noDuplicates,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Отсканируйте катушку:'),
-        backgroundColor: Theme.of(context).backgroundColor,
+        title: const Text('Просканируйте катушку:'),
+        backgroundColor: Theme.of(context).colorScheme.background,
       ),
       body: Column(
         children: <Widget>[

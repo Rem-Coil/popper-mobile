@@ -9,6 +9,7 @@ import 'package:popper_mobile/ui/current_user/bloc/bloc.dart';
 import 'package:popper_mobile/core/widgets/logo.dart';
 import 'package:popper_mobile/ui/splash/bloc/bloc.dart';
 
+@RoutePage()
 class SplashScreen extends StatefulWidget implements AutoRouteWrapper {
   const SplashScreen({Key? key}) : super(key: key);
 
@@ -69,7 +70,7 @@ class _SplashScreenState extends State<SplashScreen> {
                           overflow: TextOverflow.ellipsis,
                           style: Theme.of(context)
                               .textTheme
-                              .headline6
+                              .titleLarge
                               ?.copyWith(color: const Color(0xFF71706D)),
                           textAlign: TextAlign.center,
                         ),
