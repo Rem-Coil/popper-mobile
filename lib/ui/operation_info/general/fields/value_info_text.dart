@@ -14,6 +14,8 @@ class ValueInfoText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text,
+      // maxLines: 2,
+      overflow: TextOverflow.clip,
       style: TextStyle(fontSize: 24, color: color),
     );
   }

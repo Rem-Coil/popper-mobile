@@ -20,7 +20,7 @@ class Header extends StatelessWidget {
         centerTitle: true,
         titlePadding: const EdgeInsets.only(bottom: 8),
         title: SizedBox(
-          height: 40,
+          height: 46,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [

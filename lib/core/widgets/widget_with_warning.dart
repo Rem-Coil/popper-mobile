@@ -17,7 +17,7 @@ class WidgetWithWarning extends StatelessWidget {
   Widget get _label {
     return Row(
       children: [
-        child,
+        Expanded(child: child),
         const SizedBox(width: 5),
         const Icon(Icons.warning_rounded, color: Colors.red),
       ],

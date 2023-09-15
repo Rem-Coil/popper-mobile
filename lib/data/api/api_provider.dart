@@ -43,9 +43,12 @@ class ApiProvider {
 }
 
 @module
-abstract class ServerAddressModule {
+abstract class ServerUrlModule {
+  @Named('BaseUrl')
+  @Environment('prod')
+  String get prod => 'https://api.remcoil.webtm.ru';
+
   @Named('BaseUrl')
   @Environment('dev')
-  @Environment('prod')
-  String get baseUrlTest => 'https://api.remcoil.webtm.ru';
+  String get test => 'https://test.remcoil.webtm.ru';
 }

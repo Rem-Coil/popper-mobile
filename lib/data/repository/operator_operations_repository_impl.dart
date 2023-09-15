@@ -44,9 +44,8 @@ class OperatorOperationsRepositoryImpl extends BaseRepository
       );
 
       return Right(operationsByProduct);
-    } on DioError catch (e) {
-      final failure = await handleError(e);
-      return Left(failure);
+    } on DioException catch (e) {
+      return handleDioException(e);
     }
   }
 
@@ -74,8 +73,8 @@ class OperatorOperationsRepositoryImpl extends BaseRepository
       try {
         final api = apiProvider.getApiService(isSafe: true);
         await api.deleteOperatorOperation(operation.id);
-      } on DioError catch (e) {
-        return Left(await handleError(e));
+      } on DioException catch (e) {
+        return handleDioException(e);
       }
     }
 
@@ -117,13 +116,11 @@ class OperatorOperationsRepositoryImpl extends BaseRepository
       final local = _factory.mapRemoteToLocal(answer);
       await _cache.save(local);
       return const Right(null);
-    } on DioError catch (e) {
-      final failure = await handleError(e, {
+    } on DioException catch (e) {
+      return handleDioException(e, {
         HttpStatus.badRequest: const ProductNotExistOrNotActiveFailure(),
         HttpStatus.conflict: const OperationAlreadyExistFailure(),
       });
-
-      return Left(failure);
     }
   }
 }

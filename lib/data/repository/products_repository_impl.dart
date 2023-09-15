@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:dio/dio.dart';
 import 'package:either_dart/either.dart';
 import 'package:injectable/injectable.dart';
@@ -49,8 +47,8 @@ class ProductsRepositoryImpl extends BaseRepository
       final remote = await service.getProductInfo(id);
       final local = await _factory.mapRemoteToLocal(remote);
       await _cache.save(local);
-    } on DioError catch (e) {
-      log(e.error.toString());
+    } on DioException catch (e) {
+      handleDioException(e);
     }
   }
 
@@ -61,9 +59,8 @@ class ProductsRepositoryImpl extends BaseRepository
       await api.deactivateProduct(id);
       await _updateBobbinInfo(id);
       return const Right(null);
-    } on DioError catch (e) {
-      final failure = await handleError(e);
-      return Left(failure);
+    } on DioException catch (e) {
+      return handleDioException(e);
     }
   }
 }

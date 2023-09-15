@@ -43,7 +43,7 @@ class _SelectOperationTypeButtonState extends State<SelectOperationTypeButton> {
         if (state is! TypesLoadedState) {
           return Row(
             children: [
-              widget.label,
+              Expanded(child: widget.label),
               const CircularLoader(),
             ],
           );

@@ -2,11 +2,13 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:either_dart/either.dart';
 import 'package:flutter/foundation.dart';
 import 'package:popper_mobile/core/error/failure.dart';
+import 'package:popper_mobile/core/utils/typedefs.dart';
 import 'package:popper_mobile/data/api/api_provider.dart';
 
-typedef MappingRule = Map<int, Failure>;
+typedef StatusMappingRule = Map<int, Failure>;
 
 abstract class BaseRepository {
   const BaseRepository(this.apiProvider);
@@ -15,14 +17,14 @@ abstract class BaseRepository {
   final ApiProvider apiProvider;
 
   @protected
-  Future<Failure> handleError(
-    DioError e, [
-    MappingRule rules = const {},
-  ]) async {
-    log(e.error.toString());
+  Result<T> handleDioException<T>(
+    DioException e, [
+    StatusMappingRule rules = const {},
+  ]) {
+    log(e.logMessage);
 
     if (e.error is SocketException) {
-      return NoInternetFailure(e);
+      return Left(NoInternetFailure(e));
     }
 
     final statusCode = e.response?.statusCode;
@@ -30,15 +32,27 @@ abstract class BaseRepository {
       switch (statusCode) {
         case HttpStatus.internalServerError:
         case HttpStatus.badGateway:
-          return ServerFailure(e);
+          return Left(ServerFailure(e));
         case HttpStatus.unauthorized:
-          return WrongCredentialsFailure(e);
+          return Left(WrongCredentialsFailure(e));
       }
 
       final mapped = rules[statusCode];
-      if (mapped != null) return mapped;
+      if (mapped != null) return Left(mapped);
     }
 
-    return UnknownFailure(e);
+    return Left(UnknownFailure(e));
+  }
+}
+
+extension _LogDioExceptionWithResponse on DioException {
+  String get logMessage {
+    String msg = toString();
+
+    if (response != null) {
+      msg += '\nResponse data: ${response?.data.toString()}';
+    }
+
+    return msg;
   }
 }

@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:dio/dio.dart';
 import 'package:either_dart/either.dart';
 import 'package:injectable/injectable.dart';
@@ -90,9 +88,8 @@ class SpecificationsRepository extends BaseRepository
       final local = specifications.map(_factory.mapToLocal);
       await _cache.clear();
       await _cache.saveAll(local);
-    } on DioError catch (e) {
-      final failure = await handleError(e);
-      log(failure.message);
+    } on DioException catch (e) {
+      handleDioException(e);
     }
   }
 

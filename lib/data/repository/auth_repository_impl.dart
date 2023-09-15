@@ -28,11 +28,11 @@ class AuthRepositoryImpl extends BaseRepository implements AuthRepository {
       final token = await service.singIn(json);
       await _storage.saveToken(token);
       return const Right(null);
-    } on DioError catch (e) {
-      return Left(await handleError(e, {
+    } on DioException catch (e) {
+      return handleDioException(e, {
         HttpStatus.badRequest: const WrongCredentialsFailure(),
         HttpStatus.notFound: const NoSuchUserFailure(),
-      }));
+      });
     }
   }
 
@@ -44,10 +44,10 @@ class AuthRepositoryImpl extends BaseRepository implements AuthRepository {
       final token = await service.singUp(userJson);
       await _storage.saveToken(token);
       return const Right(null);
-    } on DioError catch (e) {
-      return Left(await handleError(e, {
+    } on DioException catch (e) {
+      return handleDioException(e, {
         HttpStatus.conflict: const UserAlreadyExistFailure(),
-      }));
+      });
     }
   }
 

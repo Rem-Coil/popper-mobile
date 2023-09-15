@@ -31,9 +31,8 @@ class UsersRepository extends BaseRepository {
         return const Left(NoSuchUserFailure());
       }
       return Right(userById.first);
-    } on DioError catch (e) {
-      final failure = await handleError(e);
-      return Left(failure);
+    } on DioException catch (e) {
+      return handleDioException(e);
     }
   }
 }
