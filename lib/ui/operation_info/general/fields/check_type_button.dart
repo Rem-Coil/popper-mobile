@@ -51,9 +51,12 @@ class _CheckTypeButtonState extends State<CheckTypeButton> {
       builder: (_) => const _CheckTypeDialog(),
     );
 
-    if (!mounted || type == null) return;
+    if (type == null) return;
     final event = ChangeCheckTypeEvent(type);
-    context.read<OperationSaveBloc>().add(ModifyOperationEvent(event));
+
+    if (context.mounted) {
+      context.read<OperationSaveBloc>().add(ModifyOperationEvent(event));
+    }
   }
 }
 

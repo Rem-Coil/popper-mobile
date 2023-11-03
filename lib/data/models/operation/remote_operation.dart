@@ -55,10 +55,13 @@ class RemoteCheckOperation extends RemoteOperation {
     required this.isSuccessful,
     required this.checkType,
     required this.comment,
+    required this.isNeedRepair,
   });
 
   @JsonKey(name: 'successful')
   final bool isSuccessful;
+  @JsonKey(name: 'need_repair')
+  final bool isNeedRepair;
   @JsonKey(name: 'control_type')
   final String checkType;
   @JsonKey(name: 'comment')

@@ -1,18 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:popper_mobile/domain/models/operation/check_operation.dart';
+import 'package:popper_mobile/domain/models/operation/modify_event.dart';
 import 'package:popper_mobile/domain/models/operation/operation.dart';
 import 'package:popper_mobile/domain/models/operation/operator_operation.dart';
 import 'package:popper_mobile/domain/models/product/product_info.dart';
 import 'package:popper_mobile/ui/operation_info/general/fields/bobbin_defected_warning.dart';
 import 'package:popper_mobile/ui/operation_info/general/fields/check_result_button.dart';
 import 'package:popper_mobile/ui/operation_info/general/fields/check_type_button.dart';
+import 'package:popper_mobile/ui/operation_info/general/fields/checkbox_button.dart';
 import 'package:popper_mobile/ui/operation_info/general/fields/comment_button.dart';
 import 'package:popper_mobile/ui/operation_info/general/fields/entity_info_not_loaded.dart';
 import 'package:popper_mobile/ui/operation_info/general/fields/repair_button.dart';
 import 'package:popper_mobile/ui/operation_info/general/fields/value_info_field.dart';
 import 'package:popper_mobile/ui/operation_info/general/fields/value_info_text.dart';
 import 'package:popper_mobile/ui/operation_info/general/operation_type_field/ui/operation_type_field.dart';
+import 'package:popper_mobile/ui/operation_info/save_operation/bloc/bloc.dart';
 
 final formatter = DateFormat('d MMM yyyy, HH:mm', 'ru_RU');
 
@@ -140,6 +144,20 @@ class _OperationActions extends StatelessWidget {
               isImmutable: isImmutable,
             ),
           ),
+          if (!checkOperation.isSuccessful)
+            ValueInfoField(
+              title: 'Ремонт',
+              value: CheckBoxButton(
+                label: 'Нужен ремонт',
+                value: checkOperation.isNeedRepair,
+                onChange: (value) {
+                  final event = ChangeNeedRepairStatusEvent(value);
+                  context
+                      .read<OperationSaveBloc>()
+                      .add(ModifyOperationEvent(event));
+                },
+              ),
+            ), 
           ValueInfoField(
             title: 'Вид проверки',
             value: CheckTypeButton(

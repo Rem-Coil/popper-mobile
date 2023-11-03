@@ -45,7 +45,7 @@ class ProductFactory {
     try {
       final service = _apiProvider.getApiService();
       return await service.getBatchById(id);
-    } on DioError {
+    } on DioException {
       return null;
     }
   }
@@ -54,7 +54,7 @@ class ProductFactory {
     try {
       final service = _apiProvider.getApiService();
       return await service.getKitById(id);
-    } on DioError {
+    } on DioException {
       return null;
     }
   }

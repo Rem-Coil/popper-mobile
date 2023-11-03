@@ -46,9 +46,12 @@ class _CheckResultButtonState extends State<CheckResultButton> {
       builder: (_) => const _CheckResultDialog(),
     );
 
-    if (!mounted || checkResult == null) return;
+    if (checkResult == null) return;
     final event = ChangeCheckResultEvent(checkResult);
-    context.read<OperationSaveBloc>().add(ModifyOperationEvent(event));
+
+    if (context.mounted) {
+      context.read<OperationSaveBloc>().add(ModifyOperationEvent(event));
+    }
   }
 }
 

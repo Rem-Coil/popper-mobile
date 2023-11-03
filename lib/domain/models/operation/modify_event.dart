@@ -37,7 +37,20 @@ class ChangeCheckResultEvent extends ModifyEvent<bool> {
   @override
   Operation updateOperation(Operation operation) {
     if (operation is! CheckOperation) return operation;
-    return operation.copy(isSuccessful: value);
+    return operation.copy(
+      isSuccessful: value,
+      isNeedRepair: !value,
+    );
+  }
+}
+
+class ChangeNeedRepairStatusEvent extends ModifyEvent<bool> {
+  const ChangeNeedRepairStatusEvent(super.value);
+
+  @override
+  Operation updateOperation(Operation operation) {
+    if (operation is! CheckOperation) return operation;
+    return operation.copy(isNeedRepair: value);
   }
 }
 

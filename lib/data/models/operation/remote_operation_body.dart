@@ -17,8 +17,7 @@ class RemoteOperationBody {
   @JsonKey(name: 'done_time', toJson: _dateToJson)
   final DateTime time;
 
-  static String _dateToJson(DateTime time) =>
-      Formatters.operation.format(time);
+  static String _dateToJson(DateTime time) => Formatters.operation.format(time);
 }
 
 @JsonSerializable(createFactory: false)
@@ -43,12 +42,15 @@ class RemoteCheckOperationBody extends RemoteOperationBody {
     required super.productId,
     required super.time,
     required this.isSuccessful,
+    required this.isNeedRepair,
     required this.controlType,
     required this.comment,
   });
 
   @JsonKey(name: 'successful')
   final bool isSuccessful;
+  @JsonKey(name: 'need_repair')
+  final bool isNeedRepair;
   @JsonKey(name: 'control_type')
   final String controlType;
   @JsonKey(name: 'comment')

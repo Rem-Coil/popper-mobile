@@ -24,6 +24,7 @@ class CheckOperationFactory extends OperationFactory<CheckOperation> {
       time: operation.time,
       status: mapOperationStatus(operation.status),
       isSuccessful: operation.isSuccessful,
+      isNeedRepair: operation.isNeedRepair,
       checkType: _checkTypeToString(operation.checkType),
       comment: operation.comment,
     );
@@ -38,6 +39,7 @@ class CheckOperationFactory extends OperationFactory<CheckOperation> {
       time: operation.time,
       status: LocalOperationStatus.sync,
       isSuccessful: operation.isSuccessful,
+      isNeedRepair: operation.isNeedRepair,
       checkType: operation.checkType,
       comment: operation.comment,
     );
@@ -55,6 +57,7 @@ class CheckOperationFactory extends OperationFactory<CheckOperation> {
         status: mapLocalOperationStatus(local.status),
         comment: local.comment,
         isSuccessful: local.isSuccessful,
+        isNeedRepair: local.isNeedRepair,
         checkType: _mapToCheck(local.checkType),
       ),
     );
@@ -72,6 +75,7 @@ class CheckOperationFactory extends OperationFactory<CheckOperation> {
         status: OperationStatus.sync,
         comment: remote.comment,
         isSuccessful: remote.isSuccessful,
+        isNeedRepair: remote.isNeedRepair,
         checkType: _mapToCheck(remote.checkType),
       ),
     );
@@ -83,6 +87,7 @@ class CheckOperationFactory extends OperationFactory<CheckOperation> {
       productId: operation.product.id,
       time: operation.time,
       isSuccessful: operation.isSuccessful,
+      isNeedRepair: operation.isNeedRepair,
       controlType: _checkTypeToString(operation.checkType),
       comment: operation.comment,
     );
@@ -94,6 +99,7 @@ class CheckOperationFactory extends OperationFactory<CheckOperation> {
       productId: operation.productId,
       time: operation.time,
       isSuccessful: operation.isSuccessful,
+      isNeedRepair: operation.isNeedRepair,
       controlType: operation.checkType,
       comment: operation.comment,
     );

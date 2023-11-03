@@ -76,6 +76,7 @@ class LocalCheckOperation extends LocalOperation {
     required this.isSuccessful,
     required this.checkType,
     required this.comment,
+    required this.isNeedRepair,
   });
 
   @HiveField(11)
@@ -84,4 +85,6 @@ class LocalCheckOperation extends LocalOperation {
   final String checkType;
   @HiveField(13)
   final String? comment;
+  @HiveField(14)
+  final bool isNeedRepair;
 }

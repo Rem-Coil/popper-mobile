@@ -26,6 +26,7 @@ class SelectOperationTypeView extends StatelessWidget {
             Expanded(
               child: SingleChildScrollView(
                 reverse: true,
+                physics: const BouncingScrollPhysics(),
                 child: OperationInfo.changeable(state.operation),
               ),
             ),

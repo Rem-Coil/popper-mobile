@@ -46,9 +46,11 @@ class _RepairButtonState extends State<RepairButton> {
       builder: (_) => const _RepairDialog(),
     );
 
-    if (!mounted || isRepair == null) return;
+    if (isRepair == null) return;
     final event = ChangeRepairStatusEvent(isRepair);
-    context.read<OperationSaveBloc>().add(ModifyOperationEvent(event));
+    if (context.mounted) {
+      context.read<OperationSaveBloc>().add(ModifyOperationEvent(event));
+    }
   }
 }
 

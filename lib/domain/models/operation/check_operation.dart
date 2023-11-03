@@ -16,7 +16,8 @@ class CheckOperation extends Operation {
     required this.comment,
     required this.isSuccessful,
     required this.checkType,
-  });
+    required this.isNeedRepair,
+  }) : assert(!isSuccessful || !isNeedRepair);
 
   const CheckOperation.create({
     required super.user,
@@ -25,6 +26,7 @@ class CheckOperation extends Operation {
   })  : comment = null,
         checkType = CheckType.otk,
         isSuccessful = true,
+        isNeedRepair = false,
         super(
           id: Operation.defaultId,
           type: null,
@@ -33,6 +35,7 @@ class CheckOperation extends Operation {
 
   final String? comment;
   final bool isSuccessful;
+  final bool isNeedRepair;
   final CheckType checkType;
 
   @override
@@ -42,6 +45,7 @@ class CheckOperation extends Operation {
     OperationStatus? status,
     String? comment,
     bool? isSuccessful,
+    bool? isNeedRepair,
     CheckType? checkType,
   }) {
     late final String? nullableComment;
@@ -61,6 +65,7 @@ class CheckOperation extends Operation {
       status: status ?? this.status,
       comment: nullableComment,
       isSuccessful: isSuccessful ?? this.isSuccessful,
+      isNeedRepair: isNeedRepair ?? this.isNeedRepair,
       checkType: checkType ?? this.checkType,
     );
   }
