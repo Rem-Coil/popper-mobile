@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:popper_mobile/core/setup/app_router.dart';
 import 'package:popper_mobile/core/setup/injection.dart';
-import 'package:popper_mobile/core/widgets/dialogs/operation_type_dialog.dart';
+import 'package:popper_mobile/ui/operation_info/save_operation/ui/widgets/operation_type_dialog.dart';
 import 'package:popper_mobile/domain/models/product/product_code_data.dart';
 import 'package:popper_mobile/ui/operation_info/general/views/info_loading_view.dart';
 import 'package:popper_mobile/ui/operation_info/general/views/result_view.dart';
