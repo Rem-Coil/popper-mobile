@@ -105,3 +105,10 @@ extension NetworkFailureExtension on Failure {
   bool get isNetworkFailure =>
       this is NoInternetFailure || this is ServerFailure;
 }
+
+class NoOperationTypeFailure extends Failure {
+  const NoOperationTypeFailure([super.exception]);
+
+  @override
+  String get message => 'Не выбран тип операции';
+}

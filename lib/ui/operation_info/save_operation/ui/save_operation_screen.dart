@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:popper_mobile/core/setup/app_router.dart';
 import 'package:popper_mobile/core/setup/injection.dart';
+import 'package:popper_mobile/core/widgets/dialogs/operation_type_dialog.dart';
 import 'package:popper_mobile/domain/models/product/product_code_data.dart';
 import 'package:popper_mobile/ui/operation_info/general/views/info_loading_view.dart';
 import 'package:popper_mobile/ui/operation_info/general/views/result_view.dart';
@@ -37,8 +38,14 @@ class _SaveOperationScreenState extends State<SaveOperationScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<OperationSaveBloc, OperationSaveState>(
-      listenWhen: (_, state) => state is CanCacheState,
-      listener: (context, state) async => await _showCacheDialog(),
+      listener: (context, state) async {
+        if (state is CanCacheState) {
+          await _showCacheDialog();
+        } else if (state is ChooseOperationState) {
+          await _showChooseOperationTypeDialog();
+        }
+      },
+      buildWhen: (_, state) => state is! ChooseOperationState,
       builder: (context, state) {
         if (state is FetchInfoState) {
           return const InfoLoadingView();
@@ -80,6 +87,26 @@ class _SaveOperationScreenState extends State<SaveOperationScreen> {
           message: 'Произошла ошибка сохранения операции. '
               'Сохранить на устройстве? '
               '(необходимо будет позже произвести ручную синхронизацию)',
+        );
+      },
+    );
+  }
+
+  Future<void> _showChooseOperationTypeDialog() async {
+    final userChoice = await _showSaveOperationType();
+
+    if (!mounted) return;
+    context.read<OperationSaveBloc>().add(const ChooseOperationEvent());
+  }
+
+  Future<String?> _showSaveOperationType() {
+    return showCupertinoDialog<String>(
+      context: context,
+      builder: (BuildContext context) {
+        return const OperationTypeDialog(
+          title: 'Выберите тип операции',
+          firstActionTitle: 'Проверка',
+          secondActionTitle: 'Приёмка',
         );
       },
     );

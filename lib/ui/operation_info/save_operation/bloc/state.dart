@@ -4,9 +4,11 @@ part of 'bloc.dart';
 abstract class OperationSaveState {}
 
 class FetchInfoState implements OperationSaveState {
-  const FetchInfoState(this.productCodeData);
+  const FetchInfoState();
+}
 
-  final ProductCodeData productCodeData;
+class ChooseOperationState implements OperationSaveState {
+  const ChooseOperationState();
 }
 
 abstract class WithOperationState implements OperationSaveState {

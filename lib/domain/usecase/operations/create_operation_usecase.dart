@@ -1,4 +1,7 @@
+import 'package:either_dart/either.dart';
 import 'package:injectable/injectable.dart';
+import 'package:popper_mobile/core/error/failure.dart';
+import 'package:popper_mobile/core/utils/typedefs.dart';
 import 'package:popper_mobile/domain/models/operation/check_operation.dart';
 import 'package:popper_mobile/domain/models/operation/operation.dart';
 import 'package:popper_mobile/domain/models/operation/operator_operation.dart';
@@ -20,26 +23,38 @@ class CreateOperationUseCase {
   final AuthRepository _authRepository;
   final OperationTypesRepository _operationsTypesRepository;
 
-  Future<Operation> call(ProductCodeData code) async {
-    final product = await _productsRepository.getInfoByCode(code);
+  FResult<Operation> call(
+    ProductCodeData code, {
+    String? operationType,
+  }) async {
     final user = await _authRepository.getCurrentUser();
+    final product = await _productsRepository.getInfoByCode(code);
     final time = DateTime.now();
 
+    late final Operation operation;
+
     if (user.role == Role.qualityEngineer) {
-      return CheckOperation.create(
+      if (operationType == null) {
+        return const Left(NoOperationTypeFailure());
+      }
+
+      operation = CheckOperation.create(
         user: user,
         product: product,
         time: time,
       );
+    } else {
+      final spec = code.specificationId;
+      final type = await _operationsTypesRepository.getLastType(spec);
+
+      operation = OperatorOperation.create(
+        user: user,
+        product: product,
+        type: type,
+        time: time,
+      );
     }
 
-    final spec = code.specificationId;
-    final type = await _operationsTypesRepository.getLastType(spec);
-    return OperatorOperation.create(
-      user: user,
-      product: product,
-      type: type,
-      time: time,
-    );
+    return Right(operation);
   }
 }

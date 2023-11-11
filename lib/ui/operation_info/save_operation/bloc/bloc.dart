@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
@@ -11,20 +13,24 @@ import 'package:popper_mobile/domain/usecase/operations/modify_operation_usecase
 import 'package:popper_mobile/domain/usecase/operations/save_operation_usecase.dart';
 
 part 'event.dart';
+
 part 'state.dart';
 
 @injectable
 class OperationSaveBloc extends Bloc<OperationSaveEvent, OperationSaveState> {
   OperationSaveBloc(
-    @factoryParam ProductCodeData? e,
+    @factoryParam ProductCodeData? data,
     this._createOperation,
     this._saveOperation,
     this._cacheOperation,
     this._modifyOperation,
-  ) : super(FetchInfoState(e!)) {
+  ) : super(const FetchInfoState()) {
+    _productData = data!;
+
     on<_Initialize>(_onInitialize);
 
     on<ModifyOperationEvent>(_onChangeOperation);
+    on<ChooseOperationEvent>(_onChooseOperationEvent);
 
     on<SaveOperation>(_onSaveOperation);
     on<CacheOperation>(_onCacheOperation);
@@ -32,15 +38,19 @@ class OperationSaveBloc extends Bloc<OperationSaveEvent, OperationSaveState> {
     add(const _Initialize());
   }
 
+  late final ProductCodeData _productData;
+
   final CreateOperationUseCase _createOperation;
   final SaveOperationUsecase _saveOperation;
   final CacheOperationUsecase _cacheOperation;
   final ModifyOperationUsecase _modifyOperation;
 
   Future<void> _onInitialize(_Initialize event, Emitter emit) async {
-    final entity = (state as FetchInfoState).productCodeData;
-    final operation = await _createOperation(entity);
-    emit(ModifyOperationState(operation: operation));
+    final operation = await _createOperation(_productData);
+    operation.fold(
+      (_) => emit(const ChooseOperationState()),
+      (operation) => emit(ModifyOperationState(operation: operation)),
+    );
   }
 
   Future<void> _onChangeOperation(
@@ -76,5 +86,16 @@ class OperationSaveBloc extends Bloc<OperationSaveEvent, OperationSaveState> {
       (f) => FailedState(f),
       (_) => const SuccessState('Операция успешно сохранена в кеш'),
     ));
+  }
+
+  Future<void> _onChooseOperationEvent(
+    ChooseOperationEvent event,
+    Emitter<OperationSaveState> emit,
+  ) async {
+    final operation = await _createOperation(_productData, operationType: '');
+    operation.fold(
+      (_) => emit(const ChooseOperationState()),
+      (operation) => emit(ModifyOperationState(operation: operation)),
+    );
   }
 }
