@@ -75,7 +75,7 @@ class OperationInfo extends StatelessWidget {
         ValueInfoField(
           title: 'Тип операции',
           value: OperationTypeField(
-            selected: operation.type,
+            selected: operation.typeName,
             isImmutable: isImmutable,
             specification: operation.product.specification,
           ),

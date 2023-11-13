@@ -1,11 +1,12 @@
 import 'package:flutter/foundation.dart';
 import 'package:popper_mobile/domain/models/operation/operation.dart';
 import 'package:popper_mobile/domain/models/operation/operation_type.dart';
+import 'operation_with_type.dart';
 
 enum CheckType { testing, otk }
 
 @immutable
-class CheckOperation extends Operation {
+class CheckOperation extends OperationWithType {
   const CheckOperation({
     required super.id,
     required super.user,

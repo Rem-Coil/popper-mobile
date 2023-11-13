@@ -14,7 +14,7 @@ class OperationItem extends StatelessWidget {
   final Operation operation;
   final OperationCallback? onTap;
 
-  String get typeName => operation.type?.name ?? 'Unknown';
+  String get typeName => operation.typeName ?? 'Unknown';
 
   @override
   Widget build(BuildContext context) {

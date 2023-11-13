@@ -33,7 +33,7 @@ class SaveOperationUsecase {
     return const Left(UnknownFailure());
   }
 
-  Future<void> _updateLastType(Operation operation) async {
+  Future<void> _updateLastType(OperatorOperation operation) async {
     final specId = operation.product.specification!.id;
     final type = operation.type!;
     await _typesRepository.setLastType(specId, type);

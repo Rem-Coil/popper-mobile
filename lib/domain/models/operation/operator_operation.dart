@@ -1,9 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:popper_mobile/domain/models/operation/operation.dart';
 import 'package:popper_mobile/domain/models/operation/operation_type.dart';
+import 'operation_with_type.dart';
 
 @immutable
-class OperatorOperation extends Operation {
+class OperatorOperation extends OperationWithType {
   const OperatorOperation({
     required super.id,
     required super.user,

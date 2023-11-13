@@ -40,7 +40,7 @@ class HistoryOperationWidget extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           Text(
-            operation.type?.name ?? 'Unknown',
+            operation.typeName ?? 'Unknown',
             style: Theme.of(context).textTheme.bodySmall,
           ),
           if (comment != null) ...[

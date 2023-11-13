@@ -14,7 +14,6 @@ abstract class Operation {
     required this.id,
     required this.user,
     required this.product,
-    required this.type,
     required this.time,
     required this.status,
   });
@@ -22,7 +21,6 @@ abstract class Operation {
   final int id;
   final User user;
   final ProductInfo product;
-  final OperationType? type;
   final OperationStatus status;
   final DateTime time;
 
@@ -38,4 +36,8 @@ abstract class Operation {
     OperationType? type,
     OperationStatus? status,
   });
+
+  String? get typeName;
+
+  bool get savable;
 }

@@ -3,13 +3,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:popper_mobile/core/setup/app_router.dart';
 import 'package:popper_mobile/core/setup/injection.dart';
-import 'package:popper_mobile/ui/operation_info/save_operation/ui/widgets/operation_type_dialog.dart';
+import 'package:popper_mobile/core/widgets/dialogs/decision_dialog.dart';
 import 'package:popper_mobile/domain/models/product/product_code_data.dart';
 import 'package:popper_mobile/ui/operation_info/general/views/info_loading_view.dart';
 import 'package:popper_mobile/ui/operation_info/general/views/result_view.dart';
 import 'package:popper_mobile/ui/operation_info/save_operation/bloc/bloc.dart';
+import 'package:popper_mobile/ui/operation_info/save_operation/ui/widgets/operation_type_dialog.dart';
 import 'package:popper_mobile/ui/operation_info/save_operation/ui/widgets/select_operation_type_view.dart';
-import 'package:popper_mobile/core/widgets/dialogs/decision_dialog.dart';
 
 @RoutePage()
 class SaveOperationScreen extends StatefulWidget implements AutoRouteWrapper {
@@ -103,11 +103,7 @@ class _SaveOperationScreenState extends State<SaveOperationScreen> {
     return showCupertinoDialog<String>(
       context: context,
       builder: (BuildContext context) {
-        return const OperationTypeDialog(
-          title: 'Выберите тип операции',
-          firstActionTitle: 'Проверка',
-          secondActionTitle: 'Приёмка',
-        );
+        return const OperationTypeDialog();
       },
     );
   }

@@ -35,7 +35,7 @@ class CreateOperationUseCase {
 
     if (user.role == Role.qualityEngineer) {
       if (operationType == null) {
-        return const Left(NoOperationTypeFailure());
+        return const Left(OperationTypeNotSelectedFailure());
       }
 
       operation = CheckOperation.create(
