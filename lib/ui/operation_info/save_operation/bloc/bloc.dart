@@ -90,7 +90,10 @@ class OperationSaveBloc extends Bloc<OperationSaveEvent, OperationSaveState> {
     ChooseOperationEvent event,
     Emitter<OperationSaveState> emit,
   ) async {
-    final operation = await _createOperation(_productData, operationType: '');
+    final operation = await _createOperation(
+      _productData,
+      operationType: event.operationType,
+    );
     operation.fold(
       (_) => emit(const ChooseOperationState()),
       (operation) => emit(ModifyOperationState(operation: operation)),

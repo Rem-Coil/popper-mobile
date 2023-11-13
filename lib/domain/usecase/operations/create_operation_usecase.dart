@@ -2,6 +2,7 @@ import 'package:either_dart/either.dart';
 import 'package:injectable/injectable.dart';
 import 'package:popper_mobile/core/error/failure.dart';
 import 'package:popper_mobile/core/utils/typedefs.dart';
+import 'package:popper_mobile/domain/models/operation/acceptance_operation.dart';
 import 'package:popper_mobile/domain/models/operation/check_operation.dart';
 import 'package:popper_mobile/domain/models/operation/operation.dart';
 import 'package:popper_mobile/domain/models/operation/operator_operation.dart';
@@ -36,13 +37,20 @@ class CreateOperationUseCase {
     if (user.role == Role.qualityEngineer) {
       if (operationType == null) {
         return const Left(OperationTypeNotSelectedFailure());
+      } else if (operationType == 'Приёмка') {
+        operation = AcceptanceOperation.create(
+          user: user,
+          product: product,
+          time: time,
+        );
+      } else {
+      operation = CheckOperation.create(
+          user: user,
+          product: product,
+          time: time,
+        );
       }
 
-      operation = CheckOperation.create(
-        user: user,
-        product: product,
-        time: time,
-      );
     } else {
       final spec = code.specificationId;
       final type = await _operationsTypesRepository.getLastType(spec);

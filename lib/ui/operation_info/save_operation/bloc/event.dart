@@ -8,7 +8,9 @@ class _Initialize implements OperationSaveEvent {
 }
 
 class ChooseOperationEvent implements OperationSaveEvent {
-  const ChooseOperationEvent();
+  const ChooseOperationEvent(this.operationType);
+
+  final String? operationType;
 }
 
 class ModifyOperationEvent implements OperationSaveEvent {

@@ -96,7 +96,7 @@ class _SaveOperationScreenState extends State<SaveOperationScreen> {
     final userChoice = await _showSaveOperationType();
 
     if (!mounted) return;
-    context.read<OperationSaveBloc>().add(const ChooseOperationEvent());
+    context.read<OperationSaveBloc>().add(ChooseOperationEvent(userChoice));
   }
 
   Future<String?> _showSaveOperationType() {

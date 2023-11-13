@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:popper_mobile/domain/models/operation/acceptance_operation.dart';
 import 'package:popper_mobile/domain/models/operation/check_operation.dart';
 import 'package:popper_mobile/domain/models/operation/modify_event.dart';
 import 'package:popper_mobile/domain/models/operation/operation.dart';
@@ -181,6 +182,18 @@ class _OperationActions extends StatelessWidget {
               isRepair: operatorOperation.isRepair,
               isImmutable: isImmutable,
             ),
+          ),
+        ],
+      );
+    }
+
+    if (operation is AcceptanceOperation) {
+      final acceptanceOperation = operation as AcceptanceOperation;
+      return Column(
+        children: [
+          ValueInfoField(
+            title: 'Тип операции',
+            value: ValueInfoText(acceptanceOperation.typeName!),
           ),
         ],
       );
