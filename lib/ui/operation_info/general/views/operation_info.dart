@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:popper_mobile/domain/models/operation/check_operation.dart';
 import 'package:popper_mobile/domain/models/operation/modify_event.dart';
 import 'package:popper_mobile/domain/models/operation/operation.dart';
+import 'package:popper_mobile/domain/models/operation/operation_with_type.dart';
 import 'package:popper_mobile/domain/models/operation/operator_operation.dart';
 import 'package:popper_mobile/domain/models/product/product_info.dart';
 import 'package:popper_mobile/ui/operation_info/general/fields/bobbin_defected_warning.dart';
@@ -72,14 +73,15 @@ class OperationInfo extends StatelessWidget {
           title: 'Сотрудник',
           value: ValueInfoText(operation.user.fullName),
         ),
-        ValueInfoField(
-          title: 'Тип операции',
-          value: OperationTypeField(
-            selected: operation.typeName,
-            isImmutable: isImmutable,
-            specification: operation.product.specification,
+        if (operation is OperationWithType)
+          ValueInfoField(
+            title: 'Тип операции',
+            value: OperationTypeField(
+              selected: (operation as OperationWithType).type,
+              isImmutable: isImmutable,
+              specification: operation.product.specification,
+            ),
           ),
-        ),
         _OperationActions(
           operation: operation,
           isImmutable: isImmutable,
@@ -157,7 +159,7 @@ class _OperationActions extends StatelessWidget {
                       .add(ModifyOperationEvent(event));
                 },
               ),
-            ), 
+            ),
           ValueInfoField(
             title: 'Вид проверки',
             value: CheckTypeButton(

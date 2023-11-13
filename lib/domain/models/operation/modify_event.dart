@@ -1,6 +1,7 @@
 import 'package:popper_mobile/domain/models/operation/check_operation.dart';
 import 'package:popper_mobile/domain/models/operation/operation.dart';
 import 'package:popper_mobile/domain/models/operation/operation_type.dart';
+import 'package:popper_mobile/domain/models/operation/operation_with_type.dart';
 import 'package:popper_mobile/domain/models/operation/operator_operation.dart';
 
 abstract class ModifyEvent<T> {
@@ -69,6 +70,7 @@ class ChangeOperationTypeEvent extends ModifyEvent<OperationType?> {
 
   @override
   Operation updateOperation(Operation operation) {
+    if (operation is! OperationWithType) return operation;
     return operation.setType(value);
   }
 }

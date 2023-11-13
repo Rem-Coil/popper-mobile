@@ -15,6 +15,15 @@ abstract class OperationWithType extends Operation {
 
   final OperationType? type;
 
+  Operation setType(OperationType? type) => copy(type: type);
+
+  @override
+  Operation copy({
+    int? id,
+    OperationType? type,
+    OperationStatus? status,
+  });
+
   @override
   String? get typeName => type?.name;
 

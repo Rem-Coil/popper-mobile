@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:popper_mobile/core/setup/injection.dart';
 import 'package:popper_mobile/core/widgets/widget_with_warning.dart';
 import 'package:popper_mobile/domain/models/operation/modify_event.dart';
+import 'package:popper_mobile/domain/models/operation/operation_type.dart';
 import 'package:popper_mobile/domain/models/specification/specification.dart';
 import 'package:popper_mobile/ui/operation_info/general/fields/value_info_text.dart';
 import 'package:popper_mobile/ui/operation_info/general/operation_type_field/bloc/bloc.dart';
@@ -17,7 +18,7 @@ class OperationTypeField extends StatelessWidget {
     required this.isImmutable,
   });
 
-  final String? selected;
+  final OperationType? selected;
   final bool isImmutable;
   final Specification? specification;
 
@@ -26,7 +27,7 @@ class OperationTypeField extends StatelessWidget {
       return const WidgetWithWarning(child: ValueInfoText('Не выбрана'));
     }
 
-    return ValueInfoText(selected!);
+    return ValueInfoText(selected!.name);
   }
 
   @override
