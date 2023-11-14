@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:popper_mobile/core/setup/app_router.dart';
 import 'package:popper_mobile/core/setup/injection.dart';
 import 'package:popper_mobile/core/widgets/dialogs/decision_dialog.dart';
+import 'package:popper_mobile/domain/models/operation/qe_operation_type.dart';
 import 'package:popper_mobile/domain/models/product/product_code_data.dart';
 import 'package:popper_mobile/ui/operation_info/general/views/info_loading_view.dart';
 import 'package:popper_mobile/ui/operation_info/general/views/result_view.dart';
@@ -99,8 +100,8 @@ class _SaveOperationScreenState extends State<SaveOperationScreen> {
     context.read<OperationSaveBloc>().add(ChooseOperationEvent(userChoice));
   }
 
-  Future<String?> _showSaveOperationType() {
-    return showCupertinoDialog<String>(
+  Future<QeOperationType?> _showSaveOperationType() {
+    return showCupertinoDialog<QeOperationType>(
       context: context,
       builder: (BuildContext context) {
         return const OperationTypeDialog();

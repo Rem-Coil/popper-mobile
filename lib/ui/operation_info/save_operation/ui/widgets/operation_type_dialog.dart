@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:popper_mobile/domain/models/operation/qe_operation_type.dart';
 
 class OperationTypeDialog extends StatelessWidget {
   const OperationTypeDialog({
@@ -11,12 +12,12 @@ class OperationTypeDialog extends StatelessWidget {
       title: const Text('Выберите тип операции'),
       actions: <CupertinoDialogAction>[
         CupertinoDialogAction(
-          onPressed: () => Navigator.pop(context, 'Проверка'),
-          child: const Text('Проверка'),
+          onPressed: () => Navigator.pop(context, QeOperationType.check),
+          child: Text(QeOperationType.check.localizedOperationType),
         ),
         CupertinoDialogAction(
-          onPressed: () => Navigator.pop(context, 'Приёмка'),
-          child: const Text('Приёмка'),
+          onPressed: () => Navigator.pop(context, QeOperationType.acceptance),
+          child: Text(QeOperationType.acceptance.localizedOperationType),
         )
       ],
     );

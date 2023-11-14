@@ -6,6 +6,7 @@ import 'package:popper_mobile/domain/models/operation/acceptance_operation.dart'
 import 'package:popper_mobile/domain/models/operation/check_operation.dart';
 import 'package:popper_mobile/domain/models/operation/operation.dart';
 import 'package:popper_mobile/domain/models/operation/operator_operation.dart';
+import 'package:popper_mobile/domain/models/operation/qe_operation_type.dart';
 import 'package:popper_mobile/domain/models/product/product_code_data.dart';
 import 'package:popper_mobile/domain/models/user/role.dart';
 import 'package:popper_mobile/domain/repository/auth_repository.dart';
@@ -26,7 +27,7 @@ class CreateOperationUseCase {
 
   FResult<Operation> call(
     ProductCodeData code, {
-    String? operationType,
+    QeOperationType? operationType,
   }) async {
     final user = await _authRepository.getCurrentUser();
     final product = await _productsRepository.getInfoByCode(code);
@@ -37,7 +38,7 @@ class CreateOperationUseCase {
     if (user.role == Role.qualityEngineer) {
       if (operationType == null) {
         return const Left(OperationTypeNotSelectedFailure());
-      } else if (operationType == 'Приёмка') {
+      } else if (operationType == QeOperationType.acceptance) {
         operation = AcceptanceOperation.create(
           user: user,
           product: product,
