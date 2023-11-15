@@ -60,11 +60,11 @@ class _OperationIndicator extends StatelessWidget {
   Widget build(BuildContext context) {
     late final IconData? icon;
 
-    if (operation is OperatorOperation) {
-      icon = null;
-    } else {
+    if (operation is CheckOperation) {
       final checkOperation = operation as CheckOperation;
       icon = checkOperation.isSuccessful ? Icons.check : Icons.close;
+    } else {
+      icon = null;
     }
 
     return DotIndicator(
@@ -81,11 +81,13 @@ extension OperationColor on Operation {
       return operatorOperation.isRepair
           ? Colors.orangeAccent
           : const Color(0xff66c97f);
+    } else if (this is CheckOperation) {
+      final checkOperation = this as CheckOperation;
+      return checkOperation.isSuccessful
+          ? const Color(0xff66c97f)
+          : Colors.redAccent;
+    } else {
+      return const Color(0xff66c97f);
     }
-
-    final checkOperation = this as CheckOperation;
-    return checkOperation.isSuccessful
-        ? const Color(0xff66c97f)
-        : Colors.redAccent;
   }
 }

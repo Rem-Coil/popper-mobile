@@ -16,7 +16,8 @@ class AppCache {
       ..registerAdapter(LocalOperationTypeAdapter())
       ..registerAdapter(LocalProductAdapter())
       ..registerAdapter(LocalSimpleOperationTypeAdapter())
-      ..registerAdapter(LocalSpecificationAdapter());
+      ..registerAdapter(LocalSpecificationAdapter())
+      ..registerAdapter(LocalAcceptanceOperationAdapter());
   }
 
   static Future<void> clear() async {

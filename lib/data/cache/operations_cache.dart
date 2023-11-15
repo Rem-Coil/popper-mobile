@@ -4,6 +4,7 @@ import 'package:popper_mobile/data/models/operation/local_operation.dart';
 
 const _checkOperationsBox = 'check_operations';
 const _operatorOperationsBox = 'operator_operations';
+const _acceptanceOperationsBox = 'acceptance_operations';
 
 @singleton
 class OperatorOperationsCache extends Cache<String, LocalOperatorOperation> {
@@ -13,4 +14,10 @@ class OperatorOperationsCache extends Cache<String, LocalOperatorOperation> {
 @singleton
 class CheckOperationsCache extends Cache<String, LocalCheckOperation> {
   const CheckOperationsCache() : super(_checkOperationsBox);
+}
+
+@singleton
+class AcceptanceOperationsCache
+    extends Cache<String, LocalAcceptanceOperation> {
+  const AcceptanceOperationsCache() : super(_acceptanceOperationsBox);
 }

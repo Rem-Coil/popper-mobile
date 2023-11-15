@@ -6,15 +6,12 @@ part 'remote_operation.g.dart';
 class RemoteOperation {
   const RemoteOperation({
     required this.id,
-    required this.operationId,
     required this.time,
     required this.userId,
     required this.productId,
   });
 
   final int id;
-  @JsonKey(name: 'operation_type')
-  final int operationId;
   @JsonKey(name: 'employee_id')
   final int userId;
   @JsonKey(name: 'product_id')
@@ -27,7 +24,33 @@ class RemoteOperation {
 }
 
 @JsonSerializable(createToJson: false)
-class RemoteOperatorOperation extends RemoteOperation {
+class RemoteAcceptanceOperation extends RemoteOperation {
+  const RemoteAcceptanceOperation({
+    required super.id,
+    required super.userId,
+    required super.productId,
+    required super.time,
+  });
+
+  factory RemoteAcceptanceOperation.fromJson(Map<String, dynamic> json) =>
+      _$RemoteAcceptanceOperationFromJson(json);
+}
+
+class RemoteOperationWithType extends RemoteOperation {
+  const RemoteOperationWithType({
+    required super.id,
+    required super.time,
+    required super.userId,
+    required super.productId,
+    required this.operationId,
+  });
+
+  @JsonKey(name: 'operation_type')
+  final int operationId;
+}
+
+@JsonSerializable(createToJson: false)
+class RemoteOperatorOperation extends RemoteOperationWithType {
   const RemoteOperatorOperation({
     required super.id,
     required super.operationId,
@@ -45,7 +68,7 @@ class RemoteOperatorOperation extends RemoteOperation {
 }
 
 @JsonSerializable(createToJson: false)
-class RemoteCheckOperation extends RemoteOperation {
+class RemoteCheckOperation extends RemoteOperationWithType {
   const RemoteCheckOperation({
     required super.id,
     required super.operationId,

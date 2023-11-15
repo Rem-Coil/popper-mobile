@@ -4,45 +4,43 @@ import 'package:dio/dio.dart';
 import 'package:either_dart/either.dart';
 import 'package:injectable/injectable.dart';
 import 'package:popper_mobile/core/data/base_repository.dart';
-import 'package:popper_mobile/core/error/failure.dart';
 import 'package:popper_mobile/core/utils/typedefs.dart';
 import 'package:popper_mobile/data/cache/operations_cache.dart';
-import 'package:popper_mobile/data/factories/check_operation_factory.dart';
+import 'package:popper_mobile/data/factories/acceptance_operation_factory.dart';
 import 'package:popper_mobile/data/models/operation/local_operation.dart';
-import 'package:popper_mobile/data/models/operation/remote_operation_body.dart';
-import 'package:popper_mobile/domain/models/operation/check_operation.dart';
+import 'package:popper_mobile/domain/models/operation/acceptance_operation.dart';
 import 'package:popper_mobile/domain/models/operation/operation.dart';
 import 'package:popper_mobile/domain/repository/operations_repository.dart';
+import 'package:popper_mobile/core/error/failure.dart';
+import 'package:popper_mobile/data/models/operation/remote_operation_body.dart';
 
-@Singleton(as: CheckOperationsRepository)
-class CheckOperationsRepositoryImpl extends BaseRepository
-    implements CheckOperationsRepository {
-  const CheckOperationsRepositoryImpl(
+@Singleton(as: AcceptanceOperationsRepository)
+class AcceptanceOperationsRepositoryImpl extends BaseRepository
+    implements AcceptanceOperationsRepository {
+  const AcceptanceOperationsRepositoryImpl(
     super.apiProvider,
     this._cache,
     this._factory,
   );
 
-  final CheckOperationsCache _cache;
-  final CheckOperationFactory _factory;
+  final AcceptanceOperationsCache _cache;
+  final AcceptanceOperationFactory _factory;
 
   @override
-  Future<List<CheckOperation>> getAllSaved() async {
+  Future<List<AcceptanceOperation>> getAllSaved() async {
     final operations = await _cache.getAll();
     return Future.wait(operations.map(_factory.mapToOperation));
   }
 
   @override
-  FResult<List<CheckOperation>> getByProduct(int productId) async {
+  FResult<List<AcceptanceOperation>> getByProduct(int productId) async {
     try {
       final service = apiProvider.getApiService();
-      final operations = await service.getCheckOperationsByProduct(productId);
+      final operation = await service.getAcceptanceOperationsByProduct(productId);
 
-      final operationsByProduct = await Future.wait(
-        operations.map(_factory.mapRemoteToOperation),
-      );
+      final operationByProduct = [await _factory.mapRemoteToOperation(operation)];
 
-      return Right(operationsByProduct);
+      return Right(operationByProduct);
     } on DioException catch (e) {
       if (e.response?.statusCode == HttpStatus.notFound){
         return const Right([]);
@@ -52,17 +50,17 @@ class CheckOperationsRepositoryImpl extends BaseRepository
   }
 
   @override
-  FResult<void> save(CheckOperation operation) {
+  FResult<void> save(AcceptanceOperation operation) {
     final remoteOperation = _factory.mapToBody(operation);
     return _save(remoteOperation);
   }
 
-  FResult<void> _save(RemoteCheckOperationBody operationBody) async {
+  FResult<void> _save(RemoteAcceptanceOperationBody operationBody) async {
     try {
       final api = apiProvider.getApiService(isSafe: true);
-      final answer = await api.saveCheckOperation(operationBody);
-      final local = _factory.mapRemoteToLocal(answer);
-      await _cache.save(local);
+      final answer = await api.saveAcceptanceOperation(operationBody);
+      final local = answer.map(_factory.mapRemoteToLocal);
+      await _cache.saveAll(local);
       return const Right(null);
     } on DioException catch (e) {
       return handleDioException(e, {
@@ -73,10 +71,11 @@ class CheckOperationsRepositoryImpl extends BaseRepository
   }
 
   @override
-  FResult<void> cache(CheckOperation operation) async {
+  FResult<void> cache(AcceptanceOperation operation) async {
     try {
       final notSyncOperation = operation.setStatus(OperationStatus.notSync);
-      final local = _factory.mapToLocal(notSyncOperation as CheckOperation);
+      final local =
+          _factory.mapToLocal(notSyncOperation as AcceptanceOperation);
       await _cache.save(local);
       return const Right(null);
     } on Exception {
@@ -85,10 +84,26 @@ class CheckOperationsRepositoryImpl extends BaseRepository
   }
 
   @override
+  FResult<void> delete(AcceptanceOperation operation) async {
+    if (operation.status == OperationStatus.sync) {
+      try {
+        final api = apiProvider.getApiService(isSafe: true);
+        await api.deleteAcceptanceOperation(operation.id);
+      } on DioException catch (e) {
+        return handleDioException(e);
+      }
+    }
+
+    final local = _factory.mapToLocal(operation);
+    await _cache.delete(local.key);
+    return const Right(null);
+  }
+
+  @override
   FResult<void> syncOperations() async {
     final operations = await _cache.getAll();
     final notSync =
-        operations.where((o) => o.status == LocalOperationStatus.notSync);
+    operations.where((o) => o.status == LocalOperationStatus.notSync);
 
     var isContainsError = false;
     for (var o in notSync) {
@@ -108,21 +123,5 @@ class CheckOperationsRepositoryImpl extends BaseRepository
     return isContainsError
         ? const Left(SynchronizationWithErrorFailure())
         : const Right(null);
-  }
-
-  @override
-  FResult<void> delete(CheckOperation operation) async {
-    if (operation.status == OperationStatus.sync) {
-      try {
-        final api = apiProvider.getApiService(isSafe: true);
-        await api.deleteCheckOperation(operation.id);
-      } on DioException catch (e) {
-        return handleDioException(e);
-      }
-    }
-
-    final local = _factory.mapToLocal(operation);
-    await _cache.delete(local.key);
-    return const Right(null);
   }
 }

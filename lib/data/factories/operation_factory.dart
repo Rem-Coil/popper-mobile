@@ -30,9 +30,15 @@ abstract class OperationFactory<T extends Operation> {
 
     final product = await _productsRepository.getInfo(local.productId);
 
-    final typeRes =
-        await _operationTypesRepository.getTypeById(local.operationId);
-    final type = typeRes.fold((_) => null, (t) => t);
+    late final OperationType? type;
+
+    if (local is LocalOperationWithType) {
+      final typeRes =
+          await _operationTypesRepository.getTypeById(local.operationId);
+      type = typeRes.fold((_) => null, (t) => t);
+    } else {
+      type = null;
+    }
 
     return construct(user, product, type);
   }
@@ -47,9 +53,15 @@ abstract class OperationFactory<T extends Operation> {
 
     final product = await _productsRepository.getInfo(remote.productId);
 
-    final typeRes =
-        await _operationTypesRepository.getTypeById(remote.operationId);
-    final type = typeRes.fold((_) => null, (t) => t);
+    late final OperationType? type;
+
+    if (remote is RemoteOperationWithType) {
+      final typeRes =
+          await _operationTypesRepository.getTypeById(remote.operationId);
+      type = typeRes.fold((_) => null, (t) => t);
+    } else {
+      type = null;
+    }
 
     return construct(user, product, type);
   }

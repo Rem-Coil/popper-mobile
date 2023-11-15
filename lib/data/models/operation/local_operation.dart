@@ -19,7 +19,6 @@ const defaultOperationId = -1;
 abstract class LocalOperation implements Cacheable<String> {
   const LocalOperation({
     required this.id,
-    required this.operationId,
     required this.userId,
     required this.productId,
     required this.time,
@@ -29,15 +28,46 @@ abstract class LocalOperation implements Cacheable<String> {
   @HiveField(0)
   final int id;
   @HiveField(1)
-  final int operationId;
-  @HiveField(2)
   final int userId;
-  @HiveField(3)
+  @HiveField(2)
   final int productId;
-  @HiveField(4)
+  @HiveField(3)
   final DateTime time;
-  @HiveField(5)
+  @HiveField(4)
   final LocalOperationStatus status;
+}
+
+@HiveType(typeId: 23)
+class LocalAcceptanceOperation extends LocalOperation {
+  LocalAcceptanceOperation({
+    required super.id,
+    required super.userId,
+    required super.productId,
+    required super.time,
+    required super.status,
+  });
+
+  @override
+  String get key {
+    if (status == LocalOperationStatus.sync) return '$id';
+
+    final timeFormatted = Formatters.operation.format(time);
+    return '$productId-$timeFormatted';
+  }
+}
+
+abstract class LocalOperationWithType extends LocalOperation {
+  const LocalOperationWithType({
+    required super.id,
+    required super.userId,
+    required super.productId,
+    required super.time,
+    required super.status,
+    required this.operationId,
+  });
+
+  @HiveField(5)
+  final int operationId;
 
   @override
   String get key {
@@ -48,8 +78,8 @@ abstract class LocalOperation implements Cacheable<String> {
   }
 }
 
-@HiveType(typeId: 17)
-class LocalOperatorOperation extends LocalOperation {
+@HiveType(typeId: 25)
+class LocalOperatorOperation extends LocalOperationWithType {
   const LocalOperatorOperation({
     required super.id,
     required super.operationId,
@@ -64,8 +94,8 @@ class LocalOperatorOperation extends LocalOperation {
   final bool isRepair;
 }
 
-@HiveType(typeId: 18)
-class LocalCheckOperation extends LocalOperation {
+@HiveType(typeId: 24)
+class LocalCheckOperation extends LocalOperationWithType {
   const LocalCheckOperation({
     required super.id,
     required super.operationId,

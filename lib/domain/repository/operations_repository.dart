@@ -1,4 +1,5 @@
 import 'package:popper_mobile/core/utils/typedefs.dart';
+import 'package:popper_mobile/domain/models/operation/acceptance_operation.dart';
 import 'package:popper_mobile/domain/models/operation/check_operation.dart';
 import 'package:popper_mobile/domain/models/operation/operation.dart';
 import 'package:popper_mobile/domain/models/operation/operator_operation.dart';
@@ -22,3 +23,6 @@ abstract class CheckOperationsRepository
 
 abstract class OperatorOperationsRepository
     extends OperationsRepository<OperatorOperation> {}
+
+abstract class AcceptanceOperationsRepository
+    extends OperationsRepository<AcceptanceOperation> {}

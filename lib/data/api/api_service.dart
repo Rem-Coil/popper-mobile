@@ -53,6 +53,11 @@ abstract class ApiService {
   @GET('/control_action')
   Future<List<RemoteCheckOperation>> getAllCheckOperation();
 
+  @GET('/control_action/product/{id}')
+  Future<List<RemoteCheckOperation>> getCheckOperationsByProduct(
+    @Path('id') int id,
+  );
+
   @POST('/control_action')
   Future<RemoteCheckOperation> saveCheckOperation(
     @Body() RemoteCheckOperationBody operation,
@@ -63,4 +68,17 @@ abstract class ApiService {
 
   @PATCH('/product/{id}/deactivate')
   Future<void> deactivateProduct(@Path('id') int id);
+
+  @POST('/acceptance_action')
+  Future<List<RemoteAcceptanceOperation>> saveAcceptanceOperation(
+    @Body() RemoteAcceptanceOperationBody operation,
+  );
+
+  @GET('/acceptance_action/product/{id}')
+  Future<RemoteAcceptanceOperation> getAcceptanceOperationsByProduct(
+    @Path('id') int id,
+  );
+
+  @DELETE('/acceptance_action/{id}')
+  Future<void> deleteAcceptanceOperation(@Path('id') int id);
 }

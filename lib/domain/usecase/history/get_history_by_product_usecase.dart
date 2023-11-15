@@ -11,11 +11,13 @@ class GetHistoryByProductUsecase {
   const GetHistoryByProductUsecase(
     this._checkOperationsRepository,
     this._operatorOperationsRepository,
+    this._acceptanceOperationsRepository,
     this._productsRepository,
   );
 
   final CheckOperationsRepository _checkOperationsRepository;
   final OperatorOperationsRepository _operatorOperationsRepository;
+  final AcceptanceOperationsRepository _acceptanceOperationsRepository;
   final ProductsRepository _productsRepository;
 
   FResult<ProductHistory> call(int productId) async {
@@ -37,9 +39,18 @@ class GetHistoryByProductUsecase {
       return Left(failure);
     }
 
+    final acceptanceOperations =
+    await _acceptanceOperationsRepository.getByProduct(productId);
+
+    if (acceptanceOperations.isLeft) {
+      final failure = acceptanceOperations.left;
+      return Left(failure);
+    }
+
     final operations = <Operation>[];
     operations.addAll(operatorOperations.right);
     operations.addAll(checkOperations.right);
+    operations.addAll(acceptanceOperations.right);
     operations.sort((o1, o2) => o2.time.compareTo(o1.time));
 
     return Right(ProductHistory(

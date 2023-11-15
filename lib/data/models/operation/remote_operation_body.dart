@@ -5,13 +5,10 @@ part 'remote_operation_body.g.dart';
 
 class RemoteOperationBody {
   const RemoteOperationBody({
-    required this.operationId,
     required this.time,
     required this.productId,
   });
 
-  @JsonKey(name: 'operation_type')
-  final int operationId;
   @JsonKey(name: 'product_id')
   final int productId;
   @JsonKey(name: 'done_time', toJson: _dateToJson)
@@ -21,7 +18,36 @@ class RemoteOperationBody {
 }
 
 @JsonSerializable(createFactory: false)
-class RemoteOperatorOperationBody extends RemoteOperationBody {
+class RemoteAcceptanceOperationBody extends RemoteOperationBody {
+  const RemoteAcceptanceOperationBody({
+    required super.time,
+    required this.productId,
+  }) : super(productId: productId);
+
+  @override
+  @JsonKey(toJson: _productIdToJson, name: 'products_id')
+  final int productId;
+
+  Map<String, dynamic> toJson() => _$RemoteAcceptanceOperationBodyToJson(this);
+
+  static List<int> _productIdToJson(int productId) {
+    return [productId];
+  }
+}
+
+class RemoteOperationWithTypeBody extends RemoteOperationBody {
+  const RemoteOperationWithTypeBody({
+    required super.productId,
+    required super.time,
+    required this.operationId,
+  });
+
+  @JsonKey(name: 'operation_type')
+  final int operationId;
+}
+
+@JsonSerializable(createFactory: false)
+class RemoteOperatorOperationBody extends RemoteOperationWithTypeBody {
   const RemoteOperatorOperationBody({
     required super.operationId,
     required super.productId,
@@ -36,7 +62,7 @@ class RemoteOperatorOperationBody extends RemoteOperationBody {
 }
 
 @JsonSerializable(createFactory: false)
-class RemoteCheckOperationBody extends RemoteOperationBody {
+class RemoteCheckOperationBody extends RemoteOperationWithTypeBody {
   const RemoteCheckOperationBody({
     required super.operationId,
     required super.productId,

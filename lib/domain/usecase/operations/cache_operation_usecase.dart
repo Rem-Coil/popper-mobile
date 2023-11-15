@@ -2,6 +2,7 @@ import 'package:either_dart/either.dart';
 import 'package:injectable/injectable.dart';
 import 'package:popper_mobile/core/error/failure.dart';
 import 'package:popper_mobile/core/utils/typedefs.dart';
+import 'package:popper_mobile/domain/models/operation/acceptance_operation.dart';
 import 'package:popper_mobile/domain/models/operation/check_operation.dart';
 import 'package:popper_mobile/domain/models/operation/operation.dart';
 import 'package:popper_mobile/domain/models/operation/operator_operation.dart';
@@ -14,10 +15,12 @@ class CacheOperationUsecase {
     this._checkOperationsRepository,
     this._operatorOperationsRepository,
     this._typesRepository,
+    this._acceptanceOperationsRepository,
   );
 
   final CheckOperationsRepository _checkOperationsRepository;
   final OperatorOperationsRepository _operatorOperationsRepository;
+  final AcceptanceOperationsRepository _acceptanceOperationsRepository;
   final OperationTypesRepository _typesRepository;
 
   FResult<void> call(Operation operation) async {
@@ -31,6 +34,10 @@ class CacheOperationUsecase {
       final type = operation.type!;
       await _typesRepository.setLastType(specId, type);
       return const Right(null);
+    }
+
+    if (operation is AcceptanceOperation) {
+      return _acceptanceOperationsRepository.cache(operation);
     }
 
     return const Left(UnknownFailure());
