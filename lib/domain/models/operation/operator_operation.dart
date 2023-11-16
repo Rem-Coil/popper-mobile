@@ -28,7 +28,7 @@ class OperatorOperation extends OperationWithType {
   @override
   Operation copy({
     int? id,
-    OperationType? type,
+    ActionType? type,
     OperationStatus? status,
     bool? isRepair,
   }) {

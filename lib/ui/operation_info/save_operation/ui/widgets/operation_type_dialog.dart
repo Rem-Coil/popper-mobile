@@ -12,12 +12,12 @@ class OperationTypeDialog extends StatelessWidget {
       title: const Text('Выберите тип операции'),
       actions: <CupertinoDialogAction>[
         CupertinoDialogAction(
-          onPressed: () => Navigator.pop(context, QeOperationType.check),
-          child: Text(QeOperationType.check.localizedOperationType),
+          onPressed: () => Navigator.pop(context, OperationType.check),
+          child: Text(OperationType.check.localizedOperationType),
         ),
         CupertinoDialogAction(
-          onPressed: () => Navigator.pop(context, QeOperationType.acceptance),
-          child: Text(QeOperationType.acceptance.localizedOperationType),
+          onPressed: () => Navigator.pop(context, OperationType.acceptance),
+          child: Text(OperationType.acceptance.localizedOperationType),
         )
       ],
     );

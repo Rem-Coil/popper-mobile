@@ -20,5 +20,5 @@ class LoadingFailureState implements LoadTypesState {
 class TypesLoadedState implements LoadTypesState {
   const TypesLoadedState(this.types);
 
-  final List<OperationType> types;
+  final List<ActionType> types;
 }

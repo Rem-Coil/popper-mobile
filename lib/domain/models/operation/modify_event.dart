@@ -65,7 +65,7 @@ class ChangeRepairStatusEvent extends ModifyEvent<bool> {
   }
 }
 
-class ChangeOperationTypeEvent extends ModifyEvent<OperationType?> {
+class ChangeOperationTypeEvent extends ModifyEvent<ActionType?> {
   const ChangeOperationTypeEvent(super.value);
 
   @override

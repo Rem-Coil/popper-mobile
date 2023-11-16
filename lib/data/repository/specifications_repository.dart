@@ -60,7 +60,7 @@ class SpecificationsRepository extends BaseRepository
   }
 
   @override
-  FResult<OperationType?> getTypeById(int typeId) async {
+  FResult<ActionType?> getTypeById(int typeId) async {
     final spec = await _cache.getAll();
     final type = spec
         .map((s) => s.operationTypes)
@@ -69,14 +69,14 @@ class SpecificationsRepository extends BaseRepository
 
     if (type.length != 1) return const Right(null);
     final local = type.first;
-    return Right(OperationType(local.id, local.name));
+    return Right(ActionType(local.id, local.name));
   }
 
   @override
-  FResult<List<OperationType>> getTypesBySpec(int specificationId) async {
+  FResult<List<ActionType>> getTypesBySpec(int specificationId) async {
     final spec = await _cache.getByKey(specificationId);
     final types =
-        spec?.operationTypes.map((o) => OperationType(o.id, o.name)) ?? [];
+        spec?.operationTypes.map((o) => ActionType(o.id, o.name)) ?? [];
     return Right(types.toList());
   }
 
@@ -94,16 +94,16 @@ class SpecificationsRepository extends BaseRepository
   }
 
   @override
-  Future<OperationType?> getLastType(int specificationId) async {
+  Future<ActionType?> getLastType(int specificationId) async {
     final type = await _lastOperationCache.get(specificationId);
     if (type == null) return null;
-    return OperationType(type.id, type.name);
+    return ActionType(type.id, type.name);
   }
 
   @override
   Future<void> setLastType(
     int specificationId,
-    OperationType type,
+    ActionType type,
   ) async {
     final local = _factory.mapToSimpleLocalType(type);
     await _lastOperationCache.save(local, specificationId);

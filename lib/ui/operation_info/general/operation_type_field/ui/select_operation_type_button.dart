@@ -51,7 +51,7 @@ class _SelectOperationTypeButtonState extends State<SelectOperationTypeButton> {
 
         return GestureDetector(
           onTap: () async {
-            final type = await showCupertinoModalPopup<OperationType>(
+            final type = await showCupertinoModalPopup<ActionType>(
               context: context,
               builder: (_) => SelectOperationDialog(types: state.types),
             );
@@ -64,4 +64,4 @@ class _SelectOperationTypeButtonState extends State<SelectOperationTypeButton> {
   }
 }
 
-typedef OnTypeSelected = void Function(OperationType?);
+typedef OnTypeSelected = void Function(ActionType?);

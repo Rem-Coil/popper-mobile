@@ -13,14 +13,14 @@ abstract class OperationWithType extends Operation {
     required super.status,
   });
 
-  final OperationType? type;
+  final ActionType? type;
 
-  Operation setType(OperationType? type) => copy(type: type);
+  Operation setType(ActionType? type) => copy(type: type);
 
   @override
   Operation copy({
     int? id,
-    OperationType? type,
+    ActionType? type,
     OperationStatus? status,
   });
 

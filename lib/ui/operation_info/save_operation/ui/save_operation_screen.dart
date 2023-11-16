@@ -100,8 +100,8 @@ class _SaveOperationScreenState extends State<SaveOperationScreen> {
     context.read<OperationSaveBloc>().add(ChooseOperationEvent(userChoice));
   }
 
-  Future<QeOperationType?> _showSaveOperationType() {
-    return showCupertinoDialog<QeOperationType>(
+  Future<OperationType?> _showSaveOperationType() {
+    return showCupertinoDialog<OperationType>(
       context: context,
       builder: (BuildContext context) {
         return const OperationTypeDialog();

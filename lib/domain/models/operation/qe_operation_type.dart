@@ -1,15 +1,18 @@
-enum QeOperationType {
+enum OperationType {
   acceptance,
-  check
+  check,
+  operation
 }
 
-extension LocalizedTypeOfOperation on QeOperationType {
+extension LocalizedTypeOfOperation on OperationType {
   String get localizedOperationType {
     switch (this) {
-      case QeOperationType.acceptance:
+      case OperationType.acceptance:
         return 'Приёмка';
-      case QeOperationType.check:
+      case OperationType.check:
         return 'Проверка';
+      case OperationType.operation:
+        return 'Обычная операция';
     }
   }
 }

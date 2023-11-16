@@ -33,7 +33,7 @@ class SpecificationFactory {
     );
   }
 
-  LocalSimpleOperationType mapToSimpleLocalType(OperationType type) {
+  LocalSimpleOperationType mapToSimpleLocalType(ActionType type) {
     return LocalSimpleOperationType(
       id: type.id,
       name: type.name,

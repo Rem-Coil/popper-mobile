@@ -23,14 +23,14 @@ abstract class OperationFactory<T extends Operation> {
   @protected
   Future<T> mapWithConstruct(
     LocalOperation local,
-    T Function(User? user, ProductInfo product, OperationType? type) construct,
+    T Function(User? user, ProductInfo product, ActionType? type) construct,
   ) async {
     final userRes = await _usersRepository.getById(local.userId);
     final user = userRes.fold((_) => null, (u) => u);
 
     final product = await _productsRepository.getInfo(local.productId);
 
-    late final OperationType? type;
+    late final ActionType? type;
 
     if (local is LocalOperationWithType) {
       final typeRes =
@@ -46,14 +46,14 @@ abstract class OperationFactory<T extends Operation> {
   @protected
   Future<T> mapRemoteWithConstruct(
     RemoteOperation remote,
-    T Function(User? user, ProductInfo product, OperationType? type) construct,
+    T Function(User? user, ProductInfo product, ActionType? type) construct,
   ) async {
     final userRes = await _usersRepository.getById(remote.userId);
     final user = userRes.fold((_) => null, (u) => u);
 
     final product = await _productsRepository.getInfo(remote.productId);
 
-    late final OperationType? type;
+    late final ActionType? type;
 
     if (remote is RemoteOperationWithType) {
       final typeRes =

@@ -10,7 +10,7 @@ class _Initialize implements OperationSaveEvent {
 class ChooseOperationEvent implements OperationSaveEvent {
   const ChooseOperationEvent(this.operationType);
 
-  final QeOperationType? operationType;
+  final OperationType? operationType;
 }
 
 class ModifyOperationEvent implements OperationSaveEvent {

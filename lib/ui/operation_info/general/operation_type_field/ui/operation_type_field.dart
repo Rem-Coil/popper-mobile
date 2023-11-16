@@ -18,7 +18,7 @@ class OperationTypeField extends StatelessWidget {
     required this.isImmutable,
   });
 
-  final OperationType? selected;
+  final ActionType? selected;
   final bool isImmutable;
   final Specification? specification;
 

@@ -27,7 +27,7 @@ class CreateOperationUseCase {
 
   FResult<Operation> call(
     ProductCodeData code, {
-    QeOperationType? operationType,
+    OperationType? operationType,
   }) async {
     final user = await _authRepository.getCurrentUser();
     final product = await _productsRepository.getInfoByCode(code);
@@ -38,7 +38,7 @@ class CreateOperationUseCase {
     if (user.role == Role.qualityEngineer) {
       if (operationType == null) {
         return const Left(OperationTypeNotSelectedFailure());
-      } else if (operationType == QeOperationType.acceptance) {
+      } else if (operationType == OperationType.acceptance) {
         operation = AcceptanceOperation.create(
           user: user,
           product: product,

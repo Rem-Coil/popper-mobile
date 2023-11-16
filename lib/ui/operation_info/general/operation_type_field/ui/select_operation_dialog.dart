@@ -7,7 +7,7 @@ class SelectOperationDialog extends StatelessWidget {
     required this.types,
   }) : super(key: key);
 
-  final List<OperationType> types;
+  final List<ActionType> types;
 
   @override
   Widget build(BuildContext context) {
