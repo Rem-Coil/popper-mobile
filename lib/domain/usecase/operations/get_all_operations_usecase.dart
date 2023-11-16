@@ -24,12 +24,11 @@ class GetAllOperationsUsecase {
     if (user.role == Role.operator) {
       operations = await _operatorOperationsRepository.getAllSaved();
     } else {
-      final List<Operation> checkOperations =
-          await _checkOperationsRepository.getAllSaved();
-      final List<Operation> acceptanceOperations =
-          await _acceptanceOperationsRepository.getAllSaved();
-      operations = checkOperations.cast<Operation>() +
-          acceptanceOperations.cast<Operation>();
+
+      operations = (await Future.wait([
+        _checkOperationsRepository.getAllSaved(),
+        _acceptanceOperationsRepository.getAllSaved(),
+      ])).expand((element) => element).toList();
     }
 
     operations.sort((a, b) => b.time.compareTo(a.time));

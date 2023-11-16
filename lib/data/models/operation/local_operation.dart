@@ -27,13 +27,13 @@ abstract class LocalOperation implements Cacheable<String> {
 
   @HiveField(0)
   final int id;
-  @HiveField(1)
-  final int userId;
   @HiveField(2)
-  final int productId;
+  final int userId;
   @HiveField(3)
-  final DateTime time;
+  final int productId;
   @HiveField(4)
+  final DateTime time;
+  @HiveField(5)
   final LocalOperationStatus status;
 }
 
@@ -66,7 +66,7 @@ abstract class LocalOperationWithType extends LocalOperation {
     required this.operationId,
   });
 
-  @HiveField(5)
+  @HiveField(1)
   final int operationId;
 
   @override
@@ -78,7 +78,7 @@ abstract class LocalOperationWithType extends LocalOperation {
   }
 }
 
-@HiveType(typeId: 25)
+@HiveType(typeId: 17)
 class LocalOperatorOperation extends LocalOperationWithType {
   const LocalOperatorOperation({
     required super.id,
@@ -94,7 +94,7 @@ class LocalOperatorOperation extends LocalOperationWithType {
   final bool isRepair;
 }
 
-@HiveType(typeId: 24)
+@HiveType(typeId: 18)
 class LocalCheckOperation extends LocalOperationWithType {
   const LocalCheckOperation({
     required super.id,
