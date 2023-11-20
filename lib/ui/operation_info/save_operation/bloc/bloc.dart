@@ -4,7 +4,7 @@ import 'package:injectable/injectable.dart';
 import 'package:popper_mobile/core/error/failure.dart';
 import 'package:popper_mobile/domain/models/operation/modify_event.dart';
 import 'package:popper_mobile/domain/models/operation/operation.dart';
-import 'package:popper_mobile/domain/models/operation/qe_operation_type.dart';
+import 'package:popper_mobile/domain/models/operation/operation_type.dart';
 import 'package:popper_mobile/domain/models/product/product_code_data.dart';
 import 'package:popper_mobile/domain/usecase/operations/cache_operation_usecase.dart';
 import 'package:popper_mobile/domain/usecase/operations/create_operation_usecase.dart';

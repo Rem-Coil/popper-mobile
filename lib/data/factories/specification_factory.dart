@@ -3,7 +3,7 @@ import 'package:popper_mobile/data/models/operation_type/local_operation_type.da
 import 'package:popper_mobile/data/models/operation_type/remote_operation_type.dart';
 import 'package:popper_mobile/data/models/specification/local_specification.dart';
 import 'package:popper_mobile/data/models/specification/remote_specification.dart';
-import 'package:popper_mobile/domain/models/operation/operation_type.dart';
+import 'package:popper_mobile/domain/models/operation/action_type.dart';
 import 'package:popper_mobile/domain/models/specification/specification.dart';
 
 @singleton

@@ -6,7 +6,7 @@ import 'package:popper_mobile/domain/models/operation/acceptance_operation.dart'
 import 'package:popper_mobile/domain/models/operation/check_operation.dart';
 import 'package:popper_mobile/domain/models/operation/operation.dart';
 import 'package:popper_mobile/domain/models/operation/operator_operation.dart';
-import 'package:popper_mobile/domain/models/operation/qe_operation_type.dart';
+import 'package:popper_mobile/domain/models/operation/operation_type.dart';
 import 'package:popper_mobile/domain/models/product/product_code_data.dart';
 import 'package:popper_mobile/domain/models/user/role.dart';
 import 'package:popper_mobile/domain/repository/auth_repository.dart';

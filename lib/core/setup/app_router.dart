@@ -11,6 +11,7 @@ import 'package:popper_mobile/ui/operation_info/simple_info/ui/simple_info_scree
 import 'package:popper_mobile/ui/registration/ui/registration_screen.dart';
 import 'package:popper_mobile/ui/scanner/ui/scanner_screen.dart';
 import 'package:popper_mobile/ui/splash/ui/splash_screen.dart';
+import 'package:popper_mobile/ui/kit_selection/ui/kit_selection_screen.dart';
 
 part 'app_router.gr.dart';
 
@@ -29,5 +30,6 @@ class AppRouter extends _$AppRouter {
     AutoRoute(page: SaveOperationRoute.page),
     AutoRoute(page: SimpleInfoRoute.page),
     AutoRoute(page: HistoryRoute.page),
+    AutoRoute(page: KitSelectionRoute.page),
   ];
 }

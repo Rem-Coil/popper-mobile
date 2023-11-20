@@ -40,6 +40,7 @@ class SettingsPage extends StatelessWidget {
                           const ProfileView(),
                           const ClearCacheButton(),
                           const SyncButton(),
+                          const KitSelectionButton(),
                         ],
                       ),
                     ),

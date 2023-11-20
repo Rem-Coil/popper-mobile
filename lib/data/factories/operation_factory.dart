@@ -3,7 +3,7 @@ import 'package:popper_mobile/data/models/operation/local_operation.dart';
 import 'package:popper_mobile/data/models/operation/remote_operation.dart';
 import 'package:popper_mobile/data/repository/users_repository.dart';
 import 'package:popper_mobile/domain/models/operation/operation.dart';
-import 'package:popper_mobile/domain/models/operation/operation_type.dart';
+import 'package:popper_mobile/domain/models/operation/action_type.dart';
 import 'package:popper_mobile/domain/models/product/product_info.dart';
 import 'package:popper_mobile/domain/models/user/user.dart';
 import 'package:popper_mobile/domain/repository/operations_types_repository.dart';

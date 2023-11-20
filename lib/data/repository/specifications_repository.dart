@@ -7,7 +7,7 @@ import 'package:popper_mobile/data/api/api_provider.dart';
 import 'package:popper_mobile/data/cache/last_operation_cache.dart';
 import 'package:popper_mobile/data/cache/specifications_cache.dart';
 import 'package:popper_mobile/data/factories/specification_factory.dart';
-import 'package:popper_mobile/domain/models/operation/operation_type.dart';
+import 'package:popper_mobile/domain/models/operation/action_type.dart';
 import 'package:popper_mobile/domain/models/specification/specification.dart';
 import 'package:popper_mobile/domain/repository/operations_types_repository.dart';
 

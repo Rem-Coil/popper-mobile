@@ -1,9 +1,18 @@
-import 'package:flutter/foundation.dart';
+enum OperationType {
+  acceptance,
+  check,
+  operation
+}
 
-@immutable
-class ActionType {
-  const ActionType(this.id, this.name);
-
-  final int id;
-  final String name;
+extension LocalizedTypeOfOperation on OperationType {
+  String get localizedOperationType {
+    switch (this) {
+      case OperationType.acceptance:
+        return 'Приёмка';
+      case OperationType.check:
+        return 'Проверка';
+      case OperationType.operation:
+        return 'Обычная операция';
+    }
+  }
 }

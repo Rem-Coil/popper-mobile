@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:popper_mobile/core/utils/context_utils.dart';
 import 'package:popper_mobile/core/widgets/circular_loader.dart';
-import 'package:popper_mobile/domain/models/operation/operation_type.dart';
+import 'package:popper_mobile/domain/models/operation/action_type.dart';
 import 'package:popper_mobile/domain/models/specification/specification.dart';
 import 'package:popper_mobile/ui/operation_info/general/operation_type_field/bloc/bloc.dart';
 import 'package:popper_mobile/ui/operation_info/general/operation_type_field/ui/select_operation_dialog.dart';

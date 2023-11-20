@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:popper_mobile/domain/models/operation/qe_operation_type.dart';
+import 'package:popper_mobile/domain/models/operation/operation_type.dart';
 
 class OperationTypeDialog extends StatelessWidget {
   const OperationTypeDialog({

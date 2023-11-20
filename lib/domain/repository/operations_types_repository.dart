@@ -1,5 +1,5 @@
 import 'package:popper_mobile/core/utils/typedefs.dart';
-import 'package:popper_mobile/domain/models/operation/operation_type.dart';
+import 'package:popper_mobile/domain/models/operation/action_type.dart';
 
 abstract class OperationTypesRepository {
   FResult<ActionType?> getTypeById(int typeId);
