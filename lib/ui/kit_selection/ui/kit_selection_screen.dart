@@ -5,6 +5,7 @@ import 'package:popper_mobile/core/setup/injection.dart';
 import 'package:popper_mobile/core/widgets/circular_loader.dart';
 import 'package:popper_mobile/ui/kit_selection/bloc/bloc.dart';
 import 'package:popper_mobile/ui/kit_selection/ui/widgets/kit_scroll_view.dart';
+import 'package:popper_mobile/ui/operation_info/general/views/result_view.dart';
 
 @RoutePage()
 class KitSelectionScreen extends StatelessWidget implements AutoRouteWrapper  {
@@ -31,6 +32,13 @@ class KitSelectionScreen extends StatelessWidget implements AutoRouteWrapper  {
             if (state is LoadKitState) {
               return const Center(
                 child: CircularLoader(size: 50, strokeWidth: 5),
+              );
+            }
+
+            if (state is FailureKitSelectionState) {
+              return ResultView(
+                message: state.failure.toString(),
+                isSuccess: false,
               );
             }
 

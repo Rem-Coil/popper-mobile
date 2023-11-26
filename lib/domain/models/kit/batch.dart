@@ -1,12 +1,12 @@
 class Batch {
   const Batch({
     required this.id,
-    required this.batchNumber,
+    required this.number,
     required this.kitId,
   });
 
   final int id;
-  final int batchNumber;
+  final int number;
   final int kitId;
 
   @override

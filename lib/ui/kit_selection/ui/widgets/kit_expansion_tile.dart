@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:popper_mobile/domain/models/kit/batch.dart';
-import 'package:popper_mobile/domain/models/kit/full_kit_info.dart';
+import 'package:popper_mobile/domain/entities/full_kit_info.dart';
 import 'package:popper_mobile/ui/kit_selection/bloc/bloc.dart';
 
 class KitExpansionTile extends StatelessWidget {
@@ -29,7 +29,7 @@ class KitExpansionTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ExpansionTile(
-      title: Text(kit.kitName),
+      title: Text(kit.kit.number),
       leading: Checkbox(
         tristate: true,
         value: value,
@@ -70,7 +70,7 @@ class BatchCheckboxListTile extends StatelessWidget {
             .read<KitSelectionBloc>()
             .add(UpdateBatchSelection(batch: batch));
       },
-      title: Text(batch.batchNumber.toString()),
+      title: Text(batch.number.toString()),
     );
   }
 }

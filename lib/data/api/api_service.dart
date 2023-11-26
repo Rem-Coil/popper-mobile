@@ -31,8 +31,14 @@ abstract class ApiService {
   @GET('/specification')
   Future<List<RemoteSpecification>> getAllSpecifications();
 
+  @GET('/kit')
+  Future<List<RemoteKit>> getAllKits();
+
   @GET('/kit/{id}')
   Future<RemoteKit> getKitById(@Path('id') int id);
+
+  @GET('/batch')
+  Future<List<RemoteBatch>> getAllBatches();
 
   @GET('/batch/{id}')
   Future<RemoteBatch> getBatchById(@Path('id') int id);

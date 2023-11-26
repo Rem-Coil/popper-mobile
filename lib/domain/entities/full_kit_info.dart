@@ -1,13 +1,12 @@
 import 'package:popper_mobile/domain/models/kit/batch.dart';
+import 'package:popper_mobile/domain/models/kit/kit.dart';
 
 class FullKitInfo {
   FullKitInfo({
-    required this.kitId,
-    required this.kitName,
+    required this.kit,
     required this.batches,
   });
 
-  final int kitId;
-  final String kitName;
+  final Kit kit;
   final List<Batch> batches;
 }

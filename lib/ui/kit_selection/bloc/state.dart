@@ -16,3 +16,9 @@ class SaveKitSelectionState implements KitSelectionState {
   final List<FullKitInfo> kitList;
   final List<Batch> selectedBatches;
 }
+
+class FailureKitSelectionState implements KitSelectionState {
+  final Failure failure;
+
+  FailureKitSelectionState(this.failure);
+}
