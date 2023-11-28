@@ -1,8 +1,8 @@
 import 'package:injectable/injectable.dart';
 import 'package:popper_mobile/data/factories/operation_factory.dart';
 import 'package:popper_mobile/data/models/operation/local_operation.dart';
+import 'package:popper_mobile/data/models/operation/many_products_remote_operation_body.dart';
 import 'package:popper_mobile/data/models/operation/remote_operation.dart';
-import 'package:popper_mobile/data/models/operation/remote_operation_body.dart';
 import 'package:popper_mobile/domain/models/operation/acceptance_operation.dart';
 
 import '../../domain/models/operation/operation.dart';
@@ -20,7 +20,7 @@ class AcceptanceOperationFactory extends OperationFactory<AcceptanceOperation> {
     return LocalAcceptanceOperation(
       id: operation.id,
       userId: operation.user.id,
-      productId: operation.product.id,
+      productsId: operation.products.map((p) => p.id).toList(),
       time: operation.time,
       status: mapOperationStatus(operation.status),
     );
@@ -31,7 +31,7 @@ class AcceptanceOperationFactory extends OperationFactory<AcceptanceOperation> {
     return LocalAcceptanceOperation(
       id: operation.id,
       userId: operation.userId,
-      productId: operation.productId,
+      productsId: [operation.productId],
       time: operation.time,
       status: LocalOperationStatus.sync,
     );
@@ -40,10 +40,10 @@ class AcceptanceOperationFactory extends OperationFactory<AcceptanceOperation> {
   Future<AcceptanceOperation> mapToOperation(LocalAcceptanceOperation local) {
     return mapWithConstruct(
       local,
-      (user, product, type) => AcceptanceOperation(
+      (user, products, type) => AcceptanceOperation(
         id: local.id,
         user: user ?? const User.unknown(),
-        product: product,
+        products: products,
         time: local.time,
         status: mapLocalOperationStatus(local.status),
       ),
@@ -57,24 +57,25 @@ class AcceptanceOperationFactory extends OperationFactory<AcceptanceOperation> {
       (user, product, type) => AcceptanceOperation(
         id: remote.id,
         user: user ?? const User.unknown(),
-        product: product,
+        products: [product],
         time: remote.time,
         status: OperationStatus.sync,
       ),
     );
   }
 
-  RemoteAcceptanceOperationBody mapToBody(AcceptanceOperation operation) {
-    return RemoteAcceptanceOperationBody(
-      productId: operation.product.id,
+  ManyProductsRemoteAcceptanceOperationBody mapToBody(
+      AcceptanceOperation operation) {
+    return ManyProductsRemoteAcceptanceOperationBody(
+      productsId: operation.products.map((p) => p.id).toList(),
       time: operation.time,
     );
   }
 
-  RemoteAcceptanceOperationBody mapLocalToBody(
+  ManyProductsRemoteAcceptanceOperationBody mapLocalToBody(
       LocalAcceptanceOperation operation) {
-    return RemoteAcceptanceOperationBody(
-      productId: operation.productId,
+    return ManyProductsRemoteAcceptanceOperationBody(
+      productsId: operation.productsId,
       time: operation.time,
     );
   }

@@ -4,15 +4,15 @@ import 'package:dio/dio.dart';
 import 'package:either_dart/either.dart';
 import 'package:injectable/injectable.dart';
 import 'package:popper_mobile/core/data/base_repository.dart';
+import 'package:popper_mobile/core/error/failure.dart';
 import 'package:popper_mobile/core/utils/typedefs.dart';
 import 'package:popper_mobile/data/cache/operations_cache.dart';
 import 'package:popper_mobile/data/factories/acceptance_operation_factory.dart';
 import 'package:popper_mobile/data/models/operation/local_operation.dart';
+import 'package:popper_mobile/data/models/operation/many_products_remote_operation_body.dart';
 import 'package:popper_mobile/domain/models/operation/acceptance_operation.dart';
 import 'package:popper_mobile/domain/models/operation/operation.dart';
 import 'package:popper_mobile/domain/repository/operations_repository.dart';
-import 'package:popper_mobile/core/error/failure.dart';
-import 'package:popper_mobile/data/models/operation/remote_operation_body.dart';
 
 @Singleton(as: AcceptanceOperationsRepository)
 class AcceptanceOperationsRepositoryImpl extends BaseRepository
@@ -36,13 +36,16 @@ class AcceptanceOperationsRepositoryImpl extends BaseRepository
   FResult<List<AcceptanceOperation>> getByProduct(int productId) async {
     try {
       final service = apiProvider.getApiService();
-      final operation = await service.getAcceptanceOperationsByProduct(productId);
+      final operation =
+          await service.getAcceptanceOperationsByProduct(productId);
 
-      final operationByProduct = [await _factory.mapRemoteToOperation(operation)];
+      final operationByProduct = [
+        await _factory.mapRemoteToOperation(operation)
+      ];
 
       return Right(operationByProduct);
     } on DioException catch (e) {
-      if (e.response?.statusCode == HttpStatus.notFound){
+      if (e.response?.statusCode == HttpStatus.notFound) {
         return const Right([]);
       }
       return handleDioException(e);
@@ -55,7 +58,8 @@ class AcceptanceOperationsRepositoryImpl extends BaseRepository
     return _save(remoteOperation);
   }
 
-  FResult<void> _save(RemoteAcceptanceOperationBody operationBody) async {
+  FResult<void> _save(
+      ManyProductsRemoteAcceptanceOperationBody operationBody) async {
     try {
       final api = apiProvider.getApiService(isSafe: true);
       final answer = await api.saveAcceptanceOperation(operationBody);
@@ -103,7 +107,7 @@ class AcceptanceOperationsRepositoryImpl extends BaseRepository
   FResult<void> syncOperations() async {
     final operations = await _cache.getAll();
     final notSync =
-    operations.where((o) => o.status == LocalOperationStatus.notSync);
+        operations.where((o) => o.status == LocalOperationStatus.notSync);
 
     var isContainsError = false;
     for (var o in notSync) {

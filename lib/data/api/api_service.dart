@@ -1,8 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:popper_mobile/data/models/batch/remote_batch.dart';
 import 'package:popper_mobile/data/models/kit/remote_kit.dart';
+import 'package:popper_mobile/data/models/operation/many_products_remote_operation_body.dart';
 import 'package:popper_mobile/data/models/operation/remote_operation.dart';
-import 'package:popper_mobile/data/models/operation/remote_operation_body.dart';
 import 'package:popper_mobile/data/models/product/remote_product.dart';
 import 'package:popper_mobile/data/models/specification/remote_specification.dart';
 import 'package:popper_mobile/data/models/user/credentials_json.dart';
@@ -48,9 +48,9 @@ abstract class ApiService {
     @Path('id') int id,
   );
 
-  @POST('/action')
-  Future<RemoteOperatorOperation> saveOperatorOperation(
-    @Body() RemoteOperatorOperationBody operation,
+  @POST('/action/batch')
+  Future<List<RemoteOperatorOperation>> saveOperatorOperation(
+    @Body() ManyProductsRemoteOperatorOperationBody operation,
   );
 
   @DELETE('/action/{id}')
@@ -64,9 +64,9 @@ abstract class ApiService {
     @Path('id') int id,
   );
 
-  @POST('/control_action')
-  Future<RemoteCheckOperation> saveCheckOperation(
-    @Body() RemoteCheckOperationBody operation,
+  @POST('/control_action/batch')
+  Future<List<RemoteCheckOperation>> saveCheckOperation(
+    @Body() ManyProductsRemoteCheckOperationBody operation,
   );
 
   @DELETE('/control_action/{id}')
@@ -77,7 +77,7 @@ abstract class ApiService {
 
   @POST('/acceptance_action')
   Future<List<RemoteAcceptanceOperation>> saveAcceptanceOperation(
-    @Body() RemoteAcceptanceOperationBody operation,
+    @Body() ManyProductsRemoteAcceptanceOperationBody operation,
   );
 
   @GET('/acceptance_action/product/{id}')

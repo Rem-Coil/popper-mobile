@@ -1,8 +1,8 @@
 import 'package:injectable/injectable.dart';
 import 'package:popper_mobile/data/factories/operation_factory.dart';
 import 'package:popper_mobile/data/models/operation/local_operation.dart';
+import 'package:popper_mobile/data/models/operation/many_products_remote_operation_body.dart';
 import 'package:popper_mobile/data/models/operation/remote_operation.dart';
-import 'package:popper_mobile/data/models/operation/remote_operation_body.dart';
 import 'package:popper_mobile/domain/models/operation/check_operation.dart';
 import 'package:popper_mobile/domain/models/operation/operation.dart';
 import 'package:popper_mobile/domain/models/user/user.dart';
@@ -20,7 +20,7 @@ class CheckOperationFactory extends OperationFactory<CheckOperation> {
       id: operation.id,
       operationId: operation.type?.id ?? defaultOperationId,
       userId: operation.user.id,
-      productId: operation.product.id,
+      productsId: operation.products.map((p) => p.id).toList(),
       time: operation.time,
       status: mapOperationStatus(operation.status),
       isSuccessful: operation.isSuccessful,
@@ -35,7 +35,7 @@ class CheckOperationFactory extends OperationFactory<CheckOperation> {
       id: operation.id,
       operationId: operation.operationId,
       userId: operation.userId,
-      productId: operation.productId,
+      productsId: [operation.productId],
       time: operation.time,
       status: LocalOperationStatus.sync,
       isSuccessful: operation.isSuccessful,
@@ -48,10 +48,10 @@ class CheckOperationFactory extends OperationFactory<CheckOperation> {
   Future<CheckOperation> mapToOperation(LocalCheckOperation local) {
     return mapWithConstruct(
       local,
-      (user, product, type) => CheckOperation(
+      (user, products, type) => CheckOperation(
         id: local.id,
         user: user ?? const User.unknown(),
-        product: product,
+        products: products,
         type: type,
         time: local.time,
         status: mapLocalOperationStatus(local.status),
@@ -69,7 +69,7 @@ class CheckOperationFactory extends OperationFactory<CheckOperation> {
       (user, product, type) => CheckOperation(
         id: remote.id,
         user: user ?? const User.unknown(),
-        product: product,
+        products: [product],
         type: type,
         time: remote.time,
         status: OperationStatus.sync,
@@ -81,10 +81,10 @@ class CheckOperationFactory extends OperationFactory<CheckOperation> {
     );
   }
 
-  RemoteCheckOperationBody mapToBody(CheckOperation operation) {
-    return RemoteCheckOperationBody(
+  ManyProductsRemoteCheckOperationBody mapToBody(CheckOperation operation) {
+    return ManyProductsRemoteCheckOperationBody(
       operationId: operation.type!.id,
-      productId: operation.product.id,
+      productsId: operation.products.map((p) => p.id).toList(),
       time: operation.time,
       isSuccessful: operation.isSuccessful,
       isNeedRepair: operation.isNeedRepair,
@@ -93,10 +93,11 @@ class CheckOperationFactory extends OperationFactory<CheckOperation> {
     );
   }
 
-  RemoteCheckOperationBody mapLocalToBody(LocalCheckOperation operation) {
-    return RemoteCheckOperationBody(
+  ManyProductsRemoteCheckOperationBody mapLocalToBody(
+      LocalCheckOperation operation) {
+    return ManyProductsRemoteCheckOperationBody(
       operationId: operation.operationId,
-      productId: operation.productId,
+      productsId: operation.productsId,
       time: operation.time,
       isSuccessful: operation.isSuccessful,
       isNeedRepair: operation.isNeedRepair,

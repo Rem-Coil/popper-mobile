@@ -2,8 +2,8 @@ import 'package:flutter/foundation.dart';
 import 'package:popper_mobile/data/models/operation/local_operation.dart';
 import 'package:popper_mobile/data/models/operation/remote_operation.dart';
 import 'package:popper_mobile/data/repository/users_repository.dart';
-import 'package:popper_mobile/domain/models/operation/operation.dart';
 import 'package:popper_mobile/domain/models/operation/action_type.dart';
+import 'package:popper_mobile/domain/models/operation/operation.dart';
 import 'package:popper_mobile/domain/models/product/product_info.dart';
 import 'package:popper_mobile/domain/models/user/user.dart';
 import 'package:popper_mobile/domain/repository/operations_types_repository.dart';
@@ -23,20 +23,26 @@ abstract class OperationFactory<T extends Operation> {
   @protected
   Future<T> mapWithConstruct(
     LocalOperation local,
-    T Function(User? user, ProductInfo product, ActionType? type) construct,
+    T Function(User? user, List<ProductInfo> products, ActionType? type)
+        construct,
   ) async {
     final userRes = await _usersRepository.getById(local.userId);
     final user = userRes.fold((_) => null, (u) => u);
 
-    final product = await _productsRepository.getInfo(local.productId);
+    final List<ProductInfo> products = [];
+
+    for (int product in local.productsId) {
+      final productInfo = await _productsRepository.getInfo(product);
+      products.add(productInfo);
+    }
 
     if (local is LocalOperationWithType) {
       final typeRes =
           await _operationTypesRepository.getTypeById(local.operationId);
       final type = typeRes.fold((_) => null, (t) => t);
-      return construct(user, product, type);
+      return construct(user, products, type);
     } else {
-      return construct(user, product, null);
+      return construct(user, products, null);
     }
   }
 

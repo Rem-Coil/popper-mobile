@@ -7,7 +7,7 @@ abstract class OperationWithType extends Operation {
   const OperationWithType({
     required super.id,
     required super.user,
-    required super.product,
+    required super.products,
     required this.type,
     required super.time,
     required super.status,

@@ -10,7 +10,7 @@ class CheckOperation extends OperationWithType {
   const CheckOperation({
     required super.id,
     required super.user,
-    required super.product,
+    required super.products,
     required super.type,
     required super.time,
     required super.status,
@@ -22,7 +22,7 @@ class CheckOperation extends OperationWithType {
 
   const CheckOperation.create({
     required super.user,
-    required super.product,
+    required super.products,
     required super.time,
   })  : comment = null,
         checkType = CheckType.otk,
@@ -60,7 +60,7 @@ class CheckOperation extends OperationWithType {
     return CheckOperation(
       id: id ?? this.id,
       user: user,
-      product: product,
+      products: products,
       type: type ?? this.type,
       time: time,
       status: status ?? this.status,

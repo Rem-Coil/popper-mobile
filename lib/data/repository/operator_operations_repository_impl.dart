@@ -9,7 +9,7 @@ import 'package:popper_mobile/core/utils/typedefs.dart';
 import 'package:popper_mobile/data/cache/operations_cache.dart';
 import 'package:popper_mobile/data/factories/operator_operation_factory.dart';
 import 'package:popper_mobile/data/models/operation/local_operation.dart';
-import 'package:popper_mobile/data/models/operation/remote_operation_body.dart';
+import 'package:popper_mobile/data/models/operation/many_products_remote_operation_body.dart';
 import 'package:popper_mobile/domain/models/operation/operation.dart';
 import 'package:popper_mobile/domain/models/operation/operator_operation.dart';
 import 'package:popper_mobile/domain/repository/operations_repository.dart';
@@ -109,12 +109,13 @@ class OperatorOperationsRepositoryImpl extends BaseRepository
         : const Right(null);
   }
 
-  FResult<void> _save(RemoteOperatorOperationBody operationBody) async {
+  FResult<void> _save(
+      ManyProductsRemoteOperatorOperationBody operationBody) async {
     try {
       final api = apiProvider.getApiService(isSafe: true);
       final answer = await api.saveOperatorOperation(operationBody);
-      final local = _factory.mapRemoteToLocal(answer);
-      await _cache.save(local);
+      final local = answer.map((o) => _factory.mapRemoteToLocal(o));
+      await _cache.saveAll(local);
       return const Right(null);
     } on DioException catch (e) {
       return handleDioException(e, {

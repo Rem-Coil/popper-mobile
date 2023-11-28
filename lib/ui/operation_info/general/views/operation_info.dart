@@ -7,7 +7,6 @@ import 'package:popper_mobile/domain/models/operation/modify_event.dart';
 import 'package:popper_mobile/domain/models/operation/operation.dart';
 import 'package:popper_mobile/domain/models/operation/operation_with_type.dart';
 import 'package:popper_mobile/domain/models/operation/operator_operation.dart';
-import 'package:popper_mobile/domain/models/product/product_info.dart';
 import 'package:popper_mobile/ui/operation_info/general/fields/bobbin_defected_warning.dart';
 import 'package:popper_mobile/ui/operation_info/general/fields/check_result_button.dart';
 import 'package:popper_mobile/ui/operation_info/general/fields/check_type_button.dart';
@@ -50,21 +49,24 @@ class OperationInfo extends StatelessWidget {
               child: ValueInfoField(
                 title: 'Тип',
                 value: ValueInfoText(
-                  operation.product.specification?.productType ?? 'Неизвестно',
+                  operation.products.first.specification?.productType ??
+                      'Неизвестно',
                 ),
               ),
             ),
             Expanded(
               child: ValueInfoField(
                 title: 'Идентификатор',
-                value: ValueInfoText('${operation.product.id}'),
+                value: ValueInfoText(operation.products.length > 1
+                    ? '${operation.products.first.id} - ${operation.products.last.id}'
+                    : '${operation.products.first.id}'),
               ),
             ),
           ],
         ),
         ValueInfoField(
           title: 'Номер',
-          value: _ProductNumber(operation.product),
+          value: _ProductNumber(operation),
         ),
         ValueInfoField(
           title: 'Дата сканирования',
@@ -80,7 +82,7 @@ class OperationInfo extends StatelessWidget {
             value: OperationTypeField(
               selected: (operation as OperationWithType).type,
               isImmutable: isImmutable,
-              specification: operation.product.specification,
+              specification: operation.products.first.specification,
             ),
           ),
         _OperationActions(
@@ -94,21 +96,21 @@ class OperationInfo extends StatelessWidget {
 
 class _ProductNumber extends StatelessWidget {
   const _ProductNumber(
-    this.product, {
+    this.products, {
     Key? key,
   }) : super(key: key);
 
-  final ProductInfo product;
+  final Operation products;
 
-  String get number => product.number;
+  String get number => products.productsName;
 
   @override
   Widget build(BuildContext context) {
-    if (!product.isActive) {
+    if (products.products.any((p) => !p.isActive)) {
       return ProductDefectedWarning(number);
     }
 
-    if (!product.isLoaded) {
+    if (products.products.any((p) => !p.isLoaded)) {
       return EntityInfoNotLoadedWarning(number);
     }
 

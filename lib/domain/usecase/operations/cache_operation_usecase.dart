@@ -30,7 +30,7 @@ class CacheOperationUsecase {
 
     if (operation is OperatorOperation) {
       await _operatorOperationsRepository.cache(operation);
-      final specId = operation.product.specification!.id;
+      final specId = operation.products.first.specification!.id;
       final type = operation.type!;
       await _typesRepository.setLastType(specId, type);
       return const Right(null);

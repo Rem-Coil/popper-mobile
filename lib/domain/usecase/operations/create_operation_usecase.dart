@@ -41,13 +41,13 @@ class CreateOperationUseCase {
       } else if (operationType == OperationType.acceptance) {
         operation = AcceptanceOperation.create(
           user: user,
-          product: product,
+          products: [product],
           time: time,
         );
       } else {
       operation = CheckOperation.create(
           user: user,
-          product: product,
+          products: [product],
           time: time,
         );
       }
@@ -58,7 +58,7 @@ class CreateOperationUseCase {
 
       operation = OperatorOperation.create(
         user: user,
-        product: product,
+        products: [product],
         type: type,
         time: time,
       );

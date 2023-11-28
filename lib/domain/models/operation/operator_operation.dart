@@ -8,7 +8,7 @@ class OperatorOperation extends OperationWithType {
   const OperatorOperation({
     required super.id,
     required super.user,
-    required super.product,
+    required super.products,
     required super.type,
     required super.time,
     required super.status,
@@ -17,7 +17,7 @@ class OperatorOperation extends OperationWithType {
 
   const OperatorOperation.create({
     required super.user,
-    required super.product,
+    required super.products,
     required super.type,
     required super.time,
   })  : isRepair = false,
@@ -35,7 +35,7 @@ class OperatorOperation extends OperationWithType {
     return OperatorOperation(
       id: id ?? this.id,
       user: user,
-      product: product,
+      products: products,
       type: type ?? this.type,
       time: time,
       status: status ?? this.status,

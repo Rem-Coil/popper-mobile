@@ -29,7 +29,7 @@ class OperationItem extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  operation.product.specification?.productType.toLowerCase() ??
+                  operation.products.first.specification?.productType.toLowerCase() ??
                       'Неизвестно',
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
@@ -40,7 +40,7 @@ class OperationItem extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 4),
-            _TitleView(title: operation.product.number),
+            _TitleView(title: operation.productsName),
             const SizedBox(height: 8),
             Text(
               typeName,

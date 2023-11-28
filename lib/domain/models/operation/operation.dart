@@ -12,14 +12,14 @@ abstract class Operation {
   const Operation({
     required this.id,
     required this.user,
-    required this.product,
+    required this.products,
     required this.time,
     required this.status,
   });
 
   final int id;
   final User user;
-  final ProductInfo product;
+  final List<ProductInfo> products;
   final OperationStatus status;
   final DateTime time;
 
@@ -36,4 +36,8 @@ abstract class Operation {
   String? get typeName;
 
   bool get savable;
+
+  String get productsName => products.length > 1
+      ? '${products.first.number} - ${products.last.number}'
+      : products.first.number;
 }

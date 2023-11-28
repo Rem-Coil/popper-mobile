@@ -20,7 +20,7 @@ abstract class LocalOperation implements Cacheable<String> {
   const LocalOperation({
     required this.id,
     required this.userId,
-    required this.productId,
+    required this.productsId,
     required this.time,
     required this.status,
   });
@@ -29,8 +29,8 @@ abstract class LocalOperation implements Cacheable<String> {
   final int id;
   @HiveField(2)
   final int userId;
-  @HiveField(3)
-  final int productId;
+  @HiveField(6)
+  final List<int> productsId;
   @HiveField(4)
   final DateTime time;
   @HiveField(5)
@@ -42,7 +42,7 @@ class LocalAcceptanceOperation extends LocalOperation {
   LocalAcceptanceOperation({
     required super.id,
     required super.userId,
-    required super.productId,
+    required super.productsId,
     required super.time,
     required super.status,
   });
@@ -52,7 +52,7 @@ class LocalAcceptanceOperation extends LocalOperation {
     if (status == LocalOperationStatus.sync) return '$id';
 
     final timeFormatted = Formatters.operation.format(time);
-    return '$productId-$timeFormatted';
+    return timeFormatted;
   }
 }
 
@@ -60,7 +60,7 @@ abstract class LocalOperationWithType extends LocalOperation {
   const LocalOperationWithType({
     required super.id,
     required super.userId,
-    required super.productId,
+    required super.productsId,
     required super.time,
     required super.status,
     required this.operationId,
@@ -74,7 +74,7 @@ abstract class LocalOperationWithType extends LocalOperation {
     if (status == LocalOperationStatus.sync) return '$id';
 
     final timeFormatted = Formatters.operation.format(time);
-    return '$productId-$operationId-$timeFormatted';
+    return timeFormatted;
   }
 }
 
@@ -84,7 +84,7 @@ class LocalOperatorOperation extends LocalOperationWithType {
     required super.id,
     required super.operationId,
     required super.userId,
-    required super.productId,
+    required super.productsId,
     required super.time,
     required super.status,
     required this.isRepair,
@@ -100,7 +100,7 @@ class LocalCheckOperation extends LocalOperationWithType {
     required super.id,
     required super.operationId,
     required super.userId,
-    required super.productId,
+    required super.productsId,
     required super.time,
     required super.status,
     required this.isSuccessful,

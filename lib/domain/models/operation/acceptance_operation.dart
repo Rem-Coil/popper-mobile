@@ -6,14 +6,14 @@ class AcceptanceOperation extends Operation {
   const AcceptanceOperation({
     required super.id,
     required super.user,
-    required super.product,
+    required super.products,
     required super.time,
     required super.status,
   });
 
   const AcceptanceOperation.create({
     required super.user,
-    required super.product,
+    required super.products,
     required super.time,
   }) :
         super(
@@ -30,7 +30,7 @@ class AcceptanceOperation extends Operation {
     return AcceptanceOperation(
       id: id ?? this.id,
       user: user,
-      product: product,
+      products: products,
       time: time,
       status: status ?? this.status,
     );

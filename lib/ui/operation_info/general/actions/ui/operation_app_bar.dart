@@ -38,9 +38,13 @@ class OperationAppBar extends StatelessWidget implements PreferredSizeWidget {
           IconButton(
             icon: const Icon(Icons.history),
             splashRadius: 20.0,
-            onPressed: () => context.router.push(
-              HistoryRoute(product: operation.product),
-            ),
+            onPressed: () {
+              if (operation.products.length == 1) {
+                context.router.push(
+                  HistoryRoute(product: operation.products.first),
+                );
+              }
+            },
           ),
         ],
         BlocProvider<OperationTasksBloc>(
@@ -136,8 +140,10 @@ class _BobbinButtonsState extends State<BobbinButtons> {
     );
 
     if (isClear == true && mounted) {
-      final bobbin = widget.operation.product;
+      if (widget.operation.products.length == 1) {
+      final bobbin = widget.operation.products.first;
       context.read<OperationTasksBloc>().add(DefectBobbinEvent(bobbin));
+      }
     }
   }
 
