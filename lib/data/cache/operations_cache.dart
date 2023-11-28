@@ -1,10 +1,12 @@
 import 'package:injectable/injectable.dart';
 import 'package:popper_mobile/core/data/cache.dart';
+import 'package:popper_mobile/data/models/batch/local_batch.dart';
 import 'package:popper_mobile/data/models/operation/local_operation.dart';
 
 const _checkOperationsBox = 'check_operations';
 const _operatorOperationsBox = 'operator_operations';
 const _acceptanceOperationsBox = 'acceptance_operations';
+const _batchesBox = 'batches_box';
 
 @singleton
 class OperatorOperationsCache extends Cache<String, LocalOperatorOperation> {
@@ -20,4 +22,9 @@ class CheckOperationsCache extends Cache<String, LocalCheckOperation> {
 class AcceptanceOperationsCache
     extends Cache<String, LocalAcceptanceOperation> {
   const AcceptanceOperationsCache() : super(_acceptanceOperationsBox);
+}
+
+@singleton
+class BatchesCache extends Cache<String, LocalBatch> {
+  const BatchesCache() : super(_batchesBox);
 }

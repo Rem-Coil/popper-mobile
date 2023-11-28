@@ -14,4 +14,12 @@ class Kit {
   final int batchesQuantity;
   final int batchesSize;
   final int specificationId;
+
+  const Kit.deleted() :
+    id = -1,
+    number = 'Удалённые с сервера',
+    acceptancePercentage = 0,
+    batchesQuantity = 0,
+    batchesSize = 0,
+    specificationId = 0;
 }

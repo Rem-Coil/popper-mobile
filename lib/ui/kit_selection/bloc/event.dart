@@ -23,3 +23,9 @@ class UpdateKitSelection implements KitSelectionEvent {
   final FullKitInfo kit;
   final bool? selected;
 }
+
+class UpdateDeletedBatches implements KitSelectionEvent{
+  const UpdateDeletedBatches({required this.batchesToDelete});
+
+  final List<Batch> batchesToDelete;
+}

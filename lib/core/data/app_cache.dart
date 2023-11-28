@@ -1,5 +1,6 @@
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:injectable/injectable.dart';
+import 'package:popper_mobile/data/models/batch/local_batch.dart';
 import 'package:popper_mobile/data/models/operation/local_operation.dart';
 import 'package:popper_mobile/data/models/operation_type/local_operation_type.dart';
 import 'package:popper_mobile/data/models/product/local_product.dart';
@@ -17,7 +18,8 @@ class AppCache {
       ..registerAdapter(LocalProductAdapter())
       ..registerAdapter(LocalSimpleOperationTypeAdapter())
       ..registerAdapter(LocalSpecificationAdapter())
-      ..registerAdapter(LocalAcceptanceOperationAdapter());
+      ..registerAdapter(LocalAcceptanceOperationAdapter())
+      ..registerAdapter(LocalBatchAdapter());
   }
 
   static Future<void> clear() async {
