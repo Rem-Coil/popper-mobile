@@ -63,8 +63,8 @@ class AcceptanceOperationsRepositoryImpl extends BaseRepository
     try {
       final api = apiProvider.getApiService(isSafe: true);
       final answer = await api.saveAcceptanceOperation(operationBody);
-      final local = answer.map(_factory.mapRemoteToLocal);
-      await _cache.saveAll(local);
+      final local = _factory.mapRemoteToLocal(answer);
+      await _cache.save(local);
       return const Right(null);
     } on DioException catch (e) {
       return handleDioException(e, {

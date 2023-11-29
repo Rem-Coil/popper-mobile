@@ -58,7 +58,7 @@ class OperationInfo extends StatelessWidget {
               child: ValueInfoField(
                 title: 'Идентификатор',
                 value: ValueInfoText(operation.products.length > 1
-                    ? '${operation.products.first.id} - ${operation.products.last.id}'
+                    ? 'Множество продуктов'
                     : '${operation.products.first.id}'),
               ),
             ),
@@ -106,11 +106,14 @@ class _ProductNumber extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (products.products.any((p) => !p.isActive)) {
+    if (products.products.length > 1) {
+      return ValueInfoText(number);
+    }
+    if (!products.products.first.isActive) {
       return ProductDefectedWarning(number);
     }
 
-    if (products.products.any((p) => !p.isLoaded)) {
+    if (!products.products.first.isLoaded) {
       return EntityInfoNotLoadedWarning(number);
     }
 

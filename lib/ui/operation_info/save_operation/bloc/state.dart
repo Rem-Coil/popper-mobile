@@ -17,7 +17,8 @@ abstract class WithOperationState implements OperationSaveState {
   final Operation operation;
 
   bool get isCanSave =>
-      operation.savable && operation.products.every((p) => p.isActive);
+      operation.savable &&
+      (operation.products.length > 1 || operation.products.first.isActive);
 }
 
 class ModifyOperationState extends WithOperationState {

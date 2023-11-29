@@ -27,11 +27,12 @@ class AcceptanceOperationFactory extends OperationFactory<AcceptanceOperation> {
   }
 
   LocalAcceptanceOperation mapRemoteToLocal(
-      RemoteAcceptanceOperation operation) {
+      List<RemoteAcceptanceOperation> operations) {
+    final operation = operations.first;
     return LocalAcceptanceOperation(
       id: operation.id,
       userId: operation.userId,
-      productsId: [operation.productId],
+      productsId: operations.map((o) => o.productId).toList(),
       time: operation.time,
       status: LocalOperationStatus.sync,
     );

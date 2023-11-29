@@ -34,17 +34,14 @@ class OperationAppBar extends StatelessWidget implements PreferredSizeWidget {
       title: Text(title),
       backgroundColor: Theme.of(context).colorScheme.background,
       actions: [
-        if (userState.user.role == Role.qualityEngineer) ...[
+        if (userState.user.role == Role.qualityEngineer &&
+            operation.products.length == 1) ...[
           IconButton(
             icon: const Icon(Icons.history),
             splashRadius: 20.0,
-            onPressed: () {
-              if (operation.products.length == 1) {
-                context.router.push(
-                  HistoryRoute(product: operation.products.first),
-                );
-              }
-            },
+            onPressed: () => context.router.push(
+              HistoryRoute(product: operation.products.first),
+            ),
           ),
         ],
         BlocProvider<OperationTasksBloc>(
@@ -141,8 +138,8 @@ class _BobbinButtonsState extends State<BobbinButtons> {
 
     if (isClear == true && mounted) {
       if (widget.operation.products.length == 1) {
-      final bobbin = widget.operation.products.first;
-      context.read<OperationTasksBloc>().add(DefectBobbinEvent(bobbin));
+        final bobbin = widget.operation.products.first;
+        context.read<OperationTasksBloc>().add(DefectBobbinEvent(bobbin));
       }
     }
   }

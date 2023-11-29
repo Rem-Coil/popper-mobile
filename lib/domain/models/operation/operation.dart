@@ -38,6 +38,6 @@ abstract class Operation {
   bool get savable;
 
   String get productsName => products.length > 1
-      ? '${products.first.number} - ${products.last.number}'
+      ? 'Множество продуктов'
       : products.first.number;
 }
