@@ -5,7 +5,7 @@ import 'package:popper_mobile/domain/models/kit/batch.dart';
 part 'local_batch.g.dart';
 
 @HiveType(typeId: 24)
-class LocalBatch extends Batch implements Cacheable<String> {
+class LocalBatch extends Batch implements Cacheable<int> {
   LocalBatch({
     required this.id,
     required this.number,
@@ -23,7 +23,7 @@ class LocalBatch extends Batch implements Cacheable<String> {
   final int kitId;
 
   @override
-  String get key => '$id';
+  int get key => id;
 
   factory LocalBatch.from(Batch batch) => LocalBatch(
         id: batch.id,

@@ -36,7 +36,7 @@ class KitExpansionTile extends StatelessWidget {
         onChanged: (value) {
           context
               .read<KitSelectionBloc>()
-              .add(UpdateKitSelection(kit: kit, selected: value));
+              .add(UpdateKitSelection(data: kit, selected: value));
         },
       ),
       children: kit.batches

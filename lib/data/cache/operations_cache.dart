@@ -25,6 +25,6 @@ class AcceptanceOperationsCache
 }
 
 @singleton
-class BatchesCache extends Cache<String, LocalBatch> {
+class BatchesCache extends Cache<int, LocalBatch> {
   const BatchesCache() : super(_batchesBox);
 }

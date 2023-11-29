@@ -16,11 +16,11 @@ class UpdateBatchSelection implements KitSelectionEvent {
 
 class UpdateKitSelection implements KitSelectionEvent {
   UpdateKitSelection({
-    required this.kit,
+    required this.data,
     required this.selected,
   });
 
-  final FullKitInfo kit;
+  final FullKitInfo data;
   final bool? selected;
 }
 

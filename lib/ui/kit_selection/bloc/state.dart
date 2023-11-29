@@ -17,14 +17,30 @@ class SaveKitSelectionState implements KitSelectionState {
   final List<FullKitInfo> kitList;
   final List<Batch> selectedBatches;
   final FullKitInfo deletedBatches;
+
+  factory SaveKitSelectionState.withDeletedBatches(
+      List<FullKitInfo> kitList, List<Batch> selectedBatches) {
+    final kitListCopy = List<FullKitInfo>.from(kitList);
+    final selectedBatchesCopy = List<Batch>.from(selectedBatches);
+
+    final allServerBatches = kitListCopy.expand((kit) => kit.batches);
+    final onlyCachedBatches = selectedBatchesCopy
+        .where((cachedBatch) => !allServerBatches.contains(cachedBatch))
+        .toList();
+
+    final deleted =
+        FullKitInfo(kit: const Kit.deleted(), batches: onlyCachedBatches);
+
+    return SaveKitSelectionState(
+      kitList: kitList,
+      selectedBatches: selectedBatches,
+      deletedBatches: deleted,
+    );
+  }
 }
 
 class FailureKitSelectionState implements KitSelectionState {
   final Failure failure;
 
   FailureKitSelectionState(this.failure);
-}
-
-class DeletedKitSelectedState implements KitSelectionState {
-  const DeletedKitSelectedState();
 }

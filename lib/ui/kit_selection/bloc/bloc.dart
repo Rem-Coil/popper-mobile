@@ -30,10 +30,6 @@ class KitSelectionBloc extends Bloc<KitSelectionEvent, KitSelectionState> {
   final BatchesRepository _batchesRepository;
   final List<FullKitInfo> kits = [];
   final List<Batch> selected = [];
-  final FullKitInfo deletedFromServer = FullKitInfo(
-    kit: const Kit.deleted(),
-    batches: [],
-  );
 
   Future<void> _onInitialize(_Initialize event, Emitter emit) async {
     final cachedBatches = await _batchesRepository.getAllSaved();
@@ -44,15 +40,7 @@ class KitSelectionBloc extends Bloc<KitSelectionEvent, KitSelectionState> {
       (f) => FailureKitSelectionState(f),
       (k) {
         kits.addAll(k);
-        final allServerBatches = kits.expand((kit) => kit.batches);
-        deletedFromServer.batches.addAll(selected.where((cachedBatch) =>
-            allServerBatches
-                .every((serverBatch) => serverBatch != cachedBatch)));
-        return SaveKitSelectionState(
-          kitList: kits,
-          selectedBatches: selected,
-          deletedBatches: deletedFromServer,
-        );
+        return SaveKitSelectionState.withDeletedBatches(kits,selected);
       },
     ));
   }
@@ -68,11 +56,7 @@ class KitSelectionBloc extends Bloc<KitSelectionEvent, KitSelectionState> {
       selected.add(event.batch);
       _batchesRepository.cache(event.batch);
     }
-    emit(SaveKitSelectionState(
-      kitList: kits,
-      selectedBatches: selected,
-      deletedBatches: deletedFromServer,
-    ));
+    emit(SaveKitSelectionState.withDeletedBatches(kits,selected));
   }
 
   FutureOr<void> _onUpdateKitSelection(
@@ -80,38 +64,27 @@ class KitSelectionBloc extends Bloc<KitSelectionEvent, KitSelectionState> {
     Emitter<KitSelectionState> emit,
   ) {
     if (event.selected == true) {
-      selected.addAll(event.kit.batches);
-      _batchesRepository.cacheAll(event.kit.batches);
+      selected.addAll(event.data.batches);
+      _batchesRepository.cacheAll(event.data.batches);
     } else if (event.selected == false) {
       /// часть партии уже была выбрана
-      selected.removeWhere((b) => event.kit.kit.id == b.kitId);
-      selected.addAll(event.kit.batches);
-      _batchesRepository.cacheAll(event.kit.batches);
+      selected.removeWhere((b) => event.data.kit.id == b.kitId);
+      selected.addAll(event.data.batches);
+      _batchesRepository.cacheAll(event.data.batches);
     } else {
       _batchesRepository.deleteAll(
-          selected.where((b) => event.kit.kit.id == b.kitId).toList());
-      selected.removeWhere((b) => event.kit.kit.id == b.kitId);
+          selected.where((b) => event.data.batches.contains(b)).toList());
+      selected.removeWhere((b) => event.data.batches.contains(b));
     }
-    emit(SaveKitSelectionState(
-      kitList: kits,
-      selectedBatches: selected,
-      deletedBatches: deletedFromServer,
-    ));
+    emit(SaveKitSelectionState.withDeletedBatches(kits,selected));
   }
 
   FutureOr<void> _onUpdateDeletedBatches(
     UpdateDeletedBatches event,
     Emitter<KitSelectionState> emit,
   ) async {
-    final list = List<Batch>.from(event.batchesToDelete);     //TODO: Сомнительно но иначе не работает
-    deletedFromServer.batches.removeWhere(
-        (deletedBatch) => event.batchesToDelete.contains(deletedBatch));
-    await _batchesRepository.deleteAll(list);
-    selected.removeWhere((b) => list.contains(b));
-    emit(SaveKitSelectionState(
-      kitList: kits,
-      selectedBatches: selected,
-      deletedBatches: deletedFromServer,
-    ));
+    await _batchesRepository.deleteAll(event.batchesToDelete);
+    selected.removeWhere((b) => event.batchesToDelete.contains(b));
+    emit(SaveKitSelectionState.withDeletedBatches(kits,selected));
   }
 }

@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:either_dart/either.dart';
 import 'package:injectable/injectable.dart';
 import 'package:popper_mobile/core/utils/typedefs.dart';
@@ -30,11 +31,14 @@ class GetFullKitInfoUsecase {
       return Left(failure);
     }
 
-    List<FullKitInfo> result = kits.right.expand<FullKitInfo>((kit) {
-      final batchesInKit =
-          batches.right.where((b) => b.kitId == kit.id).toList();
-      return [FullKitInfo(kit: kit, batches: batchesInKit)];
-    }).toList();
+    final groupedBatches = groupBy(batches.right, (p0) => p0.kitId);
+
+    List<FullKitInfo> result = kits.right
+        .map((k) => FullKitInfo(
+            kit: k,
+            batches:
+                groupedBatches.containsKey(k.id) ? groupedBatches[k.id]! : []))
+        .toList();
 
     return Right(result);
   }

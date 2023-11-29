@@ -13,11 +13,11 @@ class KitScrollView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<Padding> widgetList = [];
+    final List<Widget> widgetList = [];
     if (state.deletedBatches.batches.isNotEmpty) {
       widgetList.add(Padding(
         padding: const EdgeInsets.all(8.0),
-        child: DeletedKitExpansionTile(kit: state.deletedBatches),
+        child: DeletedKitExpansionTile(data: state.deletedBatches),
       ));
     }
 

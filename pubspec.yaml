@@ -19,6 +19,7 @@ dependencies:
   shared_preferences: ^2.1.0
   flutter_bloc: ^8.1.2
   json_annotation: ^4.8.1
+  collection: ^1.16.0
 
   dio: ^5.1.1
   retrofit: ^4.0.1

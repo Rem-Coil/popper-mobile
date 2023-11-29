@@ -9,10 +9,10 @@ import 'package:popper_mobile/ui/kit_selection/bloc/bloc.dart';
 class DeletedKitExpansionTile extends StatefulWidget {
   const DeletedKitExpansionTile({
     super.key,
-    required this.kit,
+    required this.data,
   });
 
-  final FullKitInfo kit;
+  final FullKitInfo data;
 
   @override
   State<DeletedKitExpansionTile> createState() =>
@@ -24,7 +24,7 @@ class _DeletedKitExpansionTileState extends State<DeletedKitExpansionTile> {
   Widget build(BuildContext context) {
     return ExpansionTile(
       title: Text(
-        widget.kit.kit.number,
+        widget.data.kit.number,
         style: const TextStyle(color: Colors.redAccent),
       ),
       leading: IconButton(
@@ -33,26 +33,58 @@ class _DeletedKitExpansionTileState extends State<DeletedKitExpansionTile> {
           color: Colors.redAccent,
         ),
         onPressed: () {
-          _showAcceptanceDialog(widget.kit.batches, mounted, context);
+          _showAcceptanceDialog(widget.data.batches);
         },
       ),
-      children: widget.kit.batches
-          .map((b) => DeletedBatchListTile(batch: b))
+      children: widget.data.batches
+          .map((b) => DeletedBatchListTile(
+                batch: b,
+                onPressed:() {
+                  _showAcceptanceDialog([b]);
+                },
+              ))
           .toList(),
+    );
+  }
+
+  Future<void> _showAcceptanceDialog(List<Batch> batches) async {
+    final isSaveInCache = await _showDeleteDialog();
+
+    if (!mounted) return;
+    if (isSaveInCache!) {
+      context
+          .read<KitSelectionBloc>()
+          .add(UpdateDeletedBatches(batchesToDelete: batches));
+    }
+  }
+
+  Future<bool?> _showDeleteDialog() {
+    return showCupertinoDialog<bool>(
+      context: context,
+      builder: (BuildContext context) {
+        return const DecisionDialog(
+          title: 'Удалить набор?',
+          message: 'Набор сохранён в кеше но отсутствует на сервере. '
+              'Отменить действие будет невозможно. '
+              'Удалить из кеша? ',
+          cancelActionTitle: 'Отмена',
+          acceptActionTitle: 'Удалить',
+        );
+      },
     );
   }
 }
 
-class DeletedBatchListTile extends StatefulWidget {
-  const DeletedBatchListTile({super.key, required this.batch});
+class DeletedBatchListTile extends StatelessWidget {
+  const DeletedBatchListTile({
+    super.key,
+    required this.batch,
+    required this.onPressed,
+  });
 
   final Batch batch;
+  final VoidCallback onPressed;
 
-  @override
-  State<DeletedBatchListTile> createState() => _DeletedBatchListTileState();
-}
-
-class _DeletedBatchListTileState extends State<DeletedBatchListTile> {
   @override
   Widget build(BuildContext context) {
     return ListTile(
@@ -62,44 +94,12 @@ class _DeletedBatchListTileState extends State<DeletedBatchListTile> {
           Icons.delete,
           color: Colors.redAccent,
         ),
-        onPressed: () {
-          _showAcceptanceDialog([widget.batch], mounted, context);
-        },
+        onPressed: onPressed,
       ),
       title: Text(
-        '${widget.batch.kitId.toString()} - ${widget.batch.id.toString()}',
+        '${batch.kitId.toString()} - ${batch.id.toString()}',
         style: const TextStyle(color: Colors.redAccent),
       ),
     );
   }
-}
-
-Future<void> _showAcceptanceDialog(
-  List<Batch> batches,
-  bool mounted,
-  BuildContext context,
-) async {
-  final isSaveInCache = await _showDeleteDialog(context);
-
-  if (!mounted) return;
-  if (isSaveInCache == true) {
-    context
-        .read<KitSelectionBloc>()
-        .add(UpdateDeletedBatches(batchesToDelete: batches));
-  }
-}
-
-Future<bool?> _showDeleteDialog(BuildContext context) {
-  return showCupertinoDialog<bool>(
-    context: context,
-    builder: (BuildContext context) {
-      return const DecisionDialog(
-        title: 'Удалить набор?',
-        message: 'Набор сохранён в кеше но отсутствует на сервере. '
-            'Удалить из кеша? ',
-        cancelActionTitle: 'Отмена',
-        acceptActionTitle: 'Удалить',
-      );
-    },
-  );
 }
